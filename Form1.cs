@@ -26,7 +26,7 @@ namespace AbreDico
         // **** Couleurs de l'environnement
         readonly Color CouleurDefaut = Color.FromName("Navy");
         // Variables de classe      
-        public Noeud NoeudRacine { get; private set; }
+      
         //=================================================================
 
 
@@ -114,8 +114,8 @@ namespace AbreDico
                                 }
                                 else
                                 {
-                                    this.textBox2.Text =
-                                    this.textBox2.Text = "  " + this.textBox2.Text + "consonne facile rejetée = " + lettre.ToString() + "\r\n";
+                                 //   this.textBox2.Text =
+                                  //  this.textBox2.Text = "  " + this.textBox2.Text + "consonne facile rejetée = " + lettre.ToString() + "\r\n";
                                 }
 
                             }
@@ -213,34 +213,16 @@ namespace AbreDico
         }
 
 
-        private void InitialiseEnvironnement()  // initialisation des données pour la construction de l'arbre des lettres des mots français
-        {
-            this.pictureBox1.Visible = true;
-            // Création de l'arbre à partir du fichier texte.
-            //===================
-            // initialisation du dictionnaire
-            // string NomDuDico = "H:\\Famille\\GERALD\\visual_Studio\\Arbre_Dico\\MOTS TRADUITS.txt";
-            string NomDuDico = Directory.GetCurrentDirectory() + "\\MOTS TRADUITS.txt";
-            if (!File.Exists(NomDuDico))
-            {
-                MessageBox.Show(NomDuDico + " n'existe pas");
-            }
-            else
-            {
-                // le fichier existe : Lecture
-                string[] lignesDico = System.IO.File.ReadAllLines(NomDuDico);
-                NoeudRacine = GestionDesNoeuds.NoeudRacineConstructioArbre(lignesDico);
-                this.pictureBox1.Left += 50;
-                this.pictureBox1.Visible = false;
-            }
-        }
-
+        
 
 
         private void BoutonVerifMot(object sender, EventArgs e)
         // Bouton qui déclenche l'action de vocontroler si le mot estr acceptable        
-        {
+        {    
             VerifMot();
+            labNmotsTrouves.Text ="Nombre de mots trouvés = "+ DataGame.NumberOFGoodWord.ToString();
+            float PercentOfFind = DataGame.NumberOFGoodWord / Chemin.NumberOfWordCanBeDone*100;
+            LabPourcentageDeTrouves.Text = PercentOfFind.ToString();
             this.textBox1.Clear();
             DataGame.RazScoreMotJoueur();
             labScoreMotJoueur.Text = "";
@@ -250,7 +232,8 @@ namespace AbreDico
         private void VerifMot() // Vérifie si le mot à controler n'est pas un mot déjà utilisé
         {
             this.pictureBox1.Visible = false;
-            if (Motexiste(this.textBox1.Text))
+          
+            if (ArbreDesMots. Motexiste(this.textBox1.Text, ArbreDesMots.NoeudRacine))
             { // le mot propose par joueur existe
                 bool MotDejaUtilise = false;
                 for (int cptM = 0; cptM < listBox1.Items.Count; cptM++)
@@ -269,6 +252,7 @@ namespace AbreDico
                     this.ImageGai.Visible = true;
                     this.ImageTriste.Visible = false;
                     DataGame.ActualiseScoreTotal(DataGame.scoreMotJoueur);
+                    DataGame.NumberOFGoodWord++;
                     labScoreTotal.Text = DataGame.ScoreTotal.ToString();
                     listBox1.Items.Add(textBox1.Text);
                     this.textBox1.Clear();
@@ -298,6 +282,7 @@ namespace AbreDico
         private void Button1_Click(object sender, EventArgs e)
         {   // Réalise un nouveau tirage de lettres et configure l'IHM
             DataGame.RazScoreMotJoueur();
+            DataGame.NumberOFGoodWord = 0;
             NouvelleDonne();
             DessineMatrice();
             textBox1.Clear();
@@ -313,6 +298,8 @@ namespace AbreDico
             labScoreTotal.Text = ("Score de la partie.");
             CreerMatrice();
             DessineMatrice();
+            Chemin.TotalExploration();
+            labNbMotPossible .Text= "Le nombre de mots possibles est de " + Chemin.NumberOfWordCanBeDone.ToString();
         }
 
         //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -349,7 +336,7 @@ namespace AbreDico
             }
             DataGame.RazScoreMotJoueur();
             DataGame.RazScoreTotal();
-            InitialiseEnvironnement(); // Pour la contruction d'un arbre des lettres à partir de la liste des mots français        
+            ArbreDesMots. InitialiseEnvironnement(); // Pour la contruction d'un arbre des lettres à partir de la liste des mots français        
             DonneesLettres.InitDataPourGrille();
             NouvelleDonne();
         }
@@ -418,42 +405,7 @@ namespace AbreDico
                 return true;
             }
         }
-        bool Motexiste(string Mot)
-        {
-            int lg = Mot.Length;
-            Noeud noeudCourant = this.NoeudRacine;
-            for (int i = 0; i < lg; i++) // Faire pour toutes les lettres du mot
-            {
-                char lettreCourante = Mot[i];
-                if (noeudCourant.DictionnaireDesSousNoeuds != null) // le Dictionnaire du noeud examiné n'est pas null
-                {
-                    if (noeudCourant.DictionnaireDesSousNoeuds.ContainsKey(lettreCourante))//le dico contient la lettre du mot
-                    {
-                        noeudCourant = noeudCourant.DictionnaireDesSousNoeuds[lettreCourante]; // affectation du noeud trouvé pour la lettre pour le tour de boucle suivant                           
-                    }
-                    else
-                    {  // la lettre n'est pas trouvée !
-                        return false;
-                    }
-                }
-                else
-                {
-                    //le dictionnaire est null
-                    if (i != lg)
-                    {
-                        return false;
-                    } // si ce n'est pas la fin de mot c'est anormal on retourne false
-                    else
-                    {
-                        return true;
-                    }// si fin de mot c'est normal on retourne true
-                }
-            }
-            if (noeudCourant.FinDeMot)
-            { return true; }
-            else
-            { return false; }
-        }
+     
         private void GereClicSurLettre(string nomDuLabel, int ligne, int colonne)
         {
             DonneesLettres.caseChoisie.X = colonne;
@@ -494,20 +446,21 @@ namespace AbreDico
             DessineMatrice();
         }
 
-
-
-
        
-
         private void Bt_test_Click(object sender, EventArgs e)
         {
             textBox2.Clear();
-            ParcoursDeMatrice.CrerCaseRacine(0, 0);
-            ParcoursDeMatrice.Test+="\r\n"+ ParcoursDeMatrice.CompteurGeneral.ToString();
-            this.textBox2.Text = ParcoursDeMatrice.Test;
+            Chemin.TotalExploration();
+            string ListBoxText = "";
+             for (int i=0; i< Chemin.ListExistingWords.Count; i++)
+            {
+                ListBoxText += Chemin.ListExistingWords[i]+"\r\n";
+            }
+            ListBoxText +="Nombre de mots possible ="+ Chemin.NumberOfWordCanBeDone+ "\r\n";
+            textBox2.Text = ListBoxText;
         }
-        
-      
+
+
     }// fin classe Form1
 
 }// FIn  namspace

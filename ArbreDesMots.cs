@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,8 +13,22 @@ namespace AbreDico
         public bool FinDeMot { get; set; }
         public Dictionary<char, Noeud> DictionnaireDesSousNoeuds;
     }
+  
     public class ArbreDesMots
     {
+        public static Noeud NoeudRacine { get; private set; }
+        public static void InitialiseEnvironnement()  // initialisation des données pour la construction de l'arbre des lettres des mots français
+        {
+          //  this.pictureBox1.Visible = true;
+            // Création de l'arbre à partir du fichier texte.
+            //===================
+            // initialisation du dictionnaire
+            // string NomDuDico = "H:\\Famille\\GERALD\\visual_Studio\\Arbre_Dico\\MOTS TRADUITS.txt";
+            string NomDuDico = Directory.GetCurrentDirectory() + "\\MOTS TRADUITS.txt";
+            string[] lignesDico = System.IO.File.ReadAllLines(NomDuDico);
+            NoeudRacine = ArbreDesMots.NoeudRacineConstructionArbre(lignesDico); // c'est le dictionnaire (arbre)
+        }
+
         public static Noeud NoeudRacineConstructionArbre(string[] lignesDico)
         {
             //création de la racine
@@ -69,15 +84,13 @@ namespace AbreDico
                 if (indexLettreCourante == Word.Length - 1)
                 {   // dernière lettre du mot  : On ajoute le noeud correspondant
                     noeudEnfant.FinDeMot = true;
-                    noeudParent.DictionnaireDesSousNoeuds.Add(lettreCourante, noeudEnfant);
-                    //  MessageBox.Show(l+" Dernière lettre du mot "+Word+" => sortie à l'arrache");
+                    noeudParent.DictionnaireDesSousNoeuds.Add(lettreCourante, noeudEnfant);                    
                     return;
                 }
                 else
                 {   // PAS dernière lettre du mot  : On ajoute le noeud correspondant et on incémente rang et on relance récursivement la procédure
                     noeudEnfant.FinDeMot = false;
-                    noeudParent.DictionnaireDesSousNoeuds.Add(lettreCourante, noeudEnfant);
-                    // MessageBox.Show(l + " Pas dernière lettre du mot " + Word + " => ajout noeud");
+                    noeudParent.DictionnaireDesSousNoeuds.Add(lettreCourante, noeudEnfant);                   
                     indexLettreCourante++;
                     AjoutLettreCouranteSiBesoin(noeudEnfant, indexLettreCourante, Word);
                 }

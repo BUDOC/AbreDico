@@ -16,10 +16,8 @@ namespace AbreDico
             public int Level { get; set; }
             public List<MyCellClass> ListOfPossibleNeighbor = new List<MyCellClass>();
         }
-
         public static string Test = "";
-
-        private static bool[,] ArrayOfUsedCells = new bool[4, 4];
+        private static readonly bool[,] ArrayOfUsedCells = new bool[4, 4];
         private static void InitialiseArrayOfUsedfCells()
         {
             for (int i = 0; i < 4; i++)
@@ -30,7 +28,6 @@ namespace AbreDico
                 }
             }
         }
-
         public static void FindAcceptablesNeighbors(MyCellClass WorkingCell)
         {
             // cette procedure trouve les cases voisines de celle passée en pramètre
@@ -64,10 +61,12 @@ namespace AbreDico
                                 // La case est libre donc utilisable donc
                                 // on crée une Case de coordonnées courantes 
                                 // qu'on ajoute à la liste des cases voisines de la case courante
-                                MyCellClass NeighborsCell = new MyCellClass();
-                                NeighborsCell.X = CoordonneeX;
-                                NeighborsCell.Y = CoordonneeY;
-                                NeighborsCell.Level = NextLevel;
+                                MyCellClass NeighborsCell = new MyCellClass
+                                {
+                                    X = CoordonneeX,
+                                    Y = CoordonneeY,
+                                    Level = NextLevel
+                                };
                                 WorkingCell.ListOfPossibleNeighbor.Add(NeighborsCell);
                             }
                         }
@@ -79,7 +78,6 @@ namespace AbreDico
                 }
             }
         }
-
         public static char LetterOfCell(MyCellClass OneCell)
         {
             return DonneesLettres.tableauDeLettres[OneCell.X, OneCell.Y];
@@ -93,14 +91,26 @@ namespace AbreDico
             }
         }
         public static string WordFind;
-        public static void FindPossibleWord()
+        public static void FindPossibleWord(int Level)
         {
             WordFind = "";
-            for (int i = 0; i < PossibleWord.Length; i++)
+            for (int i = 0; i <= Level; i++)
             {
                 WordFind += PossibleWord[i];
             }
 
+        }
+        public static void TotalExploration()
+        {
+            int cpt = 0;
+            for (int i = 0; i < 4; i++)
+            {
+                for (int j = 0; j < 4; j++)
+                {
+                    cpt++;
+                    Chemin.BeginTree(i, j);
+                }
+            }
         }
         public static void BeginTree(int X, int Y)
         {
@@ -113,21 +123,17 @@ namespace AbreDico
             ArrayOfUsedCells[Root.X, Root.Y] = true;
             PossibleWord[Root.Level] = LetterOfCell(Root);
             FindAcceptablesNeighbors(Root);
-            ShowCell(Root);
-            //  GoOnTree(Root, Root.ListOfPossibleNeighbor[0]);
+            ShowCell(Root);            
             for (int round0 = 0; round0 < Root.ListOfPossibleNeighbor.Count; round0++)
-            {
-                Test += " Exploration n°" + round0.ToString() + " de puis la racine        \r\n";
+            {             
                 GoOnTree(Root, Root.ListOfPossibleNeighbor[round0]);
             }
         }
-
         public static void GoOnTree(MyCellClass TopCell, MyCellClass DonwCell)
         {
             ArrayOfUsedCells[DonwCell.X, DonwCell.Y] = true;
             PossibleWord[DonwCell.Level] = LetterOfCell(DonwCell);
-            FindAcceptablesNeighbors(DonwCell);
-          //  Test += "=>  " + "\r\n";
+            FindAcceptablesNeighbors(DonwCell);            
             ShowCell(DonwCell);
             if (DonwCell.ListOfPossibleNeighbor.Count == 0)
             {
@@ -141,35 +147,57 @@ namespace AbreDico
                     {
                         TopCell.ListOfPossibleNeighbor.RemoveAt(NumCell);
                         NumCell = MaxIndex; //pour sortir
-                        Test += " # Remontée +\r\n";
+                                           
                     }
                 }
             }
             else
             {
                 GoOnTree(DonwCell, DonwCell.ListOfPossibleNeighbor[0]);
-                if ( DonwCell.ListOfPossibleNeighbor.Count!=0)
+                if (DonwCell.ListOfPossibleNeighbor.Count != 0)
                 {
                     ArrayOfUsedCells[DonwCell.X, DonwCell.Y] = false;
-                    PossibleWord[DonwCell.Level] = '|';
-                    Test += " @ Back step to top +\r\n";
+                    PossibleWord[DonwCell.Level] = '|';                   
+                }
+            }           
+        }
+        private static void ShowCell(MyCellClass Cell)
+        {          
+           FindPossibleWord(Cell.Level);        
+            if (ArbreDesMots.Motexiste(WordFind, ArbreDesMots.NoeudRacine))
+            {
+                // Test += WordFind + "\r\n";     
+                AddWordInListExistingWords(WordFind);
+            }
+        }
+        public static int NumberOfWordCanBeDone = 0;
+        public static  List<string> ListExistingWords = new List<string>();
+        public static void AddWordInListExistingWords(string Word)
+        {
+            bool AlreadyExists = false;
+            if (ListExistingWords.Count==0) // si la liste est vide on ajoute le mot
+            {
+                ListExistingWords.Add(Word);
+                NumberOfWordCanBeDone++;
+            }
+            else
+            { // on regarde si le mot existe déja dans la liste
+                for(int i=0; i<ListExistingWords.Count; i++)
+                {
+                    if(ListExistingWords[i]== Word)
+                    {
+                        AlreadyExists = true;
+                        i = ListExistingWords.Count;
+                    }
+                }
+                if(AlreadyExists==false)
+                {
+                    ListExistingWords.Add(Word);
+                    NumberOfWordCanBeDone++;
                 }
             }
 
-          //  ArrayOfUsedCells[DonwCell.X, DonwCell.Y] = false;
         }
 
-        public static void ShowCell(MyCellClass Cell)
-        {
-            Test += LetterOfCell(Cell).ToString() + "  (" + Cell.X.ToString() + "," + Cell.Y.ToString() + ")  Niveau = " + Cell.Level.ToString() + "\r\n";
-            /* Test += "Voisines acceptables ";
-             for (int i = 0; i < Cell.ListOfPossibleNeighbor.Count; i++)
-             {
-                 Test += LetterOfCell(Cell.ListOfPossibleNeighbor[i]) + "  ";
-             }*/
-            Test += "\r\n";
-            FindPossibleWord();
-            Test += " Combinaison = " + WordFind + "\r\n";
-        }
     }
 }

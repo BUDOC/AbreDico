@@ -71,7 +71,6 @@
   <ItemGroup>
     <Compile Include="ArbreDesMots.cs" />
     <Compile Include="Chemin.cs" />
-    <Compile Include="CodeFile1.cs" />
     <Compile Include="DonneesLettres.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>

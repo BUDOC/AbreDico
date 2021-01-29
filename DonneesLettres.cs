@@ -13,6 +13,7 @@ namespace AbreDico
     {
         // GERE LES SCORES
         public static int scoreMotJoueur;
+        public static int NumberOFGoodWord;        
         public static void RazScoreMotJoueur()
         {
             scoreMotJoueur = 0;
@@ -31,11 +32,7 @@ namespace AbreDico
             ScoreTotal += ScoreMot;
         }
     }
-   /* public class Case
-    {
-        public Couple coordonnées;
-        public Dictionary<char, Case> DictionnaireDesCasesVoisiness;
-    }*/
+
     public class Couple
     {
         public int X { get; set; }

@@ -47,6 +47,9 @@ namespace AbreDico
             this.listBox1 = new System.Windows.Forms.ListBox();
             this.bt_Rotation = new System.Windows.Forms.Button();
             this.bt_test = new System.Windows.Forms.Button();
+            this.labNbMotPossible = new System.Windows.Forms.Label();
+            this.labNmotsTrouves = new System.Windows.Forms.Label();
+            this.LabPourcentageDeTrouves = new System.Windows.Forms.Label();
             this.panelMIAP.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ImageGai)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ImageTriste)).BeginInit();
@@ -233,17 +236,46 @@ namespace AbreDico
             // 
             this.bt_test.Location = new System.Drawing.Point(509, 266);
             this.bt_test.Name = "bt_test";
-            this.bt_test.Size = new System.Drawing.Size(75, 23);
+            this.bt_test.Size = new System.Drawing.Size(77, 45);
             this.bt_test.TabIndex = 25;
             this.bt_test.Text = "test";
             this.bt_test.UseVisualStyleBackColor = true;
             this.bt_test.Click += new System.EventHandler(this.Bt_test_Click);
             // 
+            // labNbMotPossible
+            // 
+            this.labNbMotPossible.AutoSize = true;
+            this.labNbMotPossible.Location = new System.Drawing.Point(14, 481);
+            this.labNbMotPossible.Name = "labNbMotPossible";
+            this.labNbMotPossible.Size = new System.Drawing.Size(0, 20);
+            this.labNbMotPossible.TabIndex = 26;
+            // 
+            // labNmotsTrouves
+            // 
+            this.labNmotsTrouves.AutoSize = true;
+            this.labNmotsTrouves.Location = new System.Drawing.Point(18, 519);
+            this.labNmotsTrouves.Name = "labNmotsTrouves";
+            this.labNmotsTrouves.Size = new System.Drawing.Size(13, 20);
+            this.labNmotsTrouves.TabIndex = 27;
+            this.labNmotsTrouves.Text = ".";
+            // 
+            // LabPourcentageDeTrouves
+            // 
+            this.LabPourcentageDeTrouves.AutoSize = true;
+            this.LabPourcentageDeTrouves.Location = new System.Drawing.Point(588, 505);
+            this.LabPourcentageDeTrouves.Name = "LabPourcentageDeTrouves";
+            this.LabPourcentageDeTrouves.Size = new System.Drawing.Size(13, 20);
+            this.LabPourcentageDeTrouves.TabIndex = 28;
+            this.LabPourcentageDeTrouves.Text = ".";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1495, 474);
+            this.ClientSize = new System.Drawing.Size(1495, 564);
+            this.Controls.Add(this.LabPourcentageDeTrouves);
+            this.Controls.Add(this.labNmotsTrouves);
+            this.Controls.Add(this.labNbMotPossible);
             this.Controls.Add(this.bt_test);
             this.Controls.Add(this.bt_Rotation);
             this.Controls.Add(this.listBox1);
@@ -258,7 +290,7 @@ namespace AbreDico
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "Form1";
-            this.Text = "Wordament by G Viot";
+            this.Text = "Wordament by Vieux Dinosaure";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.panelMIAP.ResumeLayout(false);
             this.panelMIAP.PerformLayout();
@@ -293,6 +325,9 @@ namespace AbreDico
         private System.Windows.Forms.ListBox listBox1;
         private System.Windows.Forms.Button bt_Rotation;
         private System.Windows.Forms.Button bt_test;
+        private System.Windows.Forms.Label labNbMotPossible;
+        private System.Windows.Forms.Label labNmotsTrouves;
+        private System.Windows.Forms.Label LabPourcentageDeTrouves;
     }
 }
 
