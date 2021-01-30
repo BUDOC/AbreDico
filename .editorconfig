@@ -1,0 +1,13 @@
+﻿[*.cs]
+
+# SA1633: File should have header
+dotnet_diagnostic.SA1633.severity = none
+
+# SA1600: Elements should be documented
+dotnet_diagnostic.SA1600.severity = none
+# commentaire à mettre au dessus : à reactiver
+dotnet_diagnostic.SA1108.severity = none
+dotnet_diagnostic.SA1200.severity = none
+dotnet_diagnostic.SA0001.severity = none
+dotnet_diagnostic.SA1601.severity = none
+

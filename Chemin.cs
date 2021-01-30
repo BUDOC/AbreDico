@@ -6,18 +6,26 @@ using System.Threading.Tasks;
 
 namespace AbreDico
 {
-    class Chemin
+    internal class Chemin
     {
         public class MyCellClass
+
         // définition de la case : level sera affecté en fonction de la profondeur d'exploration du chemin
         {
             public int X { get; set; }
+
             public int Y { get; set; }
+
             public int Level { get; set; }
-            public List<MyCellClass> ListOfPossibleNeighbor = new List<MyCellClass>();
+
+            internal List<MyCellClass> ListOfPossibleNeighbor { get => this.listOfPossibleNeighbor; set => this.listOfPossibleNeighbor = value; }
+
+            private List<MyCellClass> listOfPossibleNeighbor = new List<MyCellClass>();
         }
-        public static string Test = "";
+
+        private static string test = string.Empty;
         private static readonly bool[,] ArrayOfUsedCells = new bool[4, 4];
+
         private static void InitialiseArrayOfUsedfCells()
         {
             for (int i = 0; i < 4; i++)
@@ -28,46 +36,47 @@ namespace AbreDico
                 }
             }
         }
-        public static void FindAcceptablesNeighbors(MyCellClass WorkingCell)
+
+        public static void FindAcceptablesNeighbors(MyCellClass workingCell)
         {
             // cette procedure trouve les cases voisines de celle passée en pramètre
-            // Créer des instance de Case pour chacune 
-            //et les ajoute dans la liste des cases voisine de la case passée en pramètre 
+            // Créer des instance de Case pour chacune
+            // et les ajoute dans la liste des cases voisine de la case passée en pramètre
             // et le niveau de parcours du chemin?
-            int XofCell = WorkingCell.X;
-            int YofCell = WorkingCell.Y;
-            int NextLevel = WorkingCell.Level + 1;
+            int xofCell = workingCell.X;
+            int yofCell = workingCell.Y;
+            int nextLevel = workingCell.Level + 1;
             for (int dx = -1; dx < 2; dx++)
             {
                 for (int dy = -1; dy < 2; dy++)
                 {
-                    int CoordonneeX = XofCell + dx;
-                    int CoordonneeY = YofCell + dy;
-                    if ((CoordonneeX == XofCell) && (CoordonneeY == YofCell))
+                    int coordonneeX = xofCell + dx;
+                    int coordonneeY = yofCell + dy;
+                    if ((coordonneeX == xofCell) && (coordonneeY == yofCell))
                     {
-                        //On ne fait rien car les coordonnées sont celles de la case d'appel
+                        // On ne fait rien car les coordonnées sont celles de la case d'appel
                     }
                     else
                     {
-                        if (CoordonneeX >= 0 && CoordonneeX < 4 && CoordonneeY >= 0 && CoordonneeY < 4)
+                        if (coordonneeX >= 0 && coordonneeX < 4 && coordonneeY >= 0 && coordonneeY < 4)
                         {
                             // on traite car les coordonnées sont acceptables
-                            if (ArrayOfUsedCells[CoordonneeX, CoordonneeY])
+                            if (ArrayOfUsedCells[coordonneeX, coordonneeY])
                             {
                                 // La  case est déjà utilisée : on ne fait rien
                             }
                             else
                             {
                                 // La case est libre donc utilisable donc
-                                // on crée une Case de coordonnées courantes 
+                                // on crée une Case de coordonnées courantes
                                 // qu'on ajoute à la liste des cases voisines de la case courante
-                                MyCellClass NeighborsCell = new MyCellClass
+                                MyCellClass neighborsCell = new MyCellClass
                                 {
-                                    X = CoordonneeX,
-                                    Y = CoordonneeY,
-                                    Level = NextLevel
+                                    X = coordonneeX,
+                                    Y = coordonneeY,
+                                    Level = nextLevel,
                                 };
-                                WorkingCell.ListOfPossibleNeighbor.Add(NeighborsCell);
+                                workingCell.ListOfPossibleNeighbor.Add(neighborsCell);
                             }
                         }
                         else
@@ -78,11 +87,14 @@ namespace AbreDico
                 }
             }
         }
-        public static char LetterOfCell(MyCellClass OneCell)
+
+        public static char LetterOfCell(MyCellClass oneCell)
         {
-            return DonneesLettres.tableauDeLettres[OneCell.X, OneCell.Y];
+            return DonneesLettres.TableauDeLettres[oneCell.X, oneCell.Y];
         }
-        public static char[] PossibleWord = new char[16];
+
+        private static char[] possibleWord = new char[16];
+
         public static void InitializePossibleWord()
         {
             for (int i = 0; i < 16; i++)
@@ -90,16 +102,18 @@ namespace AbreDico
                 PossibleWord[i] = '.';
             }
         }
-        public static string WordFind;
-        public static void FindPossibleWord(int Level)
+
+        private static string wordFind;
+
+        public static void FindPossibleWord(int level)
         {
-            WordFind = "";
-            for (int i = 0; i <= Level; i++)
+            WordFind = string.Empty;
+            for (int i = 0; i <= level; i++)
             {
                 WordFind += PossibleWord[i];
             }
-
         }
+
         public static void TotalExploration()
         {
             int cpt = 0;
@@ -112,92 +126,107 @@ namespace AbreDico
                 }
             }
         }
-        public static void BeginTree(int X, int Y)
+
+        public static void BeginTree(int x, int y)
         {
             InitialiseArrayOfUsedfCells();
             InitializePossibleWord();
-            MyCellClass Root = new MyCellClass();
-            Root.X = X;
-            Root.Y = Y;
-            Root.Level = 0;
-            ArrayOfUsedCells[Root.X, Root.Y] = true;
-            PossibleWord[Root.Level] = LetterOfCell(Root);
-            FindAcceptablesNeighbors(Root);
-            ShowCell(Root);            
-            for (int round0 = 0; round0 < Root.ListOfPossibleNeighbor.Count; round0++)
-            {             
-                GoOnTree(Root, Root.ListOfPossibleNeighbor[round0]);
+            MyCellClass root = new MyCellClass
+            {
+                X = x,
+                Y = y,
+                Level = 0,
+            };
+            ArrayOfUsedCells[root.X, root.Y] = true;
+            PossibleWord[root.Level] = LetterOfCell(root);
+            FindAcceptablesNeighbors(root);
+            ShowCell(root);
+            for (int round0 = 0; round0 < root.ListOfPossibleNeighbor.Count; round0++)
+            {
+                GoOnTree(root, root.ListOfPossibleNeighbor[round0]);
             }
         }
-        public static void GoOnTree(MyCellClass TopCell, MyCellClass DonwCell)
+
+        public static void GoOnTree(MyCellClass topCell, MyCellClass donwCell)
         {
-            ArrayOfUsedCells[DonwCell.X, DonwCell.Y] = true;
-            PossibleWord[DonwCell.Level] = LetterOfCell(DonwCell);
-            FindAcceptablesNeighbors(DonwCell);            
-            ShowCell(DonwCell);
-            if (DonwCell.ListOfPossibleNeighbor.Count == 0)
+            ArrayOfUsedCells[donwCell.X, donwCell.Y] = true;
+            PossibleWord[donwCell.Level] = LetterOfCell(donwCell);
+            FindAcceptablesNeighbors(donwCell);
+            ShowCell(donwCell);
+            if (donwCell.ListOfPossibleNeighbor.Count == 0)
             {
-                ArrayOfUsedCells[DonwCell.X, DonwCell.Y] = false;
-                PossibleWord[DonwCell.Level] = '*';
-                int MaxIndex = TopCell.ListOfPossibleNeighbor.Count;
+                ArrayOfUsedCells[donwCell.X, donwCell.Y] = false;
+                PossibleWord[donwCell.Level] = '*';
+                int maxIndex = topCell.ListOfPossibleNeighbor.Count;
+
                 // Vire la reference à la celulle courante de la liste de la cellule mère
-                for (int NumCell = 0; NumCell < MaxIndex; NumCell++)
-                {   // Vire de la liste des voisines possibles de la case de niveau supérieur la référence à la cellule en cours
-                    if (TopCell.ListOfPossibleNeighbor[NumCell].X == DonwCell.X && TopCell.ListOfPossibleNeighbor[NumCell].Y == DonwCell.Y)
+                for (int numCell = 0; numCell < maxIndex; numCell++)
+                { // Vire de la liste des voisines possibles de la case de niveau supérieur la référence à la cellule en cours
+                    if (topCell.ListOfPossibleNeighbor[numCell].X == donwCell.X && topCell.ListOfPossibleNeighbor[numCell].Y == donwCell.Y)
                     {
-                        TopCell.ListOfPossibleNeighbor.RemoveAt(NumCell);
-                        NumCell = MaxIndex; //pour sortir
-                                           
+                        topCell.ListOfPossibleNeighbor.RemoveAt(numCell);
+                        numCell = maxIndex; // pour sortir
                     }
                 }
             }
             else
             {
-                GoOnTree(DonwCell, DonwCell.ListOfPossibleNeighbor[0]);
-                if (DonwCell.ListOfPossibleNeighbor.Count != 0)
+                GoOnTree(donwCell, donwCell.ListOfPossibleNeighbor[0]);
+                if (donwCell.ListOfPossibleNeighbor.Count != 0)
                 {
-                    ArrayOfUsedCells[DonwCell.X, DonwCell.Y] = false;
-                    PossibleWord[DonwCell.Level] = '|';                   
+                    ArrayOfUsedCells[donwCell.X, donwCell.Y] = false;
                 }
-            }           
+            }
         }
-        private static void ShowCell(MyCellClass Cell)
-        {          
-           FindPossibleWord(Cell.Level);        
+
+        private static void ShowCell(MyCellClass cell)
+        {
+            FindPossibleWord(cell.Level);
             if (ArbreDesMots.Motexiste(WordFind, ArbreDesMots.NoeudRacine))
             {
-                // Test += WordFind + "\r\n";     
+                // Test += WordFind + "\r\n";
                 AddWordInListExistingWords(WordFind);
             }
         }
-        public static int NumberOfWordCanBeDone = 0;
-        public static  List<string> ListExistingWords = new List<string>();
-        public static void AddWordInListExistingWords(string Word)
+
+        private static int numberOfWordCanBeDone = 0;
+        private static List<string> listExistingWords = new List<string>();
+
+        public static List<string> ListExistingWords { get => listExistingWords; set => listExistingWords = value; }
+
+        public static int NumberOfWordCanBeDone { get => numberOfWordCanBeDone; set => numberOfWordCanBeDone = value; }
+
+        public static string WordFind { get => wordFind; set => wordFind = value; }
+
+        public static string Test { get => test; set => test = value; }
+
+        public static char[] PossibleWord { get => possibleWord; set => possibleWord = value; }
+
+        public static void AddWordInListExistingWords(string word)
         {
-            bool AlreadyExists = false;
-            if (ListExistingWords.Count==0) // si la liste est vide on ajoute le mot
+            bool alreadyExists = false;
+            if (ListExistingWords.Count == 0) // si la liste est vide on ajoute le mot
             {
-                ListExistingWords.Add(Word);
+                ListExistingWords.Add(word);
                 NumberOfWordCanBeDone++;
             }
             else
             { // on regarde si le mot existe déja dans la liste
-                for(int i=0; i<ListExistingWords.Count; i++)
+                for (int i = 0; i < ListExistingWords.Count; i++)
                 {
-                    if(ListExistingWords[i]== Word)
+                    if (ListExistingWords[i] == word)
                     {
-                        AlreadyExists = true;
+                        alreadyExists = true;
                         i = ListExistingWords.Count;
                     }
                 }
-                if(AlreadyExists==false)
+
+                if (alreadyExists == false)
                 {
-                    ListExistingWords.Add(Word);
+                    ListExistingWords.Add(word);
                     NumberOfWordCanBeDone++;
                 }
             }
-
         }
-
     }
 }
