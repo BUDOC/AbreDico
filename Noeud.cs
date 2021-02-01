@@ -11,10 +11,8 @@
     {
         public char Lettre { get; set; }
 
-        public bool FinDeMot { get; set; }
+        public bool EndOfWord { get; set; }
 
-        public Dictionary<char, Noeud> DictionnaireDesSousNoeuds { get => dictionnaireDesSousNoeuds; set => dictionnaireDesSousNoeuds = value; }
-
-        private Dictionary<char, Noeud> dictionnaireDesSousNoeuds;
+        public Dictionary<char, Noeud> DictionnaireDesSousNoeuds { get; set; }
     }
 }

@@ -18,7 +18,7 @@ namespace AbreDico
         // **** Couleurs de l'environnement
         private readonly Color defaultColor = Color.FromName("Navy");
 
-        public void CreerMatrice() // Génère aléatoirement des lettres qui sont mises dans le tableau"matrice"
+        public void CréateMatrix() // Génère aléatoirement des lettres qui sont mises dans le tableau"matrice"
         {
             int cptVoyelle = 0;
             int voyelleDeSuite = 0;
@@ -41,7 +41,7 @@ namespace AbreDico
                 lettre = DonneesLettres.Alphabet[a];
                 if (i > 0)
                 {
-                    if (lettre != DonneesLettres.TabloListeDesCaracteres[i - 1])
+                    if (lettre != DonneesLettres.ArrayOfLetters[i - 1])
                     {
                         accord = true;
                     }
@@ -70,10 +70,10 @@ namespace AbreDico
                         { // cas autorisé
                             if (difficulteLettre > 0) // si tirage voyelle difficile
                             {
-                                if (DonneesLettres.PlaceDansLaMatrice(lettre) == -1 && noteDeChiant <= 4)
+                                if (DonneesLettres.PlaceInMatrix(lettre) == -1 && noteDeChiant <= 4)
                                 {
                                     // difficile pas en double
-                                    DonneesLettres.TabloListeDesCaracteres[i] = lettre;
+                                    DonneesLettres.ArrayOfLetters[i] = lettre;
                                     noteDeChiant += DonneesLettres.TabloDifficulte[i];
                                     cptVoyelle++;
                                     i++;
@@ -86,7 +86,7 @@ namespace AbreDico
                             else
                             {
                                 // voyelle facile
-                                DonneesLettres.TabloListeDesCaracteres[i] = lettre;
+                                DonneesLettres.ArrayOfLetters[i] = lettre;
                                 voyelleDeSuite++;
                                 consonneDeSuite = 0;
 
@@ -100,11 +100,11 @@ namespace AbreDico
                         {
                             if (difficulteLettre < 2) // facile
                             {
-                                if ((difficulteLettre == 2 && DonneesLettres.PlaceDansLaMatrice(lettre) == -1) || (difficulteLettre <= 1 && (DonneesLettres.NbDeLaLettreDansMatrice(lettre) < 3)))
+                                if ((difficulteLettre == 2 && DonneesLettres.PlaceInMatrix(lettre) == -1) || (difficulteLettre <= 1 && (DonneesLettres.HowManyInMatrix(lettre) < 3)))
 
                                 // si la lettre de difficulté 2 n'est pas déjà tirée
                                 {
-                                    DonneesLettres.TabloListeDesCaracteres[i] = lettre;
+                                    DonneesLettres.ArrayOfLetters[i] = lettre;
                                     consonneDeSuite++;
                                     voyelleDeSuite = 0;
                                     i++;
@@ -120,12 +120,12 @@ namespace AbreDico
                             }
                             else
                             { // pas facile
-                                if ((noteDeChiant < 3) && (DonneesLettres.NbDeLaLettreDansMatrice(lettre) < 2)) // acceptable et pas doublé
+                                if ((noteDeChiant < 3) && (DonneesLettres.HowManyInMatrix(lettre) < 2)) // acceptable et pas doublé
                                 {
                                     noteDeChiant += difficulteLettre;
 
                                     // augmentation de la note globale de chiant
-                                    DonneesLettres.TabloListeDesCaracteres[i] = lettre;
+                                    DonneesLettres.ArrayOfLetters[i] = lettre;
                                     consonneDeSuite++;
                                     voyelleDeSuite = 0;
                                     i++;
@@ -145,7 +145,7 @@ namespace AbreDico
             } // fin du while remmplissage matrice
 
             // modifications pour rendre plus jouable
-            if (DonneesLettres.NbDeLaLettreDansMatrice('E') < 2) // pas assez de E
+            if (DonneesLettres.HowManyInMatrix('E') < 2) // pas assez de E
             {
                 int difMax = 0;
                 for (int j = 0; j < 16; j++) // Repérage du plus haut diveau de difficulté présent
@@ -161,7 +161,7 @@ namespace AbreDico
                     if (DonneesLettres.TabloDifficulte[j] == difMax)
                     {
                         // this.textBox2.Text = this.textBox2.Text + matrice[j].ToString() + " remplacée par = E \r\n";
-                        DonneesLettres.TabloListeDesCaracteres[j] = 'E';
+                        DonneesLettres.ArrayOfLetters[j] = 'E';
                         cptVoyelle++;
                         j = 16;
                     }
@@ -181,13 +181,13 @@ namespace AbreDico
                 while (tour < aChanger)
                 { // substitution de consonnes par des voyelles
                     int b = rand.Next(0, 15);
-                    car = DonneesLettres.TabloListeDesCaracteres[b];
+                    car = DonneesLettres.ArrayOfLetters[b];
                     if (!DonneesLettres.EstVoyelle(car))
                     {
                         int c = rand.Next(0, 2);
 
                         // this.textBox2.Text = this.textBox2.Text + matrice[b].ToString() + " remplacée par = " + voyellesCourantes[c] + " \r\n";
-                        DonneesLettres.TabloListeDesCaracteres[b] = DonneesLettres.VoyellesCourantes[c];
+                        DonneesLettres.ArrayOfLetters[b] = DonneesLettres.UsualVowels[c];
                         tour++;
                     }
                 }
@@ -199,7 +199,7 @@ namespace AbreDico
             int ligne = 0, colonne = 0;
             for (int r = 0; r < 16; r++)
             {
-                DonneesLettres.TableauDeLettres[ligne, colonne] = DonneesLettres.TabloListeDesCaracteres[r];
+                DonneesLettres.TableauDeLettres[ligne, colonne] = DonneesLettres.ArrayOfLetters[r];
                 colonne++;
                 if (colonne == 4)
                 {
@@ -222,20 +222,20 @@ namespace AbreDico
         {
             this.VerifMot();
             this.labNmotsTrouves.Text = "Nombre de mots trouvés = " + DataGame.NumberOFGoodWord.ToString();
-            decimal percentOfFind = Convert.ToDecimal(DataGame.NumberOFGoodWord * 100) / Convert.ToDecimal(Chemin.NumberOfWordCanBeDone);
+            decimal percentOfFind = Convert.ToDecimal(DataGame.NumberOFGoodWord * 100) / Convert.ToDecimal(Way.NumberOfWordCanBeDone);
 
             this.LabPourcentageDeTrouves.Text = "Pourcentage de mots trouvés = " + percentOfFind.ToString("F1");
             this.textBox1.Clear();
             DataGame.ResetWordScore();
             this.labScoreMotJoueur.Text = string.Empty;
-            this.DessineMatrice();
+            this.DrawMatrix();
         }
 
         private void VerifMot() // Vérifie si le mot à controler n'est pas un mot déjà utilisé
         {
             this.pictureBox1.Visible = false;
 
-            if (ArbreDesMots.Motexiste(this.textBox1.Text, ArbreDesMots.NoeudRacine))
+            if (ArbreDesMots.WordExists(this.textBox1.Text, ArbreDesMots.NoeudRacine))
             { // le mot propose par joueur existe
                 bool motDejaUtilise = false;
                 for (int cptM = 0; cptM < this.listBox1.Items.Count; cptM++)
@@ -245,7 +245,7 @@ namespace AbreDico
                         motDejaUtilise = true;
                         this.ImageTriste.Visible = true;
                         this.labNotification.Text = "Mot déja choisi";
-                        this.DessineMatrice();
+                        this.DrawMatrix();
                     }
                 }
 
@@ -280,25 +280,27 @@ namespace AbreDico
 
         private void Button1_Click(object sender, EventArgs e)
         { // Réalise un nouveau tirage de lettres et configure l'IHM
+            this.textBox2.Clear();
+            Way.Test = string.Empty;
             DataGame.ResetWordScore();
             DataGame.NumberOFGoodWord = 0;
-            this.NouvelleDonne();
-            this.DessineMatrice();
+            this.NewGame();
+            this.DrawMatrix();
             this.textBox1.Clear();
             this.pictureBox1.Visible = true;
         }
 
-        private void NouvelleDonne()
+        private void NewGame()
         { // Réalise un nouveau tirage de lettres
             this.listBox1.Items.Clear();
             DataGame.ResetWordScore();
             DataGame.RazScoreTotal();
             this.labScoreMotJoueur.Text = "Score du mot";
             this.labScoreTotal.Text = "Score de la partie.";
-            this.CreerMatrice();
-            this.DessineMatrice();
-            Chemin.TotalExploration();
-            this.labNbMotPossible.Text = "Le nombre de mots possibles est de " + Chemin.NumberOfWordCanBeDone.ToString();
+            this.CréateMatrix();
+            this.DrawMatrix();
+            Way.TotalExploration();
+            this.labNbMotPossible.Text = "Le nombre de mots possibles est de " + Way.NumberOfWordCanBeDone.ToString();
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -315,11 +317,11 @@ namespace AbreDico
                     // Label L = new System.Windows.Forms.Label();
                     LAbelXY l = new LAbelXY();
                     {
-                        l.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, (byte)0);
+                        l.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, FontStyle.Bold, GraphicsUnit.Point, (byte)0);
                         l.Parent = this;
                     }
 
-                    l.Click += new EventHandler(this.LableEstChoisi);
+                    l.Click += new EventHandler(this.LetterIsChoosen);
                     t = cpt.ToString();
                     l.Text = t;
                     l.Name = t;
@@ -336,9 +338,22 @@ namespace AbreDico
 
             DataGame.ResetWordScore();
             DataGame.RazScoreTotal();
-            ArbreDesMots.InitialiseEnvironnement(); // Pour la contruction d'un arbre des lettres à partir de la liste des mots français
-            DonneesLettres.InitDataPourGrille();
-            this.NouvelleDonne();
+
+            // Pour la contruction d'un arbre des lettres à partir de la liste des mots français
+            ArbreDesMots.InitialiseEnvironnement();
+            if (ArbreDesMots.GetAuthorizationStatus())
+            {
+                DonneesLettres.MatrixIniialization();
+                this.NewGame();
+            }
+            else
+            {
+                MessageBox.Show(
+                    "Erreur à l'ouverture du dictionnaire des mots Français\r\n" +
+                    " Verifiez si le fichier MOTS TRADUITS.txt est présent sous le même répertoire que celui\r\n" +
+                    " de l'application.", "Erreur fatale.", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                Application.Exit();
+            }
         }
 
         private class LAbelXY : Label
@@ -348,18 +363,19 @@ namespace AbreDico
             public int Y { get; set; }
         }
 
-        private void LableEstChoisi(object sender, EventArgs e)
+        private void LetterIsChoosen(object sender, EventArgs e)
         {
             this.ImageGai.Visible = false;
             this.ImageTriste.Visible = false;
-            LAbelXY choisi = (LAbelXY)sender;
-
-            // this.Text = Choisi.X.ToString() + ", " + Choisi.Y.ToString();
-            choisi.Visible = false;
-            this.GereClicSurLettre(choisi.Name.ToString(), choisi.Y, choisi.X);
+            using (LAbelXY choisi = (LAbelXY)sender)
+            {
+                // this.Text = Choisi.X.ToString() + ", " + Choisi.Y.ToString();
+                choisi.Visible = false;
+                this.GereClicSurLettre(choisi.Name.ToString(), choisi.Y, choisi.X);
+            }
         }
 
-        private void DessineMatrice()
+        private void DrawMatrix()
         {
             int compteur = 0;
             try
@@ -376,22 +392,26 @@ namespace AbreDico
                 MessageBox.Show("Erreur dans la boucle foreach de dessinneMatrice");
             }
 
-            DonneesLettres.CasePrecedente.X = -1; // initialise case précédente
-            DonneesLettres.CasePrecedente.Y = -1;
-            DonneesLettres.InitialiseTablocochage();
+            DonneesLettres.PrecedentSquare.X = -1; // initialise case précédente
+            DonneesLettres.PrecedentSquare.Y = -1;
+            DonneesLettres.CheckUsingLetters();
         }
 
-        private bool EstVoisineDeCasePrecedente()
-        { // retourn vrai si la case est une case voisine
+        private bool IsNeiborFromPrecedent()
+        {
+            // retourn vrai si la case est une case voisine
             int rx, ry;
             this.labNotification.Text = string.Empty;
-            if (DonneesLettres.CasePrecedente.X != -1) // pas la première case
-            {// traitement
-                rx = Math.Abs(DonneesLettres.CaseChoisie.X - DonneesLettres.CasePrecedente.X);
-                ry = Math.Abs(DonneesLettres.CaseChoisie.Y - DonneesLettres.CasePrecedente.Y);
+
+            // pas la première case
+            if (DonneesLettres.PrecedentSquare.X != -1)
+            {
+                // traitement
+                rx = Math.Abs(DonneesLettres.ChoosenSquare.X - DonneesLettres.PrecedentSquare.X);
+                ry = Math.Abs(DonneesLettres.ChoosenSquare.Y - DonneesLettres.PrecedentSquare.Y);
                 if (rx >= -1 && rx <= 1 && ry >= -1 && ry <= 1)
                 {
-                    DonneesLettres.StockeCaseChoisie();
+                    DonneesLettres.StoreUsingPlace();
                     this.labNotification.Text = " ";
                     return true;
                 }
@@ -403,41 +423,43 @@ namespace AbreDico
             }
             else
             {
-                DonneesLettres.StockeCaseChoisie();
+                DonneesLettres.StoreUsingPlace();
                 this.labNotification.Text = " ";
                 return true;
             }
         }
 
-        private void GereClicSurLettre(string nomDuLabel, int ligne, int colonne)
+        private void GereClicSurLettre(string labelName, int ligne, int colonne)
         {
-            DonneesLettres.CaseChoisie.X = colonne;
-            DonneesLettres.CaseChoisie.Y = ligne;
+            DonneesLettres.ChoosenSquare.X = colonne;
+            DonneesLettres.ChoosenSquare.Y = ligne;
 
             // ParcoursDeMatrice.TrouveVoisinePossible(colonne, ligne);
-            if (this.EstVoisineDeCasePrecedente())
+            if (this.IsNeiborFromPrecedent())
             {
-                foreach (Label labelDeLettre in this.Controls.OfType<Label>()) // pour tous les label de la form
+                // pour tous les label de la form
+                foreach (Label LetterLabel in this.Controls.OfType<Label>())
                 {
-                    if (labelDeLettre.Name == nomDuLabel) // si le label est celui cliqué
+                    // si le label est celui cliqué
+                    if (LetterLabel.Name == labelName)
                     {
-                        this.textBox1.Text += labelDeLettre.Text;
-                        this.ActualiseScoreMot(char.Parse(labelDeLettre.Text));
-                        DonneesLettres.TabloCochage[colonne, ligne] = true;
+                        this.textBox1.Text += LetterLabel.Text;
+                        this.UpdateWordScore(char.Parse(LetterLabel.Text));
+                        DonneesLettres.ArrayOfLetterUse[colonne, ligne] = true;
                     }
 
-                    DonneesLettres.DefinitCoupleCaseCochee(ligne, colonne);
+                    DonneesLettres.SetPlaceOfUsingLetter(ligne, colonne);
                 }
             }
         }
 
-        private void ActualiseScoreMot(char c)
+        private void UpdateWordScore(char c)
         {
             for (int i = 0; i < DonneesLettres.Alphabet.Length - 1; i++)
             {
                 if (DonneesLettres.Alphabet[i] == c) // caractère identifié
                 {
-                    DataGame.ActualiseScoreMotJoeur(DonneesLettres.TabloPointsParLettre[i]);
+                    DataGame.UpdatePlayerScore(DonneesLettres.PointArrayForAletter[i]);
                     this.labScoreMotJoueur.Text = DataGame.ScoreMotJoueur.ToString();
                 }
             }
@@ -445,22 +467,26 @@ namespace AbreDico
 
         private void Bt_Rotation_Click(object sender, EventArgs e)
         {
-            DonneesLettres.TourneTableauDeLettres();
-            this.DessineMatrice();
+            DonneesLettres.RotateMatrix();
+            this.DrawMatrix();
         }
 
         private void Bt_test_Click(object sender, EventArgs e)
         {
             this.textBox2.Clear();
-            Chemin.TotalExploration();
+            Way.TotalExploration();
             string listBoxText = string.Empty;
-            for (int i = 0; i < Chemin.ListExistingWords.Count; i++)
+            for (int i = 0; i < Way.ListExistingWords.Count; i++)
             {
-                listBoxText += Chemin.ListExistingWords[i] + "\r\n";
+                listBoxText += Way.ListExistingWords[i] + "\r\n";
             }
 
-            listBoxText += "Nombre de mots possible =" + Chemin.NumberOfWordCanBeDone + "\r\n";
+            listBoxText += "Nombre de mots possible =" + Way.NumberOfWordCanBeDone + "\r\n";
             this.textBox2.Text = listBoxText;
         }
-    }// fin classe Form1
-}// FIn  namspace
+
+        // fin classe Form1
+    }
+
+    // FIn  namspace
+}

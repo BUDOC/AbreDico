@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace AbreDico
 {
-    internal class Chemin
+    internal class Way
     {
         public class MyCellClass
 
@@ -18,12 +18,9 @@ namespace AbreDico
 
             public int Level { get; set; }
 
-            internal List<MyCellClass> ListOfPossibleNeighbor { get => this.listOfPossibleNeighbor; set => this.listOfPossibleNeighbor = value; }
-
-            private List<MyCellClass> listOfPossibleNeighbor = new List<MyCellClass>();
+            internal List<MyCellClass> ListOfPossibleNeighbor { get; set; } = new List<MyCellClass>();
         }
 
-        private static string test = string.Empty;
         private static readonly bool[,] ArrayOfUsedCells = new bool[4, 4];
 
         private static void InitialiseArrayOfUsedfCells()
@@ -93,8 +90,6 @@ namespace AbreDico
             return DonneesLettres.TableauDeLettres[oneCell.X, oneCell.Y];
         }
 
-        private static char[] possibleWord = new char[16];
-
         public static void InitializePossibleWord()
         {
             for (int i = 0; i < 16; i++)
@@ -102,8 +97,6 @@ namespace AbreDico
                 PossibleWord[i] = '.';
             }
         }
-
-        private static string wordFind;
 
         public static void FindPossibleWord(int level)
         {
@@ -122,7 +115,7 @@ namespace AbreDico
                 for (int j = 0; j < 4; j++)
                 {
                     cpt++;
-                    Chemin.BeginTree(i, j);
+                    BeginTree(i, j);
                 }
             }
         }
@@ -182,25 +175,23 @@ namespace AbreDico
         private static void ShowCell(MyCellClass cell)
         {
             FindPossibleWord(cell.Level);
-            if (ArbreDesMots.Motexiste(WordFind, ArbreDesMots.NoeudRacine))
+            if (ArbreDesMots.WordExists(WordFind, ArbreDesMots.NoeudRacine))
             {
                 // Test += WordFind + "\r\n";
                 AddWordInListExistingWords(WordFind);
             }
         }
 
-        private static int numberOfWordCanBeDone = 0;
-        private static List<string> listExistingWords = new List<string>();
+        public static List<string> ListExistingWords { get; set; } = new List<string>();
 
-        public static List<string> ListExistingWords { get => listExistingWords; set => listExistingWords = value; }
+        public static int NumberOfWordCanBeDone { get; set; } = 0;
 
-        public static int NumberOfWordCanBeDone { get => numberOfWordCanBeDone; set => numberOfWordCanBeDone = value; }
+        public static string WordFind { get; set; }
 
-        public static string WordFind { get => wordFind; set => wordFind = value; }
+        public static string Test { get => Test1; set => Test1 = value; }
 
-        public static string Test { get => test; set => test = value; }
-
-        public static char[] PossibleWord { get => possibleWord; set => possibleWord = value; }
+        public static char[] PossibleWord { get; set; } = new char[16];
+        public static string Test1 { get; set; } = string.Empty;
 
         public static void AddWordInListExistingWords(string word)
         {

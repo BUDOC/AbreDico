@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 
 namespace AbreDico
 {
-
     public class Point2D
     {
         public int X { get; set; }

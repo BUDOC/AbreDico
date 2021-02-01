@@ -14,7 +14,13 @@
      * - un booléen indiquant si cette lettre constitue la fin d'un mot
      * - une liste de noeuds désignant les noeuds enfants
      * */
+        private static bool startAuthorization=true;
         public static Noeud NoeudRacine { get; private set; }
+
+        public static bool GetAuthorizationStatus()
+        {
+            return startAuthorization;
+        }
 
         public static void InitialiseEnvironnement() // initialisation des données pour la construction de l'arbre des lettres des mots français
         {
@@ -24,8 +30,20 @@
             // initialisation du dictionnaire
             // string NomDuDico = "H:\\Famille\\GERALD\\visual_Studio\\Arbre_Dico\\MOTS TRADUITS.txt";
             string nomDuDico = Directory.GetCurrentDirectory() + "\\MOTS TRADUITS.txt";
-            string[] lignesDico = System.IO.File.ReadAllLines(nomDuDico);
-            NoeudRacine = ArbreDesMots.NoeudRacineConstructionArbre(lignesDico); // c'est le dictionnaire (arbre)
+            string[] lignesDico;
+            try
+            {
+                lignesDico = File.ReadAllLines(nomDuDico);
+                NoeudRacine = NoeudRacineConstructionArbre(lignesDico);
+            }
+            catch
+            {
+                startAuthorization = false;
+            }
+            
+
+            // c'est le dictionnaire (arbre)
+           
         }
 
         public static Noeud NoeudRacineConstructionArbre(string[] lignesDico)
@@ -34,7 +52,7 @@
             Noeud racine = new Noeud
             {
                 Lettre = ' ',
-                FinDeMot = false,
+                EndOfWord = false,
                 DictionnaireDesSousNoeuds = null,
             };
 
@@ -45,38 +63,45 @@
                 string mot = lignesDico[i];
 
                 // Création de la branche correspondant au mot par passage du noeud racine à la prcédure récussive VerifAjouteLettre
-                AjoutLettreCouranteSiBesoin(racine, 0, mot);
+                AddCourantLetterIfNeccesity(racine, 0, mot);
             }
 
             // affecte à NoeudRacineConstructionArbre accessible partout dans form1 la valeur du pointeur de Racine
             return racine;
         }
 
-        public static void AjoutLettreCouranteSiBesoin(Noeud noeudParent, int indexLettreCourante, string word) // Création de l'arbre
+        public static void AddCourantLetterIfNeccesity(Noeud parentNode, int courantLetterIndex, string word) // Création de l'arbre
         {
+            // n'effectue pas le traitement pour un mot vide
             if (word.Length == 0)
             {
                 return;
-            } // n'effectue pas le traitement pour un mot vide
-
-            char lettreCourante = word[indexLettreCourante];
-            if (noeudParent.DictionnaireDesSousNoeuds == null)
-            { // si le dico n'existe pas on en crée un vierge
-                noeudParent.DictionnaireDesSousNoeuds = new Dictionary<char, Noeud>();
             }
 
-            if (noeudParent.DictionnaireDesSousNoeuds.ContainsKey(lettreCourante)) // le dico existe et  si la clé existe
+            char CourantLetter = word[courantLetterIndex];
+
+            // si le dico n'existe pas on en crée un vierge
+            if (parentNode.DictionnaireDesSousNoeuds == null)
             {
-                foreach (KeyValuePair<char, Noeud> cle in noeudParent.DictionnaireDesSousNoeuds)
-                { // on cherche la clé (lettre)
-                    if (cle.Key == lettreCourante) // clé identifiée
+                parentNode.DictionnaireDesSousNoeuds = new Dictionary<char, Noeud>();
+            }
+
+            if (parentNode.DictionnaireDesSousNoeuds.ContainsKey(CourantLetter)) // le dico existe et  si la clé existe
+            {
+                // on cherche la clé (lettre)
+                foreach (KeyValuePair<char, Noeud> cle in parentNode.DictionnaireDesSousNoeuds)
+                {
+                    // clé identifiée
+                    if (cle.Key == CourantLetter)
                     {
-                        indexLettreCourante++; // (pour lettre suivante du mot)
-                        if (indexLettreCourante < word.Length) // -1 viré
-                        { // si le traitement du mot n'est pas fini on appelle récursivement la procédure
-                          // en passant le noeud courant le rang incrémenté et le mot en paramètre.
-                          // MessageBox.Show("Le dico du noeud père contient " + l + "du mot " + Word + " On cherche " + Word[rang]);
-                            AjoutLettreCouranteSiBesoin(cle.Value, indexLettreCourante, word);
+                        // (pour lettre suivante du mot)
+                        courantLetterIndex++;
+                        if (courantLetterIndex < word.Length)
+                        {
+                            // si le traitement du mot n'est pas fini on appelle récursivement la procédure
+                            // en passant le noeud courant le rang incrémenté et le mot en paramètre.
+                            // MessageBox.Show("Le dico du noeud père contient " + l + "du mot " + Word + " On cherche " + Word[rang]);
+                            AddCourantLetterIfNeccesity(cle.Value, courantLetterIndex, word);
                         }
                     }
                 }
@@ -84,41 +109,50 @@
             else
             {
                 // le dico existe et  clé pas trouvée => ajout noeud dans dico
-                Noeud noeudEnfant = new Noeud
+                Noeud SonNode = new Noeud
                 {
-                    Lettre = lettreCourante,
+                    Lettre = CourantLetter,
                 };
-                if (indexLettreCourante == word.Length - 1)
-                { // dernière lettre du mot  : On ajoute le noeud correspondant
-                    noeudEnfant.FinDeMot = true;
-                    noeudParent.DictionnaireDesSousNoeuds.Add(lettreCourante, noeudEnfant);
+
+                // dernière lettre du mot  : On ajoute le noeud correspondant
+                if (courantLetterIndex == word.Length - 1)
+                {
+                    SonNode.EndOfWord = true;
+                    parentNode.DictionnaireDesSousNoeuds.Add(CourantLetter, SonNode);
                     return;
                 }
                 else
-                { // PAS dernière lettre du mot  : On ajoute le noeud correspondant et on incémente rang et on relance récursivement la procédure
-                    noeudEnfant.FinDeMot = false;
-                    noeudParent.DictionnaireDesSousNoeuds.Add(lettreCourante, noeudEnfant);
-                    indexLettreCourante++;
-                    AjoutLettreCouranteSiBesoin(noeudEnfant, indexLettreCourante, word);
+
+                // PAS dernière lettre du mot  : On ajoute le noeud correspondant et on incémente rang et on relance récursivement la procédure
+                {
+                    SonNode.EndOfWord = false;
+                    parentNode.DictionnaireDesSousNoeuds.Add(CourantLetter, SonNode);
+                    courantLetterIndex++;
+                    AddCourantLetterIfNeccesity(SonNode, courantLetterIndex, word);
                 }
             }
         }
 
-        public static bool Motexiste(string mot, Noeud dictionnaireDesMots)
+        public static bool WordExists(string word, Noeud dictionnaireDesMots)
         {
-            int lg = mot.Length;
+            int lg = word.Length;
             Noeud noeudCourant = dictionnaireDesMots;
-            for (int i = 0; i < lg; i++) // Faire pour toutes les lettres du mot
+
+            // Faire pour toutes les lettres du mot
+            for (int i = 0; i < lg; i++)
             {
-                char lettreCourante = mot[i];
-                if (noeudCourant.DictionnaireDesSousNoeuds != null) // le Dictionnaire du noeud examiné n'est pas null
+                char lettreCourante = word[i];
+
+                // le Dictionnaire du noeud examiné n'est pas null
+                if (noeudCourant.DictionnaireDesSousNoeuds != null)
                 {
                     if (noeudCourant.DictionnaireDesSousNoeuds.ContainsKey(lettreCourante)) // le dico contient la lettre du mot
                     {
                         noeudCourant = noeudCourant.DictionnaireDesSousNoeuds[lettreCourante]; // affectation du noeud trouvé pour la lettre pour le tour de boucle suivant
                     }
                     else
-                    { // la lettre n'est pas trouvée !
+                    {
+                        // la lettre n'est pas trouvée !
                         return false;
                     }
                 }
@@ -128,15 +162,18 @@
                     if (i != lg)
                     {
                         return false;
-                    } // si ce n'est pas la fin de mot c'est anormal on retourne false
+                    }
+
+                    // si ce n'est pas la fin de mot c'est anormal on retourne false
                     else
                     {
+                        // si fin de mot c'est normal on retourne true
                         return true;
-                    }// si fin de mot c'est normal on retourne true
+                    }
                 }
             }
 
-            if (noeudCourant.FinDeMot)
+            if (noeudCourant.EndOfWord)
             {
                 return true;
             }

@@ -20,7 +20,7 @@ namespace AbreDico
             ScoreMotJoueur = 0;
         }
 
-        public static void ActualiseScoreMotJoeur(int scoreLettre)
+        public static void UpdatePlayerScore(int scoreLettre)
         {
             ScoreMotJoueur += scoreLettre; // remplacer par nb point du mot
         }
