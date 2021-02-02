@@ -216,14 +216,12 @@ namespace AbreDico
             this.InitializeComponent();
         }
 
+        // Bouton qui déclenche l'action de controler si le mot est acceptable
         private void BoutonVerifMot(object sender, EventArgs e)
-
-        // Bouton qui déclenche l'action de vocontroler si le mot estr acceptable
         {
             this.VerifMot();
             this.labNmotsTrouves.Text = "Nombre de mots trouvés = " + DataGame.NumberOFGoodWord.ToString();
             decimal percentOfFind = Convert.ToDecimal(DataGame.NumberOFGoodWord * 100) / Convert.ToDecimal(Way.NumberOfWordCanBeDone);
-
             this.LabPourcentageDeTrouves.Text = "Pourcentage de mots trouvés = " + percentOfFind.ToString("F1");
             this.textBox1.Clear();
             DataGame.ResetWordScore();
@@ -231,11 +229,12 @@ namespace AbreDico
             this.DrawMatrix();
         }
 
-        private void VerifMot() // Vérifie si le mot à controler n'est pas un mot déjà utilisé
+        // Vérifie si le mot à controler n'est pas un mot déjà utilisé
+        private void VerifMot()
         {
             this.pictureBox1.Visible = false;
 
-            if (ArbreDesMots.WordExists(this.textBox1.Text, ArbreDesMots.NoeudRacine))
+            if (WordsTree.WordExists(this.textBox1.Text, WordsTree.NoeudRacine))
             { // le mot propose par joueur existe
                 bool motDejaUtilise = false;
                 for (int cptM = 0; cptM < this.listBox1.Items.Count; cptM++)
@@ -313,8 +312,6 @@ namespace AbreDico
                 {
                     cpt++;
                     int pas = 60;
-
-                    // Label L = new System.Windows.Forms.Label();
                     LAbelXY l = new LAbelXY();
                     {
                         l.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, FontStyle.Bold, GraphicsUnit.Point, (byte)0);
@@ -340,8 +337,8 @@ namespace AbreDico
             DataGame.RazScoreTotal();
 
             // Pour la contruction d'un arbre des lettres à partir de la liste des mots français
-            ArbreDesMots.InitialiseEnvironnement();
-            if (ArbreDesMots.GetAuthorizationStatus())
+            WordsTree.InitialiseEnvironnement();
+            if (WordsTree.GetAuthorizationStatus())
             {
                 DonneesLettres.MatrixIniialization();
                 this.NewGame();
@@ -367,10 +364,10 @@ namespace AbreDico
         {
             this.ImageGai.Visible = false;
             this.ImageTriste.Visible = false;
-            using (LAbelXY choisi = (LAbelXY)sender)
+            LAbelXY choisi = (LAbelXY)sender;
             {
                 // this.Text = Choisi.X.ToString() + ", " + Choisi.Y.ToString();
-                choisi.Visible = false;
+                choisi.Visible = false; choisi.Visible = false;
                 this.GereClicSurLettre(choisi.Name.ToString(), choisi.Y, choisi.X);
             }
         }
@@ -397,7 +394,7 @@ namespace AbreDico
             DonneesLettres.CheckUsingLetters();
         }
 
-        private bool IsNeiborFromPrecedent()
+        private bool IsNeighbourrFromPrecedent()
         {
             // retourn vrai si la case est une case voisine
             int rx, ry;
@@ -435,9 +432,9 @@ namespace AbreDico
             DonneesLettres.ChoosenSquare.Y = ligne;
 
             // ParcoursDeMatrice.TrouveVoisinePossible(colonne, ligne);
-            if (this.IsNeiborFromPrecedent())
+            if (this.IsNeighbourrFromPrecedent())
             {
-                // pour tous les label de la form
+                // pour tous les labels de la form
                 foreach (Label LetterLabel in this.Controls.OfType<Label>())
                 {
                     // si le label est celui cliqué

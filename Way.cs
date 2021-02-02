@@ -175,7 +175,7 @@ namespace AbreDico
         private static void ShowCell(MyCellClass cell)
         {
             FindPossibleWord(cell.Level);
-            if (ArbreDesMots.WordExists(WordFind, ArbreDesMots.NoeudRacine))
+            if (WordsTree.WordExists(WordFind, WordsTree.NoeudRacine))
             {
                 // Test += WordFind + "\r\n";
                 AddWordInListExistingWords(WordFind);

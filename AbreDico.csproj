@@ -69,7 +69,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ArbreDesMots.cs" />
+    <Compile Include="WordsTree.cs" />
     <Compile Include="Way.cs" />
     <Compile Include="DataGame.cs" />
     <Compile Include="DonneesLettres.cs" />

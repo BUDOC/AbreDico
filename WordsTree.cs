@@ -7,7 +7,7 @@
     using System.Text;
     using System.Threading.Tasks;
 
-    public class ArbreDesMots
+    public class WordsTree
     {/* Choix : l'abre est représenté par une liste de noeuds
      * Le noeud est une classe qui comprend
      * - Un caractère : la donnée
