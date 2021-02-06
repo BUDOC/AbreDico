@@ -44,7 +44,7 @@ namespace AbreDico
             return cptV;
         }
 
-        public static readonly char[] P = { 'W', 'X', 'J', 'Q', 'V', 'K', 'Y', 'H' };
+        public static readonly char[] DifficylConsonnants = { 'W', 'X', 'J', 'Q', 'V', 'K', 'Y', 'H' };
         public static readonly char[] Alphabet = new char[26];
         public static readonly int[] TabloConsonneOuVoyelle = new int[26]; // consonne (0) ou Voyelle (1)
         public static readonly int[] PointArrayForAletter = new int[26];
@@ -57,9 +57,9 @@ namespace AbreDico
 
         public int ScoreTotal { get; set; } = 0;
 
-        public static char[] UsualVowels { get; set; } = { 'A', 'E', 'I', 'O', 'U' };
+        public static char[] UsualVowels { get; set; } = { 'E', 'A', 'I', 'O',  'U' };
 
-        public char[] DifficultConsonants { get; set; } = P;
+        public char[] DifficultConsonants { get; set; } = DifficylConsonnants;
 
         public static int PlaceInMatrix(char c)
         {
@@ -77,7 +77,6 @@ namespace AbreDico
             return i;
         }
         // renvoi le nombre d'occurences de la lettre dans matrice ([0..15] of char
-
         public static int HowManyInMatrix(char c)
         {
             int cpt = 0;
@@ -212,14 +211,14 @@ namespace AbreDico
             TabloDifficulte[20] = 2; // U
             TabloDifficulte[14] = 2; // O
             TabloDifficulte[6] = 2; // G
-            TabloDifficulte[7] = 3; // H difficulté prononcée
-            TabloDifficulte[21] = 3; // V
-            TabloDifficulte[10] = 4; // difficulté très prononcée
-            TabloDifficulte[9] = 4;  // J
-            TabloDifficulte[16] = 4; // Q
+            TabloDifficulte[7] = 4; // H difficulté prononcée
+            TabloDifficulte[21] = 4; // V
+            TabloDifficulte[10] = 5; // difficulté très prononcée
+            TabloDifficulte[9] = 8;  // J
+            TabloDifficulte[16] = 8; // Q
             for (int i = 22; i < 26; i++) // W X Y Z
             {
-                TabloDifficulte[i] = 4;
+                TabloDifficulte[i] = 8;
             }
         }
 
@@ -231,7 +230,7 @@ namespace AbreDico
             DiffultyLetter();
         }
 
-        public static void CheckUsingLetters()
+        public static void ResetLettersUtilisationArray()
         {
             // met toutes les case du tableau des cases cochées = false
             for (int j = 0; j < 4; j++)

@@ -5,20 +5,21 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace AbreDico
-{
+{   
+    // this class allow the verification of the proposind gamer word exists
     internal class Way
     {
+        // définition de la case : Deep sera affecté en fonction de la profondeur d'exploration du chemin
+        
         public class MyCellClass
-
-        // définition de la case : level sera affecté en fonction de la profondeur d'exploration du chemin
         {
             public int X { get; set; }
 
             public int Y { get; set; }
 
-            public int Level { get; set; }
+            public int Deep { get; set; }
 
-            internal List<MyCellClass> ListOfPossibleNeighbor { get; set; } = new List<MyCellClass>();
+            internal List<MyCellClass> ListOfPossiblesCellNeighbors { get; set; } = new List<MyCellClass>();
         }
 
         private static readonly bool[,] ArrayOfUsedCells = new bool[4, 4];
@@ -34,15 +35,15 @@ namespace AbreDico
             }
         }
 
-        public static void FindAcceptablesNeighbors(MyCellClass workingCell)
+        public static void AddAcceptablesNeighbors(MyCellClass workingCell)
         {
             // cette procedure trouve les cases voisines de celle passée en pramètre
-            // Créer des instance de Case pour chacune
-            // et les ajoute dans la liste des cases voisine de la case passée en pramètre
-            // et le niveau de parcours du chemin?
+            // Créer des instances de Case pour chacune
+            // et les ajoute dans la liste des cases voisines de la case passée en pramètre
+            // et le niveau de parcours du chemin est incrémenté pour ces cellules voisines
             int xofCell = workingCell.X;
             int yofCell = workingCell.Y;
-            int nextLevel = workingCell.Level + 1;
+            int nextLevel = workingCell.Deep + 1;
             for (int dx = -1; dx < 2; dx++)
             {
                 for (int dy = -1; dy < 2; dy++)
@@ -71,9 +72,9 @@ namespace AbreDico
                                 {
                                     X = coordonneeX,
                                     Y = coordonneeY,
-                                    Level = nextLevel,
+                                    Deep = nextLevel,
                                 };
-                                workingCell.ListOfPossibleNeighbor.Add(neighborsCell);
+                                workingCell.ListOfPossiblesCellNeighbors.Add(neighborsCell);
                             }
                         }
                         else
@@ -107,6 +108,7 @@ namespace AbreDico
             }
         }
 
+        // find all combinations workables in  the matrix
         public static void TotalExploration()
         {
             int cpt = 0;
@@ -120,6 +122,7 @@ namespace AbreDico
             }
         }
 
+        // begin the exploration in x,y cell of matrix . (set the root)
         public static void BeginTree(int x, int y)
         {
             InitialiseArrayOfUsedfCells();
@@ -128,57 +131,87 @@ namespace AbreDico
             {
                 X = x,
                 Y = y,
-                Level = 0,
+                Deep = 0,
             };
             ArrayOfUsedCells[root.X, root.Y] = true;
-            PossibleWord[root.Level] = LetterOfCell(root);
-            FindAcceptablesNeighbors(root);
-            ShowCell(root);
-            for (int round0 = 0; round0 < root.ListOfPossibleNeighbor.Count; round0++)
+            PossibleWord[root.Deep] = LetterOfCell(root);
+            AddAcceptablesNeighbors(root);
+            AddPossibleWordsToList(root);
+
+            // for every neighbour of root run GoOntree
+            for (int round0 = 0; round0 < root.ListOfPossiblesCellNeighbors.Count; round0++)
             {
-                GoOnTree(root, root.ListOfPossibleNeighbor[round0]);
+                GoOnTree(root, root.ListOfPossiblesCellNeighbors[round0]);
             }
         }
 
         public static void GoOnTree(MyCellClass topCell, MyCellClass donwCell)
-        {
-            ArrayOfUsedCells[donwCell.X, donwCell.Y] = true;
-            PossibleWord[donwCell.Level] = LetterOfCell(donwCell);
-            FindAcceptablesNeighbors(donwCell);
-            ShowCell(donwCell);
-            if (donwCell.ListOfPossibleNeighbor.Count == 0)
-            {
-                ArrayOfUsedCells[donwCell.X, donwCell.Y] = false;
-                PossibleWord[donwCell.Level] = '*';
-                int maxIndex = topCell.ListOfPossibleNeighbor.Count;
+        { 
 
-                // Vire la reference à la celulle courante de la liste de la cellule mère
+
+            // add true in array of used cell for downcell
+            ArrayOfUsedCells[donwCell.X, donwCell.Y] = true;
+
+            // add the downcell letter to word in construction
+            PossibleWord[donwCell.Deep] = LetterOfCell(donwCell);
+
+            // find and add the possibles neighbours of downcell in downcell list of neighbours
+            AddAcceptablesNeighbors(donwCell);
+            AddPossibleWordsToList(donwCell);
+
+            // dowcell have no neighbour
+            if (donwCell.ListOfPossiblesCellNeighbors.Count == 0)
+            {
+                // make the cell not used
+                ArrayOfUsedCells[donwCell.X, donwCell.Y] = false;
+
+                // erase char at level place
+                PossibleWord[donwCell.Deep] = '*';
+
+                int maxIndex = topCell.ListOfPossiblesCellNeighbors.Count;
+
+                // Find downcel reference in the neignbours list of Top cell
                 for (int numCell = 0; numCell < maxIndex; numCell++)
-                { // Vire de la liste des voisines possibles de la case de niveau supérieur la référence à la cellule en cours
-                    if (topCell.ListOfPossibleNeighbor[numCell].X == donwCell.X && topCell.ListOfPossibleNeighbor[numCell].Y == donwCell.Y)
+                {
+                    // if it is the cell we want to find we erase it
+                    if (topCell.ListOfPossiblesCellNeighbors[numCell].X == donwCell.X && topCell.ListOfPossiblesCellNeighbors[numCell].Y == donwCell.Y)
                     {
-                        topCell.ListOfPossibleNeighbor.RemoveAt(numCell);
-                        numCell = maxIndex; // pour sortir
+                        topCell.ListOfPossiblesCellNeighbors.RemoveAt(numCell);
+
+                        // to exit shortly
+                        numCell = maxIndex;
                     }
                 }
             }
             else
+
+            // downcell have neighbour(s)
             {
-                GoOnTree(donwCell, donwCell.ListOfPossibleNeighbor[0]);
-                if (donwCell.ListOfPossibleNeighbor.Count != 0)
+                // ???????????????  c'est ici que la séquence ci-dessous doite être répétée pour toutes les voisines
+                for ( int allNeighbours = 0;  allNeighbours < donwCell.ListOfPossiblesCellNeighbors.Count; allNeighbours++)
+                {
+                    GoOnTree(donwCell, donwCell.ListOfPossiblesCellNeighbors[allNeighbours]);
+                }
+
+                if (donwCell.ListOfPossiblesCellNeighbors.Count != 0)
                 {
                     ArrayOfUsedCells[donwCell.X, donwCell.Y] = false;
                 }
             }
         }
 
-        private static void ShowCell(MyCellClass cell)
+        // If the list of chars betwen 0 to level's cell witch is transmited  is a word it is add to list
+        private static void AddPossibleWordsToList(MyCellClass cell)
         {
-            FindPossibleWord(cell.Level);
-            if (WordsTree.WordExists(WordFind, WordsTree.NoeudRacine))
+            FindPossibleWord(cell.Deep);
+            if (WordsTree.WordExists(WordFind, LoadWordsDictionnary.NoeudRacine))
             {
-                // Test += WordFind + "\r\n";
                 AddWordInListExistingWords(WordFind);
+                Test += WordFind+"\r\n";
+            }
+            else
+            {
+                Test +=  WordFind +")\r\n";
             }
         }
 

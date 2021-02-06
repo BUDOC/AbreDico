@@ -50,6 +50,7 @@ namespace AbreDico
             this.labNbMotPossible = new System.Windows.Forms.Label();
             this.labNmotsTrouves = new System.Windows.Forms.Label();
             this.LabPourcentageDeTrouves = new System.Windows.Forms.Label();
+            this.btTest2 = new System.Windows.Forms.Button();
             this.panelMIAP.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ImageGai)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ImageTriste)).BeginInit();
@@ -140,7 +141,7 @@ namespace AbreDico
             this.pictureBox1.Size = new System.Drawing.Size(150, 135);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBox1.TabIndex = 2;
-            this.pictureBox1.TabStop = false;            
+            this.pictureBox1.TabStop = false;
             // 
             // button1
             // 
@@ -156,19 +157,19 @@ namespace AbreDico
             // textBox2
             // 
             this.textBox2.Font = new System.Drawing.Font("Lucida Console", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBox2.Location = new System.Drawing.Point(872, 18);
+            this.textBox2.Location = new System.Drawing.Point(1005, 18);
             this.textBox2.Multiline = true;
             this.textBox2.Name = "textBox2";
             this.textBox2.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.textBox2.Size = new System.Drawing.Size(611, 444);
+            this.textBox2.Size = new System.Drawing.Size(478, 444);
             this.textBox2.TabIndex = 20;
             // 
             // panel1
             // 
             this.panel1.Controls.Add(this.labNotification);
-            this.panel1.Location = new System.Drawing.Point(14, 218);
+            this.panel1.Location = new System.Drawing.Point(14, 246);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(270, 57);
+            this.panel1.Size = new System.Drawing.Size(270, 29);
             this.panel1.TabIndex = 21;
             // 
             // labNotification
@@ -268,11 +269,22 @@ namespace AbreDico
             this.LabPourcentageDeTrouves.TabIndex = 28;
             this.LabPourcentageDeTrouves.Text = ".";
             // 
+            // btTest2
+            // 
+            this.btTest2.Location = new System.Drawing.Point(853, 162);
+            this.btTest2.Name = "btTest2";
+            this.btTest2.Size = new System.Drawing.Size(130, 37);
+            this.btTest2.TabIndex = 29;
+            this.btTest2.Text = "Test2";
+            this.btTest2.UseVisualStyleBackColor = true;
+            this.btTest2.Click += new System.EventHandler(this.btTest2_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1495, 564);
+            this.Controls.Add(this.btTest2);
             this.Controls.Add(this.LabPourcentageDeTrouves);
             this.Controls.Add(this.labNmotsTrouves);
             this.Controls.Add(this.labNbMotPossible);
@@ -328,6 +340,7 @@ namespace AbreDico
         private System.Windows.Forms.Label labNbMotPossible;
         private System.Windows.Forms.Label labNmotsTrouves;
         private System.Windows.Forms.Label LabPourcentageDeTrouves;
+        private System.Windows.Forms.Button btTest2;
     }
 }
 

@@ -6,6 +6,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -18,7 +19,248 @@ namespace AbreDico
         // **** Couleurs de l'environnement
         private readonly Color defaultColor = Color.FromName("Navy");
 
-        public void CréateMatrix() // Génère aléatoirement des lettres qui sont mises dans le tableau"matrice"
+        // retourne une consonne en fonction du niveau de diffculté
+        static Random  rand = new Random();
+
+        public void CreateTestLetterArray()
+        {
+            char[,] testLetterArray = new char[4, 4];
+            testLetterArray[0, 0] = 'I';
+            testLetterArray[0, 1] = 'M';
+            testLetterArray[0, 2] = 'L';
+            testLetterArray[0, 3] = 'I';
+            testLetterArray[1, 0] = 'M';
+            testLetterArray[1, 1] = 'O';
+            testLetterArray[1, 2] = 'U';
+            testLetterArray[1, 3] = 'M';
+            testLetterArray[2, 0] = 'E';
+            testLetterArray[2, 1] = 'R';
+            testLetterArray[2, 2] = 'T';
+            testLetterArray[2, 3] = 'A';
+            testLetterArray[3, 0] = 'I';
+            testLetterArray[3, 1] = 'T';
+            testLetterArray[3, 2] = 'N';
+            testLetterArray[3, 3] = 'I';
+
+            for (int li = 0; li < 4; li++)
+            {
+                for (int co = 0; co < 4; co++)
+                {
+                    DonneesLettres.TableauDeLettres[li, co] = testLetterArray[li, co];
+                }
+            }
+        }
+
+            private static int RangConsonnant(int maxDifficulty)
+        {
+
+            int range;
+            do
+            {
+                range = rand.Next(0, 26);
+            } while 
+            (DonneesLettres.TabloDifficulte[range] >= maxDifficulty &&
+                        DonneesLettres.TabloConsonneOuVoyelle[range] == 1);
+
+            return range;
+        }
+
+
+        private void MatriceCreate()
+        {
+            // this part was programmed with feet but it works :-)
+            // Variables
+            var rand = new Random();
+            int number0fVowel = rand.Next(8, 11);
+            List<char> vowelList = new List<char>();
+            char[,] lettersPositionningArray = new char[4, 4];
+
+            // variable de limitation des voyelles répétée
+            int maxO = 2;
+            int maxU = 3;
+            int maxI = 3;
+            int maxA = 3;
+            int maxE = 4;
+            int cptO = 0;
+            int cptU = 0;
+            int cptI = 0;
+            int cptA = 0;
+            int cptE = 0;
+
+            // initialise le tableau de lettre
+            for (int line = 0; line < 4; line++)
+            {
+                for (int column = 0; column < 4; column++)
+                {
+                    lettersPositionningArray[line, column] = '?';
+                }
+            }
+
+            // Ajoute des voyelles tirées au hasard dans la liste des voyelles
+            vowelList.Clear();
+            for (int i = 0; i <= number0fVowel; i++)
+            {
+                vowelList.Add(DonneesLettres.UsualVowels[rand.Next(0, 4)]);
+            }
+
+            void PlaceVoyelleDansQuart( int x1, int y1, int x2, int y2)
+            {
+                // a ajouter controle de nombre de voyelles répétées
+                char vowel;
+                for (int i = 0; i < 2; i++)
+                {
+                    int li = rand.Next(x1, y1);
+                    Thread.Sleep(12);
+                    int co = rand.Next(x2, y2);
+                    Thread.Sleep(12);
+                    if (lettersPositionningArray[li, co] == '?')
+                    {
+                        vowel = vowelList[rand.Next(0, vowelList.Count)];
+                        Thread.Sleep(12);
+                        switch (vowel)
+                        {
+                            case 'O':
+                                if (cptO <= maxO)
+                                {
+                                    lettersPositionningArray[li, co] = vowel;
+                                    cptO++;
+                                }
+                                else
+                                {
+                                    i--;
+                                }
+                                break;
+                            case 'U':
+                                if (cptU <= maxU)
+                                {
+                                    lettersPositionningArray[li, co] = vowel;
+                                    cptU++;
+                                }
+                                else
+                                {
+                                    i--;
+                                }
+                                break;
+                            case 'I':
+                                if (cptI <= maxI)
+                                {
+                                    lettersPositionningArray[li, co] = vowel;
+                                    cptI++;
+                                }
+                                else
+                                {
+                                    i--;
+                                }
+                                break;
+                            case 'A':
+                                if (cptA <= maxA)
+                                {
+                                    lettersPositionningArray[li, co] = vowel;
+                                    cptA++;
+                                }
+                                else
+                                {
+                                    i--;
+                                }
+                                break;
+                            case 'E':
+                                if (cptE <= maxE)
+                                {
+                                    lettersPositionningArray[li, co] = vowel;
+                                    cptE++;
+                                }
+                                else
+                                {
+                                    i--;
+                                }
+                                break;
+                        }
+                    }
+                    else
+                    {
+                        i--;
+                    }
+                }
+            }
+
+            // Place 2 voyelles aléatoirement dans chaque quart et le reste aléatoirement (donc 8 voyelles)
+            // Quart NO
+            PlaceVoyelleDansQuart(0, 2, 0, 2);
+
+            // Quart NE
+            PlaceVoyelleDansQuart(0, 2, 1, 4);
+
+            // Quart SO
+            PlaceVoyelleDansQuart(1, 4, 0, 2);
+
+            // QuartSE
+            PlaceVoyelleDansQuart(1, 4, 1, 4);
+
+            // Ajoute si nécessaires pour atteindre le nombre de voyelles fixé aléatoirement
+            if (number0fVowel < 8)
+            {
+                for (int i = 0; i < number0fVowel - 8; i++)
+                {
+                    int li = rand.Next(0, 4);
+                    Thread.Sleep(14);
+                    int co = rand.Next(0, 4);
+                    Thread.Sleep(12);
+                    while (lettersPositionningArray[li, co] == '?')
+                    {
+                        li = rand.Next(0, 4);
+                        Thread.Sleep(13);
+                        co = rand.Next(0, 4);
+                        Thread.Sleep(14);
+                    }
+                    lettersPositionningArray[li, co] = vowelList[rand.Next(0, vowelList.Count)];
+                }
+            }
+
+            // Remplit aléatoirement le reste du tableau avec des consonnes
+            // en gérant la difficuté
+            int difficultyLevel = 8;
+            int rangTrouve;
+            for (int li = 0; li < 4; li++)
+            {
+                for (int co = 0; co < 4; co++)
+                {
+                    rangTrouve = rand.Next(0, 26);
+                    Thread.Sleep(12);
+                    // pour toutes les cases du tableau
+                    // si la case n'est pas utilisée
+                    if (lettersPositionningArray[li, co] == '?')
+                    {
+                        // tire une consonne
+                        char test =  DonneesLettres.Alphabet[RangConsonnant(difficultyLevel)];
+                        Thread.Sleep(11);
+                        //  ================ fonctionnement différent avec point d'arrêt et sans!
+                        lettersPositionningArray[li, co] = test;
+                        if (DonneesLettres.TabloDifficulte[rangTrouve] >= 3)
+                        {
+                            difficultyLevel -= 4;
+                            if (difficultyLevel <= 0)
+                            {
+                                difficultyLevel = 1;
+                            }
+                        }
+                    }
+                }
+
+                // transfere les lettres dans la matrice
+            }
+            for (int lig = 0; lig < 4; lig++)
+            {
+                for (int co = 0; co < 4; co++)
+                {
+                    DonneesLettres.TableauDeLettres[lig, co] = lettersPositionningArray[lig, co];
+                }
+            }
+
+            // forçage d'une matrice de test
+            CreateTestLetterArray();
+        }
+
+        public void CreateMatrix() // Génère aléatoirement des lettres qui sont mises dans le tableau"matrice"
         {
             int cptVoyelle = 0;
             int voyelleDeSuite = 0;
@@ -234,7 +476,7 @@ namespace AbreDico
         {
             this.pictureBox1.Visible = false;
 
-            if (WordsTree.WordExists(this.textBox1.Text, WordsTree.NoeudRacine))
+            if (WordsTree.WordExists(this.textBox1.Text, LoadWordsDictionnary.NoeudRacine))
             { // le mot propose par joueur existe
                 bool motDejaUtilise = false;
                 for (int cptM = 0; cptM < this.listBox1.Items.Count; cptM++)
@@ -296,7 +538,8 @@ namespace AbreDico
             DataGame.RazScoreTotal();
             this.labScoreMotJoueur.Text = "Score du mot";
             this.labScoreTotal.Text = "Score de la partie.";
-            this.CréateMatrix();
+            //this.CreateMatrix();
+            MatriceCreate();
             this.DrawMatrix();
             Way.TotalExploration();
             this.labNbMotPossible.Text = "Le nombre de mots possibles est de " + Way.NumberOfWordCanBeDone.ToString();
@@ -337,8 +580,8 @@ namespace AbreDico
             DataGame.RazScoreTotal();
 
             // Pour la contruction d'un arbre des lettres à partir de la liste des mots français
-            WordsTree.InitialiseEnvironnement();
-            if (WordsTree.GetAuthorizationStatus())
+            LoadWordsDictionnary.InitialiseEnvironnement();
+            if (LoadWordsDictionnary.GetAuthorizationStatus())
             {
                 DonneesLettres.MatrixIniialization();
                 this.NewGame();
@@ -351,6 +594,9 @@ namespace AbreDico
                     " de l'application.", "Erreur fatale.", MessageBoxButtons.OK, MessageBoxIcon.Stop);
                 Application.Exit();
             }
+            this.textBox2.Clear();
+          this.textBox2.Text=  Way.Test;
+            MessageBox.Show("Nombre de combinaisons testées =" + this.textBox2.Lines.Count().ToString());
         }
 
         private class LAbelXY : Label
@@ -372,6 +618,32 @@ namespace AbreDico
             }
         }
 
+
+        private void DrawMatrix2()
+        {
+            int compteur = 0;
+            try
+            {
+                foreach (LAbelXY labelDeLettre in this.Controls.OfType<LAbelXY>())
+                {
+                    labelDeLettre.Text = DonneesLettres.TableauDeLettres[labelDeLettre.Y, labelDeLettre.X].ToString();
+                    labelDeLettre.Visible = true;
+                    compteur++;
+                }
+            }
+            catch
+            {
+                MessageBox.Show("Erreur dans la boucle foreach de dessinneMatrice");
+            }
+
+            DonneesLettres.PrecedentSquare.X = -1; // initialise case précédente
+            DonneesLettres.PrecedentSquare.Y = -1;
+            //  DonneesLettres.CheckUsingLetters();
+        }
+
+
+
+
         private void DrawMatrix()
         {
             int compteur = 0;
@@ -391,7 +663,7 @@ namespace AbreDico
 
             DonneesLettres.PrecedentSquare.X = -1; // initialise case précédente
             DonneesLettres.PrecedentSquare.Y = -1;
-            DonneesLettres.CheckUsingLetters();
+            DonneesLettres.ResetLettersUtilisationArray();
         }
 
         private bool IsNeighbourrFromPrecedent()
@@ -482,8 +754,16 @@ namespace AbreDico
             this.textBox2.Text = listBoxText;
         }
 
+        private void btTest2_Click(object sender, EventArgs e)
+        {
+            MatriceCreate();
+            DrawMatrix2();
+        }
+
         // fin classe Form1
     }
+
+   
 
     // FIn  namspace
 }

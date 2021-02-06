@@ -7,6 +7,7 @@
     using System.Text;
     using System.Threading.Tasks;
 
+    // this is the tree of french words contructed with the dictionnary file
     public class Noeud
     {
         public char Lettre { get; set; }
