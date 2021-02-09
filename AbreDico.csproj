@@ -70,6 +70,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="LoadWordsDictionnary.cs" />
+    <Compile Include="WordsInGrid.cs" />
     <Compile Include="WordsTree.cs" />
     <Compile Include="Way.cs" />
     <Compile Include="DataGame.cs" />

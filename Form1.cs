@@ -538,10 +538,14 @@ namespace AbreDico
             DataGame.RazScoreTotal();
             this.labScoreMotJoueur.Text = "Score du mot";
             this.labScoreTotal.Text = "Score de la partie.";
+
             //this.CreateMatrix();
-            MatriceCreate();
+
+            //MatriceCreate();
+            CreateTestLetterArray();
             this.DrawMatrix();
-            Way.TotalExploration();
+             // Way.TotalExploration();  // Way class de depart
+            WordsInGrid.ExploreCellWay() ;
             this.labNbMotPossible.Text = "Le nombre de mots possibles est de " + Way.NumberOfWordCanBeDone.ToString();
         }
 
@@ -595,7 +599,7 @@ namespace AbreDico
                 Application.Exit();
             }
             this.textBox2.Clear();
-          this.textBox2.Text=  Way.Test;
+            this.textBox2.Text = WordsInGrid.Test; // Way.Test;
             MessageBox.Show("Nombre de combinaisons testées =" + this.textBox2.Lines.Count().ToString());
         }
 

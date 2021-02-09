@@ -25,21 +25,20 @@ namespace AbreDico
             // this.pictureBox1.Visible = true;
             // Création de l'arbre à partir du fichier texte.
             // ===================
-            // initialisation du dictionnaire
-            // string NomDuDico = "H:\\Famille\\GERALD\\visual_Studio\\Arbre_Dico\\MOTS TRADUITS.txt";
+            // initialisation du dictionnaire            
             string nomDuDico = Directory.GetCurrentDirectory() + "\\MOTS TRADUITS.txt";
             string[] lignesDico;
             try
             {
                 lignesDico = File.ReadAllLines(nomDuDico);
-                NoeudRacine = WordsTree.NoeudRacineConstructionArbre (lignesDico); //NoeudRacineConstructionArbre(lignesDico);
+
+                // c'est le dictionnaire (arbre)
+                NoeudRacine = WordsTree.NoeudRacineConstructionArbre (lignesDico);
             }
             catch
             {
                 startAuthorization = false;
             }
-
-            // c'est le dictionnaire (arbre)
         }
 
     }

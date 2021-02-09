@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace AbreDico
@@ -23,6 +24,8 @@ namespace AbreDico
         }
 
         private static readonly bool[,] ArrayOfUsedCells = new bool[4, 4];
+
+      
 
         private static void InitialiseArrayOfUsedfCells()
         {
@@ -111,7 +114,8 @@ namespace AbreDico
         // find all combinations workables in  the matrix
         public static void TotalExploration()
         {
-            int cpt = 0;
+            BeginTree(0, 0);
+           /* int cpt = 0;
             for (int i = 0; i < 4; i++)
             {
                 for (int j = 0; j < 4; j++)
@@ -119,7 +123,7 @@ namespace AbreDico
                     cpt++;
                     BeginTree(i, j);
                 }
-            }
+            }*/
         }
 
         // begin the exploration in x,y cell of matrix . (set the root)
@@ -139,15 +143,24 @@ namespace AbreDico
             AddPossibleWordsToList(root);
 
             // for every neighbour of root run GoOntree
-            for (int round0 = 0; round0 < root.ListOfPossiblesCellNeighbors.Count; round0++)
+           /* for (int round0 = 0; round0 < root.ListOfPossiblesCellNeighbors.Count; round0++)
             {
                 GoOnTree(root, root.ListOfPossiblesCellNeighbors[round0]);
+            }*/
+
+             while ( root.ListOfPossiblesCellNeighbors.Count != 0)
+            {
+                  GoOnTree(root, root.ListOfPossiblesCellNeighbors[0]); 
+                root.ListOfPossiblesCellNeighbors.RemoveAt(0);
             }
+
+            // erase  True in used cells array.
+            ArrayOfUsedCells[root.X, root.Y] = false;
         }
 
+    
         public static void GoOnTree(MyCellClass topCell, MyCellClass donwCell)
         { 
-
 
             // add true in array of used cell for downcell
             ArrayOfUsedCells[donwCell.X, donwCell.Y] = true;
@@ -207,12 +220,18 @@ namespace AbreDico
             if (WordsTree.WordExists(WordFind, LoadWordsDictionnary.NoeudRacine))
             {
                 AddWordInListExistingWords(WordFind);
-                Test += WordFind+"\r\n";
+
             }
             else
             {
-                Test +=  WordFind +")\r\n";
+
             }
+
+            for (int i = 0; i < PossibleWord.Length; i++)
+            {
+                Test += PossibleWord[i];
+            }
+            Test += "\r\n";
         }
 
         public static List<string> ListExistingWords { get; set; } = new List<string>();
