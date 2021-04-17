@@ -1,11 +1,6 @@
 ﻿namespace AbreDico
 {
-    using System;
     using System.Collections.Generic;
-    using System.IO;
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
 
     public class WordsTree
     {/* Choix : l'abre est représenté par une liste de noeuds
@@ -15,7 +10,7 @@
      * - une liste de noeuds désignant les noeuds enfants
      * */
 
-      
+
 
         public static Noeud NoeudRacineConstructionArbre(string[] lignesDico)
         {
@@ -118,10 +113,10 @@
                 if (noeudCourant.DictionnaireDesSousNoeuds != null)
                 {
                     // le dico contient la lettre du mot
-                    if (noeudCourant.DictionnaireDesSousNoeuds.ContainsKey(lettreCourante)) 
+                    if (noeudCourant.DictionnaireDesSousNoeuds.ContainsKey(lettreCourante))
                     {
                         // affectation du noeud trouvé pour la lettre pour le tour de boucle suivant
-                        noeudCourant = noeudCourant.DictionnaireDesSousNoeuds[lettreCourante]; 
+                        noeudCourant = noeudCourant.DictionnaireDesSousNoeuds[lettreCourante];
                     }
                     else
                     {

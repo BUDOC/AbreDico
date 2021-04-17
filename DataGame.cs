@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace AbreDico
+﻿namespace AbreDico
 {
     // [Nonbre de points associés, consonne (0) ou Voyelle (1),Type de la lettre]
     // Type de la lettre 0:courante ,1: moyennement chiante, 2:assez chiante 3: très chiante.

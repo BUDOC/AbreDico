@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AbreDico
 {
@@ -57,7 +53,7 @@ namespace AbreDico
 
         public int ScoreTotal { get; set; } = 0;
 
-        public static char[] UsualVowels { get; set; } = { 'E', 'A', 'I', 'O',  'U' };
+        public static char[] UsualVowels { get; set; } = { 'E', 'A', 'I', 'O', 'U' };
 
         public char[] DifficultConsonants { get; set; } = DifficylConsonnants;
 

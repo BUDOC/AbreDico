@@ -1,13 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace AbreDico
@@ -20,15 +15,16 @@ namespace AbreDico
         private readonly Color defaultColor = Color.FromName("Navy");
 
         // retourne une consonne en fonction du niveau de diffculté
-        static Random  rand = new Random();
+        static Random rand = new Random();
 
         public void CreateTestLetterArray()
         {
             char[,] testLetterArray = new char[4, 4];
+
             testLetterArray[0, 0] = 'I';
-            testLetterArray[0, 1] = 'M';
+            testLetterArray[0, 1] = 'A';
             testLetterArray[0, 2] = 'L';
-            testLetterArray[0, 3] = 'I';
+            testLetterArray[0, 3] = 'E';
             testLetterArray[1, 0] = 'M';
             testLetterArray[1, 1] = 'O';
             testLetterArray[1, 2] = 'U';
@@ -41,7 +37,6 @@ namespace AbreDico
             testLetterArray[3, 1] = 'T';
             testLetterArray[3, 2] = 'N';
             testLetterArray[3, 3] = 'I';
-
             for (int li = 0; li < 4; li++)
             {
                 for (int co = 0; co < 4; co++)
@@ -51,14 +46,14 @@ namespace AbreDico
             }
         }
 
-            private static int RangConsonnant(int maxDifficulty)
+        private static int RangConsonnant(int maxDifficulty)
         {
 
             int range;
             do
             {
                 range = rand.Next(0, 26);
-            } while 
+            } while
             (DonneesLettres.TabloDifficulte[range] >= maxDifficulty &&
                         DonneesLettres.TabloConsonneOuVoyelle[range] == 1);
 
@@ -103,7 +98,7 @@ namespace AbreDico
                 vowelList.Add(DonneesLettres.UsualVowels[rand.Next(0, 4)]);
             }
 
-            void PlaceVoyelleDansQuart( int x1, int y1, int x2, int y2)
+            void PlaceVoyelleDansQuart(int x1, int y1, int x2, int y2)
             {
                 // a ajouter controle de nombre de voyelles répétées
                 char vowel;
@@ -231,7 +226,7 @@ namespace AbreDico
                     if (lettersPositionningArray[li, co] == '?')
                     {
                         // tire une consonne
-                        char test =  DonneesLettres.Alphabet[RangConsonnant(difficultyLevel)];
+                        char test = DonneesLettres.Alphabet[RangConsonnant(difficultyLevel)];
                         Thread.Sleep(11);
                         //  ================ fonctionnement différent avec point d'arrêt et sans!
                         lettersPositionningArray[li, co] = test;
@@ -463,8 +458,8 @@ namespace AbreDico
         {
             this.VerifMot();
             this.labNmotsTrouves.Text = "Nombre de mots trouvés = " + DataGame.NumberOFGoodWord.ToString();
-            decimal percentOfFind = Convert.ToDecimal(DataGame.NumberOFGoodWord * 100) / Convert.ToDecimal(Way.NumberOfWordCanBeDone);
-            this.LabPourcentageDeTrouves.Text = "Pourcentage de mots trouvés = " + percentOfFind.ToString("F1");
+            //    decimal percentOfFind = Convert.ToDecimal(DataGame.NumberOFGoodWord * 100) / Convert.ToDecimal(Way.NumberOfWordCanBeDone);
+            //    this.LabPourcentageDeTrouves.Text = "Pourcentage de mots trouvés = " + percentOfFind.ToString("F1");
             this.textBox1.Clear();
             DataGame.ResetWordScore();
             this.labScoreMotJoueur.Text = string.Empty;
@@ -522,7 +517,7 @@ namespace AbreDico
         private void Button1_Click(object sender, EventArgs e)
         { // Réalise un nouveau tirage de lettres et configure l'IHM
             this.textBox2.Clear();
-            Way.Test = string.Empty;
+            //    Way.Test = string.Empty;
             DataGame.ResetWordScore();
             DataGame.NumberOFGoodWord = 0;
             this.NewGame();
@@ -544,9 +539,9 @@ namespace AbreDico
             //MatriceCreate();
             CreateTestLetterArray();
             this.DrawMatrix();
-             // Way.TotalExploration();  // Way class de depart
-            WordsInGrid.ExploreCellWay() ;
-            this.labNbMotPossible.Text = "Le nombre de mots possibles est de " + Way.NumberOfWordCanBeDone.ToString();
+            // Way.TotalExploration();  // Way class de depart
+            WordsInGrid.ExploreCellWay();
+            //   this.labNbMotPossible.Text = "Le nombre de mots possibles est de " + Way.NumberOfWordCanBeDone.ToString();
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -598,8 +593,10 @@ namespace AbreDico
                     " de l'application.", "Erreur fatale.", MessageBoxButtons.OK, MessageBoxIcon.Stop);
                 Application.Exit();
             }
+
             this.textBox2.Clear();
-            this.textBox2.Text = WordsInGrid.Test; // Way.Test;
+      // this.textBox2.Text = WordsInGrid.Test; // Way.Test;
+      this.textBox2.Text = WordsInGrid.ListOfPossibleWord;
             MessageBox.Show("Nombre de combinaisons testées =" + this.textBox2.Lines.Count().ToString());
         }
 
@@ -746,16 +743,17 @@ namespace AbreDico
 
         private void Bt_test_Click(object sender, EventArgs e)
         {
-            this.textBox2.Clear();
-            Way.TotalExploration();
-            string listBoxText = string.Empty;
-            for (int i = 0; i < Way.ListExistingWords.Count; i++)
-            {
-                listBoxText += Way.ListExistingWords[i] + "\r\n";
-            }
+            /*   this.textBox2.Clear();
+               Way.TotalExploration();
+               string listBoxText = string.Empty;
+               for (int i = 0; i < Way.ListExistingWords.Count; i++)
+               {
+                   listBoxText += Way.ListExistingWords[i] + "\r\n";
+               }
 
-            listBoxText += "Nombre de mots possible =" + Way.NumberOfWordCanBeDone + "\r\n";
-            this.textBox2.Text = listBoxText;
+               listBoxText += "Nombre de mots possible =" + Way.NumberOfWordCanBeDone + "\r\n";
+               this.textBox2.Text = listBoxText;
+            */
         }
 
         private void btTest2_Click(object sender, EventArgs e)
@@ -767,7 +765,7 @@ namespace AbreDico
         // fin classe Form1
     }
 
-   
+
 
     // FIn  namspace
 }

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.IO;
 
 
 namespace AbreDico
@@ -20,7 +15,7 @@ namespace AbreDico
         }
 
         // initialisation des données pour la construction de l'arbre des lettres des mots français
-        public static void InitialiseEnvironnement() 
+        public static void InitialiseEnvironnement()
         {
             // this.pictureBox1.Visible = true;
             // Création de l'arbre à partir du fichier texte.
@@ -33,7 +28,7 @@ namespace AbreDico
                 lignesDico = File.ReadAllLines(nomDuDico);
 
                 // c'est le dictionnaire (arbre)
-                NoeudRacine = WordsTree.NoeudRacineConstructionArbre (lignesDico);
+                NoeudRacine = WordsTree.NoeudRacineConstructionArbre(lignesDico);
             }
             catch
             {
