@@ -9,42 +9,15 @@ namespace AbreDico
 {
     public partial class Form1 : Form
     {
-        // crée une variable d'instance à laquelle on affectera le noeud racine (passage du pointeur)
-        // pour en disposer dans Form1
-        // **** Couleurs de l'environnement
-        private readonly Color defaultColor = Color.FromName("Navy");
+    private static List<string> FindedWordList = new List<string>();
+
+    // crée une variable d'instance à laquelle on affectera le noeud racine (passage du pointeur)
+    // pour en disposer dans Form1
+    // **** Couleurs de l'environnement
+    private readonly Color defaultColor = Color.FromName("Navy");
 
         // retourne une consonne en fonction du niveau de diffculté
         static Random rand = new Random();
-
-        public void CreateTestLetterArray()
-        {
-            char[,] testLetterArray = new char[4, 4];
-
-            testLetterArray[0, 0] = 'I';
-            testLetterArray[0, 1] = 'A';
-            testLetterArray[0, 2] = 'L';
-            testLetterArray[0, 3] = 'E';
-            testLetterArray[1, 0] = 'M';
-            testLetterArray[1, 1] = 'O';
-            testLetterArray[1, 2] = 'U';
-            testLetterArray[1, 3] = 'M';
-            testLetterArray[2, 0] = 'E';
-            testLetterArray[2, 1] = 'R';
-            testLetterArray[2, 2] = 'T';
-            testLetterArray[2, 3] = 'A';
-            testLetterArray[3, 0] = 'I';
-            testLetterArray[3, 1] = 'T';
-            testLetterArray[3, 2] = 'N';
-            testLetterArray[3, 3] = 'I';
-            for (int li = 0; li < 4; li++)
-            {
-                for (int co = 0; co < 4; co++)
-                {
-                    DonneesLettres.TableauDeLettres[li, co] = testLetterArray[li, co];
-                }
-            }
-        }
 
         private static int RangConsonnant(int maxDifficulty)
         {
@@ -123,6 +96,7 @@ namespace AbreDico
                                 {
                                     i--;
                                 }
+
                                 break;
                             case 'U':
                                 if (cptU <= maxU)
@@ -134,6 +108,7 @@ namespace AbreDico
                                 {
                                     i--;
                                 }
+
                                 break;
                             case 'I':
                                 if (cptI <= maxI)
@@ -145,6 +120,7 @@ namespace AbreDico
                                 {
                                     i--;
                                 }
+
                                 break;
                             case 'A':
                                 if (cptA <= maxA)
@@ -167,6 +143,7 @@ namespace AbreDico
                                 {
                                     i--;
                                 }
+
                                 break;
                         }
                     }
@@ -227,7 +204,6 @@ namespace AbreDico
                         // tire une consonne
                         char test = DonneesLettres.Alphabet[RangConsonnant(difficultyLevel)];
                         Thread.Sleep(11);
-                        //  ================ fonctionnement différent avec point d'arrêt et sans!
                         lettersPositionningArray[li, co] = test;
                         if (DonneesLettres.TabloDifficulte[rangTrouve] >= 3)
                         {
@@ -242,6 +218,7 @@ namespace AbreDico
 
                 // transfere les lettres dans la matrice
             }
+
             for (int lig = 0; lig < 4; lig++)
             {
                 for (int co = 0; co < 4; co++)
@@ -250,8 +227,7 @@ namespace AbreDico
                 }
             }
 
-            // forçage d'une matrice de test
-            this.CreateTestLetterArray();
+            this.CreateMatrix();
         }
 
         public void CreateMatrix() // Génère aléatoirement des lettres qui sont mises dans le tableau"matrice"
@@ -465,7 +441,7 @@ namespace AbreDico
 
         // Vérifie si le mot à controler n'est pas un mot déjà utilisé
         private void VerifMot()
-        {
+        {   // ICI supprumer l'utilisation de Listbox1 et remplacer pas findedWordList !!!!!!!!!!!!
             this.pictureBox1.Visible = false;
 
             if (WordsTree.WordExists(this.textBox1.Text, LoadWordsDictionnary.NoeudRacine))
@@ -512,7 +488,7 @@ namespace AbreDico
             this.ImageTriste.Visible = false;
         }
 
-        private void Button1_Click(object sender, EventArgs e)
+    private void Button1_Click(object sender, EventArgs e)
         {
             // Réalise un nouveau tirage de lettres et configure l'IHM
             this.textBox2.Clear();
@@ -524,17 +500,19 @@ namespace AbreDico
             this.pictureBox1.Visible = true;
         }
 
-        private void NewGame()
+    private void NewGame()
         { // Réalise un nouveau tirage de lettres
             this.listBox1.Items.Clear();
+            FindedWordList.Clear();
             DataGame.ResetWordScore();
             DataGame.RazScoreTotal();
             this.labScoreMotJoueur.Text = "Score du mot";
             this.labScoreTotal.Text = "Score de la partie.";
-            this.CreateTestLetterArray();
+            this.CreateMatrix();
             this.DrawMatrix();
             WordsInGrid.ExploreCellWay();
-        }
+      this.PossibleWordsInTextbox2();
+    }
 
         private void Form1_Load(object sender, EventArgs e)
         {
@@ -587,11 +565,19 @@ namespace AbreDico
                 Application.Exit();
             }
 
-            this.textBox2.Clear();
-            this.textBox2.Text = WordsInGrid.ListOfPossibleWord;
-
-            //  MessageBox.Show("Nombre de combinaisons testées =" + this.textBox2.Lines.Count().ToString());
+      this.PossibleWordsInTextbox2();
         }
+
+        private void PossibleWordsInTextbox2()
+    {
+      this.textBox2.Clear();
+      this.textBox2.Text = "La nombre de mots trouvables est de " + WordsInGrid.WordList.Count + "\r\n";
+      for (int i = 0; i < WordsInGrid.WordList.Count; i++)
+      {
+        // on ajoute la liste des mots possiles
+        this.textBox2.Text += WordsInGrid.WordList[i] + "\r\n";
+      }
+    }
 
         private class LAbelXY : Label
         {

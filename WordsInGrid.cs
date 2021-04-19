@@ -16,6 +16,8 @@ namespace AbreDico
 
     public static string ListOfPossibleWord = string.Empty;
 
+    public static List<string> WordList = new List<string>();
+
     private static void InitialiseArrayOfUsedfCells()
     {
       for (int i = 0; i < 4; i++)
@@ -40,47 +42,6 @@ namespace AbreDico
       }
     }
 
-    public static void CreateTestLetterArray()
-    {
-      char[,] testLetterArray = new char[4, 4];
-      testLetterArray[0, 0] = 'I';
-      testLetterArray[0, 1] = 'A';
-      testLetterArray[0, 2] = 'L';
-      testLetterArray[0, 3] = 'E';
-      testLetterArray[1, 0] = 'M';
-      testLetterArray[1, 1] = 'O';
-      testLetterArray[1, 2] = 'U';
-      testLetterArray[1, 3] = 'M';
-      testLetterArray[2, 0] = 'E';
-      testLetterArray[2, 1] = 'R';
-      testLetterArray[2, 2] = 'T';
-      testLetterArray[2, 3] = 'A';
-      testLetterArray[3, 0] = 'I';
-      testLetterArray[3, 1] = 'T';
-      testLetterArray[3, 2] = 'N';
-      testLetterArray[3, 3] = 'I';
-
-      for (int li = 0; li < 4; li++)
-      {
-        for (int co = 0; co < 4; co++)
-        {
-          DonneesLettres.TableauDeLettres[li, co] = testLetterArray[li, co];
-        }
-      }
-    }
-
-    public static void DebogAfficheWord()
-    {
-      string toto = string.Empty;
-      for (int i = 0; i < 16; i++)
-      {
-        toto += PossibleWord[i];
-      }
-      Sw2.WriteLine(toto);
-    }
-
-    private static readonly StreamWriter Sw2 = new StreamWriter("test Combinaisons.txt");
-
     private static void TestMot(int wordLength)
     {
       string myWord = string.Empty;
@@ -91,6 +52,31 @@ namespace AbreDico
 
       if (WordsTree.WordExists(myWord, LoadWordsDictionnary.NoeudRacine))
       {
+        if (WordList.Count == 0)
+        {
+          // si la liste est vide on ajoute le mot
+          WordList.Add(myWord);
+        }
+       else
+        {
+          // La liste n'est pas vide => on vérifie si le mot n'est pas déjà dans la liste
+          bool isInList = false;
+          for (int i = 0; i < WordList.Count; i++)
+          {
+            if (WordList[i] == myWord)
+            {
+              isInList = true;
+              i = WordList.Count;
+             // System.Windows.Forms.MessageBox.Show("Le mot " + myWord + " Existe déjà");
+            }
+          }
+
+          if (isInList == false)
+          {
+            WordList.Add(myWord);
+          }
+        }
+
         ListOfPossibleWord += myWord + "\r\n";
         // System.Windows.Forms.MessageBox.Show("Le mot " + myWord + " Existe");
       }
@@ -245,8 +231,6 @@ namespace AbreDico
           BeginTree(i, j);
         }
       }
-
-      Sw2.Close();
     }
 
     // fin Class WordsGrid
