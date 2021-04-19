@@ -88,14 +88,16 @@ namespace AbreDico
       {
         myWord += PossibleWord[i];
       }
+
       if (WordsTree.WordExists(myWord, LoadWordsDictionnary.NoeudRacine))
       {
         ListOfPossibleWord += myWord + "\r\n";
-       // System.Windows.Forms.MessageBox.Show("Le mot " + myWord + " Existe");
+        // System.Windows.Forms.MessageBox.Show("Le mot " + myWord + " Existe");
       }
     }
 
-    public static void BeginTree(int x, int y)
+    // BegiTree commande la recherche des mots possibles dans la grille à partir de la case aux coordonnées passées en paramètre
+    private static void BeginTree(int x, int y)
     {
       InitialiseArrayOfUsedfCells();
       InitializePossibleWord();
@@ -107,7 +109,7 @@ namespace AbreDico
       };
       ArrayOfUsedCells[root.X, root.Y] = true;
       PossibleWord[root.Deep] = LetterOfCell(root);
-      TestMot(root.Deep );
+      TestMot(root.Deep);
       AddAcceptablesNeighbors(root);
       while (root.ListOfPossiblesCellNeighbors.Count != 0)
       {
@@ -117,10 +119,11 @@ namespace AbreDico
 
       // replace  True  by false in used cells array.
       ArrayOfUsedCells[root.X, root.Y] = false;
-      Test += cptCombinaisons.ToString() + " \r\n ";
     }
 
-    public static void AllWays(OneCell lowCell)
+    // AllWays est appelée par BeginTree pour continuer la recherche des mots possibles
+    // dans la grille à partir de la case  passée en paramètre
+    private static void AllWays(OneCell lowCell)
     {
       cptCombinaisons++;
       ArrayOfUsedCells[lowCell.X, lowCell.Y] = true;
@@ -179,8 +182,6 @@ namespace AbreDico
                     Y = coordonneeY,
                     Deep = nextLevel,
                   };
-                  //  System.Windows.Forms.MessageBox.Show(Chaine(nextLevel - 1) + " n'est pas stérile ajout case x" +
-                  //    coordonneeX + " y" + coordonneeY +" new voisine de " + LetterOfCell(neighborsCell));
                   workingCell.ListOfPossiblesCellNeighbors.Add(neighborsCell);
                 }
               }
@@ -192,9 +193,6 @@ namespace AbreDico
           }
         }
       }
-
-
-        // System.Windows.Forms.MessageBox.Show("Nb voisines de " + LetterOfCell(workingCell) + "  = " + workingCell.ListOfPossiblesCellNeighbors.Count);
     }
 
     // retourne le mot ou début de mot
@@ -247,46 +245,15 @@ namespace AbreDico
           BeginTree(i, j);
         }
       }
+
       Sw2.Close();
-      TrouveMots();
     }
 
-    private static void TrouveMots()
-    {
-      string[] combinaisons;
-      combinaisons = File.ReadAllLines("test Combinaisons.txt");
-
-      string mot;
-      StreamWriter sw3 = new StreamWriter("Mots retenus.txt");
-      int cptMots = 0;
-      int rang;
-      for (int i = 0; i <= combinaisons.Length - 1; i++)
-      {
-        rang = 0;
-        mot = string.Empty;
-        while ((int)combinaisons[i][rang] >= 65 && (int)combinaisons[i][rang] <= 90 && rang < 15)
-        {
-
-          mot += combinaisons[i][rang];
-          rang++;
-        }
-
-        if (WordsTree.WordExists(mot, LoadWordsDictionnary.NoeudRacine))
-        {
-          sw3.WriteLine(mot);
-          Test += mot + "\r\n";
-          cptMots++;
-        }
-      }
-      Test += cptMots.ToString() + "\r\n";
-      sw3.Close();
-    }
+    // fin Class WordsGrid
   }
 
-  // fin Class WordsGrid
   public class OneCell
   {
-
     public int X { get; set; }
 
     public int Y { get; set; }

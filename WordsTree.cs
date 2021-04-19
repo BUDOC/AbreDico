@@ -3,7 +3,8 @@
     using System.Collections.Generic;
 
     public class WordsTree
-    {/* Choix : l'abre est représenté par une liste de noeuds
+    {
+    /* Choix : l'abre est représenté par une liste de noeuds
      * Le noeud est une classe qui comprend
      * - Un caractère : la donnée
      * - un booléen indiquant si cette lettre constitue la fin d'un mot
@@ -44,7 +45,7 @@
                 return;
             }
 
-            char CourantLetter = word[courantLetterIndex];
+            char courantLetter = word[courantLetterIndex];
 
             // si le dico n'existe pas on en crée un vierge
             if (parentNode.DictionnaireDesSousNoeuds == null)
@@ -52,13 +53,14 @@
                 parentNode.DictionnaireDesSousNoeuds = new Dictionary<char, Noeud>();
             }
 
-            if (parentNode.DictionnaireDesSousNoeuds.ContainsKey(CourantLetter)) // le dico existe et  si la clé existe
+            // le dico existe et  si la clé existe
+            if (parentNode.DictionnaireDesSousNoeuds.ContainsKey(courantLetter))
             {
                 // on cherche la clé (lettre)
                 foreach (KeyValuePair<char, Noeud> cle in parentNode.DictionnaireDesSousNoeuds)
                 {
                     // clé identifiée
-                    if (cle.Key == CourantLetter)
+                    if (cle.Key == courantLetter)
                     {
                         // (pour lettre suivante du mot)
                         courantLetterIndex++;
@@ -75,26 +77,26 @@
             else
             {
                 // le dico existe et  clé pas trouvée => ajout noeud dans dico
-                Noeud SonNode = new Noeud
+                Noeud sonNode = new Noeud
                 {
-                    Lettre = CourantLetter,
+                    Lettre = courantLetter,
                 };
 
                 // dernière lettre du mot  : On ajoute le noeud correspondant
                 if (courantLetterIndex == word.Length - 1)
                 {
-                    SonNode.EndOfWord = true;
-                    parentNode.DictionnaireDesSousNoeuds.Add(CourantLetter, SonNode);
+                    sonNode.EndOfWord = true;
+                    parentNode.DictionnaireDesSousNoeuds.Add(courantLetter, sonNode);
                     return;
                 }
                 else
-
-                // PAS dernière lettre du mot  : On ajoute le noeud correspondant et on incémente rang et on relance récursivement la procédure
                 {
-                    SonNode.EndOfWord = false;
-                    parentNode.DictionnaireDesSousNoeuds.Add(CourantLetter, SonNode);
-                    courantLetterIndex++;
-                    AddCourantLetterIfNeccesity(SonNode, courantLetterIndex, word);
+                 // PAS dernière lettre du mot  : On ajoute le noeud correspondant et on incémente rang
+                 // et on relance récursivement la procédure
+                 sonNode.EndOfWord = false;
+                 parentNode.DictionnaireDesSousNoeuds.Add(courantLetter, sonNode);
+                 courantLetterIndex++;
+                 AddCourantLetterIfNeccesity(sonNode, courantLetterIndex, word);
                 }
             }
         }

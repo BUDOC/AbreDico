@@ -48,18 +48,17 @@ namespace AbreDico
 
         private static int RangConsonnant(int maxDifficulty)
         {
-
             int range;
             do
             {
                 range = rand.Next(0, 26);
-            } while
+            }
+            while
             (DonneesLettres.TabloDifficulte[range] >= maxDifficulty &&
                         DonneesLettres.TabloConsonneOuVoyelle[range] == 1);
 
             return range;
         }
-
 
         private void MatriceCreate()
         {
@@ -252,7 +251,7 @@ namespace AbreDico
             }
 
             // forçage d'une matrice de test
-            CreateTestLetterArray();
+            this.CreateTestLetterArray();
         }
 
         public void CreateMatrix() // Génère aléatoirement des lettres qui sont mises dans le tableau"matrice"
@@ -457,9 +456,7 @@ namespace AbreDico
         private void BoutonVerifMot(object sender, EventArgs e)
         {
             this.VerifMot();
-            this.labNmotsTrouves.Text = "Nombre de mots trouvés = " + DataGame.NumberOFGoodWord.ToString();
-            //    decimal percentOfFind = Convert.ToDecimal(DataGame.NumberOFGoodWord * 100) / Convert.ToDecimal(Way.NumberOfWordCanBeDone);
-            //    this.LabPourcentageDeTrouves.Text = "Pourcentage de mots trouvés = " + percentOfFind.ToString("F1");
+            this.labNmotsTrouves.Text = "Nombre de mots trouvés = " + DataGame.NumberOFGoodWord.ToString();           
             this.textBox1.Clear();
             DataGame.ResetWordScore();
             this.labScoreMotJoueur.Text = string.Empty;
@@ -475,7 +472,8 @@ namespace AbreDico
             { // le mot propose par joueur existe
                 bool motDejaUtilise = false;
                 for (int cptM = 0; cptM < this.listBox1.Items.Count; cptM++)
-                { // verifie si le mot a déjà été proposé
+                {
+                    // verifie si le mot a déjà été proposé
                     if (this.listBox1.Items[cptM].ToString() == this.textBox1.Text)
                     {
                         motDejaUtilise = true;
@@ -515,9 +513,9 @@ namespace AbreDico
         }
 
         private void Button1_Click(object sender, EventArgs e)
-        { // Réalise un nouveau tirage de lettres et configure l'IHM
+        {
+            // Réalise un nouveau tirage de lettres et configure l'IHM
             this.textBox2.Clear();
-            //    Way.Test = string.Empty;
             DataGame.ResetWordScore();
             DataGame.NumberOFGoodWord = 0;
             this.NewGame();
@@ -533,23 +531,18 @@ namespace AbreDico
             DataGame.RazScoreTotal();
             this.labScoreMotJoueur.Text = "Score du mot";
             this.labScoreTotal.Text = "Score de la partie.";
-
-            //this.CreateMatrix();
-
-            //MatriceCreate();
-            CreateTestLetterArray();
+            this.CreateTestLetterArray();
             this.DrawMatrix();
-            // Way.TotalExploration();  // Way class de depart
             WordsInGrid.ExploreCellWay();
-            //   this.labNbMotPossible.Text = "Le nombre de mots possibles est de " + Way.NumberOfWordCanBeDone.ToString();
         }
 
         private void Form1_Load(object sender, EventArgs e)
         {
             string t;
             int cpt = 0;
-            for (int j = 0; j < 4; j++) // Création des LABEL  de la grille
-            {
+            for (int j = 0; j < 4; j++)
+             {
+              // Création des LABEL  de la grille
                 for (int i = 0; i < 4; i++)
                 {
                     cpt++;
@@ -595,9 +588,9 @@ namespace AbreDico
             }
 
             this.textBox2.Clear();
-      // this.textBox2.Text = WordsInGrid.Test; // Way.Test;
-      this.textBox2.Text = WordsInGrid.ListOfPossibleWord;
-            MessageBox.Show("Nombre de combinaisons testées =" + this.textBox2.Lines.Count().ToString());
+            this.textBox2.Text = WordsInGrid.ListOfPossibleWord;
+
+            //  MessageBox.Show("Nombre de combinaisons testées =" + this.textBox2.Lines.Count().ToString());
         }
 
         private class LAbelXY : Label
@@ -637,13 +630,11 @@ namespace AbreDico
                 MessageBox.Show("Erreur dans la boucle foreach de dessinneMatrice");
             }
 
-            DonneesLettres.PrecedentSquare.X = -1; // initialise case précédente
+            DonneesLettres.PrecedentSquare.X = -1;
+
+            // initialise case précédente
             DonneesLettres.PrecedentSquare.Y = -1;
-            //  DonneesLettres.CheckUsingLetters();
         }
-
-
-
 
         private void DrawMatrix()
         {
@@ -662,7 +653,9 @@ namespace AbreDico
                 MessageBox.Show("Erreur dans la boucle foreach de dessinneMatrice");
             }
 
-            DonneesLettres.PrecedentSquare.X = -1; // initialise case précédente
+            DonneesLettres.PrecedentSquare.X = -1; 
+            // initialise case précédente
+
             DonneesLettres.PrecedentSquare.Y = -1;
             DonneesLettres.ResetLettersUtilisationArray();
         }
@@ -708,13 +701,13 @@ namespace AbreDico
             if (this.IsNeighbourrFromPrecedent())
             {
                 // pour tous les labels de la form
-                foreach (Label LetterLabel in this.Controls.OfType<Label>())
+                foreach (Label letterLabel in this.Controls.OfType<Label>())
                 {
                     // si le label est celui cliqué
-                    if (LetterLabel.Name == labelName)
+                    if (letterLabel.Name == labelName)
                     {
-                        this.textBox1.Text += LetterLabel.Text;
-                        this.UpdateWordScore(char.Parse(LetterLabel.Text));
+                        this.textBox1.Text += letterLabel.Text;
+                        this.UpdateWordScore(char.Parse(letterLabel.Text));
                         DonneesLettres.ArrayOfLetterUse[colonne, ligne] = true;
                     }
 
@@ -727,8 +720,10 @@ namespace AbreDico
         {
             for (int i = 0; i < DonneesLettres.Alphabet.Length - 1; i++)
             {
-                if (DonneesLettres.Alphabet[i] == c) // caractère identifié
-                {
+                if (DonneesLettres.Alphabet[i] == c)
+
+        // caractère identifié
+        {
                     DataGame.UpdatePlayerScore(DonneesLettres.PointArrayForAletter[i]);
                     this.labScoreMotJoueur.Text = DataGame.ScoreMotJoueur.ToString();
                 }
@@ -743,23 +738,13 @@ namespace AbreDico
 
         private void Bt_test_Click(object sender, EventArgs e)
         {
-            /*   this.textBox2.Clear();
-               Way.TotalExploration();
-               string listBoxText = string.Empty;
-               for (int i = 0; i < Way.ListExistingWords.Count; i++)
-               {
-                   listBoxText += Way.ListExistingWords[i] + "\r\n";
-               }
-
-               listBoxText += "Nombre de mots possible =" + Way.NumberOfWordCanBeDone + "\r\n";
-               this.textBox2.Text = listBoxText;
-            */
+           
         }
 
         private void btTest2_Click(object sender, EventArgs e)
         {
-            MatriceCreate();
-            DrawMatrix2();
+            this.MatriceCreate();
+            this.DrawMatrix2();
         }
 
         // fin classe Form1

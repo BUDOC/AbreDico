@@ -20,7 +20,7 @@ namespace AbreDico
             // this.pictureBox1.Visible = true;
             // Création de l'arbre à partir du fichier texte.
             // ===================
-            // initialisation du dictionnaire            
+            // initialisation du dictionnaire
             string nomDuDico = Directory.GetCurrentDirectory() + "\\MOTS TRADUITS.txt";
             string[] lignesDico;
             try
