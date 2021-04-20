@@ -9,7 +9,7 @@ namespace AbreDico
 {
     public partial class Form1 : Form
     {
-    private static List<string> FindedWordList = new List<string>();
+    private static List<string> findedWordList = new List<string>();
 
     // crée une variable d'instance à laquelle on affectera le noeud racine (passage du pointeur)
     // pour en disposer dans Form1
@@ -17,430 +17,431 @@ namespace AbreDico
     private readonly Color defaultColor = Color.FromName("Navy");
 
         // retourne une consonne en fonction du niveau de diffculté
-        static Random rand = new Random();
+    static Random rand = new Random();
 
-        private static int RangConsonnant(int maxDifficulty)
-        {
-            int range;
-            do
-            {
-                range = rand.Next(0, 26);
-            }
-            while
-            (DonneesLettres.TabloDifficulte[range] >= maxDifficulty &&
-                        DonneesLettres.TabloConsonneOuVoyelle[range] == 1);
-
-            return range;
-        }
-
-        private void MatriceCreate()
-        {
-            // this part was programmed with feet but it works :-)
-            // Variables
-            var rand = new Random();
-            int number0fVowel = rand.Next(8, 11);
-            List<char> vowelList = new List<char>();
-            char[,] lettersPositionningArray = new char[4, 4];
-
-            // variable de limitation des voyelles répétée
-            int maxO = 2;
-            int maxU = 3;
-            int maxI = 3;
-            int maxA = 3;
-            int maxE = 4;
-            int cptO = 0;
-            int cptU = 0;
-            int cptI = 0;
-            int cptA = 0;
-            int cptE = 0;
-
-            // initialise le tableau de lettre
-            for (int line = 0; line < 4; line++)
-            {
-                for (int column = 0; column < 4; column++)
-                {
-                    lettersPositionningArray[line, column] = '?';
-                }
-            }
-
-            // Ajoute des voyelles tirées au hasard dans la liste des voyelles
-            vowelList.Clear();
-            for (int i = 0; i <= number0fVowel; i++)
-            {
-                vowelList.Add(DonneesLettres.UsualVowels[rand.Next(0, 4)]);
-            }
-
-            void PlaceVoyelleDansQuart(int x1, int y1, int x2, int y2)
-            {
-                // a ajouter controle de nombre de voyelles répétées
-                char vowel;
-                for (int i = 0; i < 2; i++)
-                {
-                    int li = rand.Next(x1, y1);
-                    Thread.Sleep(12);
-                    int co = rand.Next(x2, y2);
-                    Thread.Sleep(12);
-                    if (lettersPositionningArray[li, co] == '?')
-                    {
-                        vowel = vowelList[rand.Next(0, vowelList.Count)];
-                        Thread.Sleep(12);
-                        switch (vowel)
-                        {
-                            case 'O':
-                                if (cptO <= maxO)
-                                {
-                                    lettersPositionningArray[li, co] = vowel;
-                                    cptO++;
-                                }
-                                else
-                                {
-                                    i--;
-                                }
-
-                                break;
-                            case 'U':
-                                if (cptU <= maxU)
-                                {
-                                    lettersPositionningArray[li, co] = vowel;
-                                    cptU++;
-                                }
-                                else
-                                {
-                                    i--;
-                                }
-
-                                break;
-                            case 'I':
-                                if (cptI <= maxI)
-                                {
-                                    lettersPositionningArray[li, co] = vowel;
-                                    cptI++;
-                                }
-                                else
-                                {
-                                    i--;
-                                }
-
-                                break;
-                            case 'A':
-                                if (cptA <= maxA)
-                                {
-                                    lettersPositionningArray[li, co] = vowel;
-                                    cptA++;
-                                }
-                                else
-                                {
-                                    i--;
-                                }
-                                break;
-                            case 'E':
-                                if (cptE <= maxE)
-                                {
-                                    lettersPositionningArray[li, co] = vowel;
-                                    cptE++;
-                                }
-                                else
-                                {
-                                    i--;
-                                }
-
-                                break;
-                        }
-                    }
-                    else
-                    {
-                        i--;
-                    }
-                }
-            }
-
-            // Place 2 voyelles aléatoirement dans chaque quart et le reste aléatoirement (donc 8 voyelles)
-            // Quart NO
-            PlaceVoyelleDansQuart(0, 2, 0, 2);
-
-            // Quart NE
-            PlaceVoyelleDansQuart(0, 2, 1, 4);
-
-            // Quart SO
-            PlaceVoyelleDansQuart(1, 4, 0, 2);
-
-            // QuartSE
-            PlaceVoyelleDansQuart(1, 4, 1, 4);
-
-            // Ajoute si nécessaires pour atteindre le nombre de voyelles fixé aléatoirement
-            if (number0fVowel < 8)
-            {
-                for (int i = 0; i < number0fVowel - 8; i++)
-                {
-                    int li = rand.Next(0, 4);
-                    Thread.Sleep(14);
-                    int co = rand.Next(0, 4);
-                    Thread.Sleep(12);
-                    while (lettersPositionningArray[li, co] == '?')
-                    {
-                        li = rand.Next(0, 4);
-                        Thread.Sleep(13);
-                        co = rand.Next(0, 4);
-                        Thread.Sleep(14);
-                    }
-                    lettersPositionningArray[li, co] = vowelList[rand.Next(0, vowelList.Count)];
-                }
-            }
-
-            // Remplit aléatoirement le reste du tableau avec des consonnes
-            // en gérant la difficuté
-            int difficultyLevel = 8;
-            int rangTrouve;
-            for (int li = 0; li < 4; li++)
-            {
-                for (int co = 0; co < 4; co++)
-                {
-                    rangTrouve = rand.Next(0, 26);
-                    Thread.Sleep(12);
-                    // pour toutes les cases du tableau
-                    // si la case n'est pas utilisée
-                    if (lettersPositionningArray[li, co] == '?')
-                    {
-                        // tire une consonne
-                        char test = DonneesLettres.Alphabet[RangConsonnant(difficultyLevel)];
-                        Thread.Sleep(11);
-                        lettersPositionningArray[li, co] = test;
-                        if (DonneesLettres.TabloDifficulte[rangTrouve] >= 3)
-                        {
-                            difficultyLevel -= 4;
-                            if (difficultyLevel <= 0)
-                            {
-                                difficultyLevel = 1;
-                            }
-                        }
-                    }
-                }
-
-                // transfere les lettres dans la matrice
-            }
-
-            for (int lig = 0; lig < 4; lig++)
-            {
-                for (int co = 0; co < 4; co++)
-                {
-                    DonneesLettres.TableauDeLettres[lig, co] = lettersPositionningArray[lig, co];
-                }
-            }
-
-            this.CreateMatrix();
-        }
-
-        public void CreateMatrix() // Génère aléatoirement des lettres qui sont mises dans le tableau"matrice"
-        {
-            int cptVoyelle = 0;
-            int voyelleDeSuite = 0;
-            int consonneDeSuite = 0;
-            int noteDeChiant = 0;
-            int difficulteLettre;
-            int maxVoyelle = 6;
-            bool estUneVoyelle;
-            bool accord = true;
-            char lettre;
-            var rand = new Random();
-
-            // remplit un tableau [0..15] d'un caractère aléatoire
-            int i = 0;
-
-            // this.textBox2.Clear();
-            while (i < 16)
-            {
-                int a = rand.Next(0, 25);
-                lettre = DonneesLettres.Alphabet[a];
-                if (i > 0)
-                {
-                    if (lettre != DonneesLettres.ArrayOfLetters[i - 1])
-                    {
-                        accord = true;
-                    }
-                    else
-                    {
-                        accord = false;
-                    }
-                }
-
-                if (accord)
-                {
-                    // this.textBox2.Text = this.textBox2.Text + lettre.ToString() + " TIRE = " + nbDeLaLettre(lettre).ToString() + " fois \r\n";
-                    difficulteLettre = DonneesLettres.TabloDifficulte[a];
-                    if (DonneesLettres.TabloConsonneOuVoyelle[a] == 1) // détermine si le caractère est ou non une voyelle
-                    {
-                        estUneVoyelle = true;
-                    }
-                    else
-                    {
-                        estUneVoyelle = false;
-                    }
-
-                    if (estUneVoyelle && voyelleDeSuite < 3)
-                    { // Tirage d'une voyelle
-                        if (cptVoyelle <= maxVoyelle) // nombre de voyelles tirées inférieur au maximaum autorisé
-                        { // cas autorisé
-                            if (difficulteLettre > 0) // si tirage voyelle difficile
-                            {
-                                if (DonneesLettres.PlaceInMatrix(lettre) == -1 && noteDeChiant <= 4)
-                                {
-                                    // difficile pas en double
-                                    DonneesLettres.ArrayOfLetters[i] = lettre;
-                                    noteDeChiant += DonneesLettres.TabloDifficulte[i];
-                                    cptVoyelle++;
-                                    i++;
-                                    voyelleDeSuite++;
-                                    consonneDeSuite = 0;
-
-                                    // this.textBox2.Text = this.textBox2.Text + "Voyelle difficile Ajoutée = " + lettre.ToString() + "\r\n";
-                                }
-                            }
-                            else
-                            {
-                                // voyelle facile
-                                DonneesLettres.ArrayOfLetters[i] = lettre;
-                                voyelleDeSuite++;
-                                consonneDeSuite = 0;
-
-                                // this.textBox2.Text = this.textBox2.Text + "Voyelle facile Ajoutée = " + lettre.ToString() + "\r\n";
-                            }
-                        }
-                    }
-                    else
-                    {// tirage d'une consonne
-                        if (consonneDeSuite <= 2) // et pas trop de consonnnes d'affilé
-                        {
-                            if (difficulteLettre < 2) // facile
-                            {
-                                if ((difficulteLettre == 2 && DonneesLettres.PlaceInMatrix(lettre) == -1) || (difficulteLettre <= 1 && (DonneesLettres.HowManyInMatrix(lettre) < 3)))
-
-                                // si la lettre de difficulté 2 n'est pas déjà tirée
-                                {
-                                    DonneesLettres.ArrayOfLetters[i] = lettre;
-                                    consonneDeSuite++;
-                                    voyelleDeSuite = 0;
-                                    i++;
-
-                                    // this.textBox2.Text =
-                                    //  this.textBox2.Text = "  " + this.textBox2.Text + "consonne facile Ajoutée = " + lettre.ToString() + " exemplaire n° " + nbDeLaLettre(lettre).ToString() + "\r\n";
-                                }
-                                else
-                                {
-                                    // this.textBox2.Text =
-                                    //  this.textBox2.Text = "  " + this.textBox2.Text + "consonne facile rejetée = " + lettre.ToString() + "\r\n";
-                                }
-                            }
-                            else
-                            { // pas facile
-                                if ((noteDeChiant < 3) && (DonneesLettres.HowManyInMatrix(lettre) < 2)) // acceptable et pas doublé
-                                {
-                                    noteDeChiant += difficulteLettre;
-
-                                    // augmentation de la note globale de chiant
-                                    DonneesLettres.ArrayOfLetters[i] = lettre;
-                                    consonneDeSuite++;
-                                    voyelleDeSuite = 0;
-                                    i++;
-
-                                    // this.textBox2.Text = "  " + this.textBox2.Text + " consonne difficile Ajoutée = " + lettre.ToString() + "\r\n";
-                                }
-                                else
-                                {
-                                    // on ne fait rien car pas acceptable
-                                    //  this.textBox2.Text =
-                                    //  this.textBox2.Text = "  " + this.textBox2.Text + "      Consonne rejetée" + lettre.ToString() + "\r\n";
-                                }
-                            }
-                        } // consoles d'affilé
-                    }
-                } // fin du if = lettre precedente et conssonne et voyelles à suivre trop nombreuses
-            } // fin du while remmplissage matrice
-
-            // modifications pour rendre plus jouable
-            if (DonneesLettres.HowManyInMatrix('E') < 2) // pas assez de E
-            {
-                int difMax = 0;
-                for (int j = 0; j < 16; j++) // Repérage du plus haut diveau de difficulté présent
-                {
-                    if (DonneesLettres.TabloDifficulte[j] > difMax)
-                    {
-                        difMax = DonneesLettres.TabloDifficulte[j];
-                    }
-                }
-
-                for (int j = 0; j < 16; j++) // la première lettre di niveau de difficulté Max est remplacée par E
-                {
-                    if (DonneesLettres.TabloDifficulte[j] == difMax)
-                    {
-                        // this.textBox2.Text = this.textBox2.Text + matrice[j].ToString() + " remplacée par = E \r\n";
-                        DonneesLettres.ArrayOfLetters[j] = 'E';
-                        cptVoyelle++;
-                        j = 16;
-                    }
-                }
-
-                for (int k = 0; k < 16; k++)
-                {
-                    // this.textBox2.Text = "  " + this.textBox2.Text + k.ToString() + "  " + matrice[k].ToString() + "\r\n";
-                }
-            }
-
-            if (cptVoyelle < 6) // pas assez de voyelles
-            {
-                int aChanger = maxVoyelle - cptVoyelle - 1;
-                int tour = 0;
-                char car;
-                while (tour < aChanger)
-                { // substitution de consonnes par des voyelles
-                    int b = rand.Next(0, 15);
-                    car = DonneesLettres.ArrayOfLetters[b];
-                    if (!DonneesLettres.EstVoyelle(car))
-                    {
-                        int c = rand.Next(0, 2);
-
-                        // this.textBox2.Text = this.textBox2.Text + matrice[b].ToString() + " remplacée par = " + voyellesCourantes[c] + " \r\n";
-                        DonneesLettres.ArrayOfLetters[b] = DonneesLettres.UsualVowels[c];
-                        tour++;
-                    }
-                }
-
-                // fin modifications pour rendre plus jouable
-            }
-
-            // transfert des lettres de Matrice vers tableaudelettres
-            int ligne = 0, colonne = 0;
-            for (int r = 0; r < 16; r++)
-            {
-                DonneesLettres.TableauDeLettres[ligne, colonne] = DonneesLettres.ArrayOfLetters[r];
-                colonne++;
-                if (colonne == 4)
-                {
-                    ligne++;
-                    colonne = 0;
-                }
-            }
-
-            // MessageBox.Show("nb voyelles =" + cptVoyelle);
-        }
-
-        public Form1()
+    public Form1()
         {
             this.InitializeComponent();
         }
 
-        // Bouton qui déclenche l'action de controler si le mot est acceptable
-        private void BoutonVerifMot(object sender, EventArgs e)
+    // Bouton qui déclenche l'action de controler si le mot est acceptable
+    private static int RangConsonnant(int maxDifficulty)
+    {
+      int range;
+      do
+      {
+        range = rand.Next(0, 26);
+      }
+      while
+      (DonneesLettres.TabloDifficulte[range] >= maxDifficulty &&
+                  DonneesLettres.TabloConsonneOuVoyelle[range] == 1);
+
+      return range;
+    }
+
+    private void MatriceCreate()
+    {
+      // this part was programmed with feet but it works :-)
+      // Variables
+      var rand = new Random();
+      int number0fVowel = rand.Next(8, 11);
+      List<char> vowelList = new List<char>();
+      char[,] lettersPositionningArray = new char[4, 4];
+
+      // variable de limitation des voyelles répétée
+      int maxO = 2;
+      int maxU = 3;
+      int maxI = 3;
+      int maxA = 3;
+      int maxE = 4;
+      int cptO = 0;
+      int cptU = 0;
+      int cptI = 0;
+      int cptA = 0;
+      int cptE = 0;
+
+      // initialise le tableau de lettre
+      for (int line = 0; line < 4; line++)
+      {
+        for (int column = 0; column < 4; column++)
+        {
+          lettersPositionningArray[line, column] = '?';
+        }
+      }
+
+      // Ajoute des voyelles tirées au hasard dans la liste des voyelles
+      vowelList.Clear();
+      for (int i = 0; i <= number0fVowel; i++)
+      {
+        vowelList.Add(DonneesLettres.UsualVowels[rand.Next(0, 4)]);
+      }
+
+      void PlaceVoyelleDansQuart(int x1, int y1, int x2, int y2)
+      {
+        // a ajouter controle de nombre de voyelles répétées
+        char vowel;
+        for (int i = 0; i < 2; i++)
+        {
+          int li = rand.Next(x1, y1);
+          Thread.Sleep(12);
+          int co = rand.Next(x2, y2);
+          Thread.Sleep(12);
+          if (lettersPositionningArray[li, co] == '?')
+          {
+            vowel = vowelList[rand.Next(0, vowelList.Count)];
+            Thread.Sleep(12);
+            switch (vowel)
+            {
+              case 'O':
+                if (cptO <= maxO)
+                {
+                  lettersPositionningArray[li, co] = vowel;
+                  cptO++;
+                }
+                else
+                {
+                  i--;
+                }
+
+                break;
+              case 'U':
+                if (cptU <= maxU)
+                {
+                  lettersPositionningArray[li, co] = vowel;
+                  cptU++;
+                }
+                else
+                {
+                  i--;
+                }
+
+                break;
+              case 'I':
+                if (cptI <= maxI)
+                {
+                  lettersPositionningArray[li, co] = vowel;
+                  cptI++;
+                }
+                else
+                {
+                  i--;
+                }
+
+                break;
+              case 'A':
+                if (cptA <= maxA)
+                {
+                  lettersPositionningArray[li, co] = vowel;
+                  cptA++;
+                }
+                else
+                {
+                  i--;
+                }
+
+                break;
+              case 'E':
+                if (cptE <= maxE)
+                {
+                  lettersPositionningArray[li, co] = vowel;
+                  cptE++;
+                }
+                else
+                {
+                  i--;
+                }
+
+                break;
+            }
+          }
+          else
+          {
+            i--;
+          }
+        }
+      }
+
+      // Place 2 voyelles aléatoirement dans chaque quart et le reste aléatoirement (donc 8 voyelles)
+      // Quart NO
+      PlaceVoyelleDansQuart(0, 2, 0, 2);
+
+      // Quart NE
+      PlaceVoyelleDansQuart(0, 2, 1, 4);
+
+      // Quart SO
+      PlaceVoyelleDansQuart(1, 4, 0, 2);
+
+      // QuartSE
+      PlaceVoyelleDansQuart(1, 4, 1, 4);
+
+      // Ajoute si nécessaires pour atteindre le nombre de voyelles fixé aléatoirement
+      if (number0fVowel < 8)
+      {
+        for (int i = 0; i < number0fVowel - 8; i++)
+        {
+          int li = rand.Next(0, 4);
+          Thread.Sleep(14);
+          int co = rand.Next(0, 4);
+          Thread.Sleep(12);
+          while (lettersPositionningArray[li, co] == '?')
+          {
+            li = rand.Next(0, 4);
+            Thread.Sleep(13);
+            co = rand.Next(0, 4);
+            Thread.Sleep(14);
+          }
+
+          lettersPositionningArray[li, co] = vowelList[rand.Next(0, vowelList.Count)];
+        }
+      }
+
+      // Remplit aléatoirement le reste du tableau avec des consonnes
+      // en gérant la difficuté
+      int difficultyLevel = 8;
+      int rangTrouve;
+      for (int li = 0; li < 4; li++)
+      {
+        for (int co = 0; co < 4; co++)
+        {
+          rangTrouve = rand.Next(0, 26);
+          Thread.Sleep(12);
+
+          // pour toutes les cases du tableau
+          // si la case n'est pas utilisée
+          if (lettersPositionningArray[li, co] == '?')
+          {
+            // tire une consonne
+            char test = DonneesLettres.Alphabet[RangConsonnant(difficultyLevel)];
+            Thread.Sleep(11);
+            lettersPositionningArray[li, co] = test;
+            if (DonneesLettres.TabloDifficulte[rangTrouve] >= 3)
+            {
+              difficultyLevel -= 4;
+              if (difficultyLevel <= 0)
+              {
+                difficultyLevel = 1;
+              }
+            }
+          }
+        }
+
+        // transfere les lettres dans la matrice
+      }
+
+      for (int lig = 0; lig < 4; lig++)
+      {
+        for (int co = 0; co < 4; co++)
+        {
+          DonneesLettres.TableauDeLettres[lig, co] = lettersPositionningArray[lig, co];
+        }
+      }
+
+      this.CreateMatrix();
+    }
+
+    private void CreateMatrix() // Génère aléatoirement des lettres qui sont mises dans le tableau"matrice"
+    {
+      int cptVoyelle = 0;
+      int voyelleDeSuite = 0;
+      int consonneDeSuite = 0;
+      int noteDeChiant = 0;
+      int difficulteLettre;
+      int maxVoyelle = 6;
+      bool estUneVoyelle;
+      bool accord = true;
+      char lettre;
+      var rand = new Random();
+
+      // remplit un tableau [0..15] d'un caractère aléatoire
+      int i = 0;
+
+      // this.textBox2.Clear();
+      while (i < 16)
+      {
+        int a = rand.Next(0, 25);
+        lettre = DonneesLettres.Alphabet[a];
+        if (i > 0)
+        {
+          if (lettre != DonneesLettres.ArrayOfLetters[i - 1])
+          {
+            accord = true;
+          }
+          else
+          {
+            accord = false;
+          }
+        }
+
+        if (accord)
+        {
+          // this.textBox2.Text = this.textBox2.Text + lettre.ToString() + " TIRE = " + nbDeLaLettre(lettre).ToString() + " fois \r\n";
+          difficulteLettre = DonneesLettres.TabloDifficulte[a];
+          if (DonneesLettres.TabloConsonneOuVoyelle[a] == 1)
+          {// détermine si le caractère est ou non une voyelle
+            estUneVoyelle = true;
+          }
+          else
+          {
+            estUneVoyelle = false;
+          }
+
+          if (estUneVoyelle && voyelleDeSuite < 3)
+          { // Tirage d'une voyelle
+            if (cptVoyelle <= maxVoyelle)
+            { // nombre de voyelles tirées inférieur au maximaum autorisé
+              // cas autorisé
+              if (difficulteLettre > 0)
+              {// si tirage voyelle difficile
+                if (DonneesLettres.PlaceInMatrix(lettre) == -1 && noteDeChiant <= 4)
+                {
+                  // difficile pas en double
+                  DonneesLettres.ArrayOfLetters[i] = lettre;
+                  noteDeChiant += DonneesLettres.TabloDifficulte[i];
+                  cptVoyelle++;
+                  i++;
+                  voyelleDeSuite++;
+                  consonneDeSuite = 0;
+
+                  // this.textBox2.Text = this.textBox2.Text + "Voyelle difficile Ajoutée = " + lettre.ToString() + "\r\n";
+                }
+              }
+              else
+              {
+                // voyelle facile
+                DonneesLettres.ArrayOfLetters[i] = lettre;
+                voyelleDeSuite++;
+                consonneDeSuite = 0;
+
+                // this.textBox2.Text = this.textBox2.Text + "Voyelle facile Ajoutée = " + lettre.ToString() + "\r\n";
+              }
+            }
+          }
+          else
+          {// tirage d'une consonne
+            if (consonneDeSuite <= 2)
+            {// et pas trop de consonnnes d'affilé
+              if (difficulteLettre < 2)
+              {// facile
+                if ((difficulteLettre == 2 && DonneesLettres.PlaceInMatrix(lettre) == -1) || (difficulteLettre <= 1 && (DonneesLettres.HowManyInMatrix(lettre) < 3)))
+                {// si la lettre de difficulté 2 n'est pas déjà tirée
+                  DonneesLettres.ArrayOfLetters[i] = lettre;
+                  consonneDeSuite++;
+                  voyelleDeSuite = 0;
+                  i++;
+
+                  // this.textBox2.Text =
+                  //  this.textBox2.Text = "  " + this.textBox2.Text + "consonne facile Ajoutée = " + lettre.ToString() + " exemplaire n° " + nbDeLaLettre(lettre).ToString() + "\r\n";
+                }
+                else
+                {
+                  // this.textBox2.Text =
+                  //  this.textBox2.Text = "  " + this.textBox2.Text + "consonne facile rejetée = " + lettre.ToString() + "\r\n";
+                }
+              }
+              else
+              { // pas facile
+                if ((noteDeChiant < 3) && (DonneesLettres.HowManyInMatrix(lettre) < 2))
+                {// acceptable et pas doublé
+                  noteDeChiant += difficulteLettre;
+
+                  // augmentation de la note globale de chiant
+                  DonneesLettres.ArrayOfLetters[i] = lettre;
+                  consonneDeSuite++;
+                  voyelleDeSuite = 0;
+                  i++;
+
+                  // this.textBox2.Text = "  " + this.textBox2.Text + " consonne difficile Ajoutée = " + lettre.ToString() + "\r\n";
+                }
+                else
+                {
+                  // on ne fait rien car pas acceptable
+                  //  this.textBox2.Text =
+                  //  this.textBox2.Text = "  " + this.textBox2.Text + "      Consonne rejetée" + lettre.ToString() + "\r\n";
+                }
+              }
+            } // consoles d'affilé
+          }
+        } // fin du if = lettre precedente et conssonne et voyelles à suivre trop nombreuses
+      } // fin du while remmplissage matrice
+
+      // modifications pour rendre plus jouable
+      if (DonneesLettres.HowManyInMatrix('E') < 2)
+      {// pas assez de E
+        int difMax = 0;
+        for (int j = 0; j < 16; j++)
+        {// Repérage du plus haut diveau de difficulté présent
+          if (DonneesLettres.TabloDifficulte[j] > difMax)
+          {
+            difMax = DonneesLettres.TabloDifficulte[j];
+          }
+        }
+
+        for (int j = 0; j < 16; j++)
+        {// la première lettre di niveau de difficulté Max est remplacée par E
+          if (DonneesLettres.TabloDifficulte[j] == difMax)
+          {
+            // this.textBox2.Text = this.textBox2.Text + matrice[j].ToString() + " remplacée par = E \r\n";
+            DonneesLettres.ArrayOfLetters[j] = 'E';
+            cptVoyelle++;
+            j = 16;
+          }
+        }
+
+        for (int k = 0; k < 16; k++)
+        {
+          // this.textBox2.Text = "  " + this.textBox2.Text + k.ToString() + "  " + matrice[k].ToString() + "\r\n";
+        }
+      }
+
+      if (cptVoyelle < 6)
+      {
+        // pas assez de voyelles
+        int aChanger = maxVoyelle - cptVoyelle - 1;
+        int tour = 0;
+        char car;
+        while (tour < aChanger)
+        { // substitution de consonnes par des voyelles
+          int b = rand.Next(0, 15);
+          car = DonneesLettres.ArrayOfLetters[b];
+          if (!DonneesLettres.EstVoyelle(car))
+          {
+            int c = rand.Next(0, 2);
+
+            // this.textBox2.Text = this.textBox2.Text + matrice[b].ToString() + " remplacée par = " + voyellesCourantes[c] + " \r\n";
+            DonneesLettres.ArrayOfLetters[b] = DonneesLettres.UsualVowels[c];
+            tour++;
+          }
+        }
+
+        // fin modifications pour rendre plus jouable
+      }
+
+      // transfert des lettres de Matrice vers tableaudelettres
+      int ligne = 0, colonne = 0;
+      for (int r = 0; r < 16; r++)
+      {
+        DonneesLettres.TableauDeLettres[ligne, colonne] = DonneesLettres.ArrayOfLetters[r];
+        colonne++;
+        if (colonne == 4)
+        {
+          ligne++;
+          colonne = 0;
+        }
+      }
+
+      // MessageBox.Show("nb voyelles =" + cptVoyelle);
+    }
+
+    private void BoutonVerifMot(object sender, EventArgs e)
         {
             this.VerifMot();
             this.labNmotsTrouves.Text = "Nombre de mots trouvés = " + DataGame.NumberOFGoodWord.ToString()
-        + " sur "+ WordsInGrid.WordList.Count;
+        + " sur " + WordsInGrid.WordList.Count;
             this.textBox1.Clear();
             DataGame.ResetWordScore();
             this.labScoreMotJoueur.Text = string.Empty;
             this.DrawMatrix();
         }
-
-     
 
     // Vérifie si le mot à controler n'est pas un mot déjà utilisé
     private void VerifMot()
@@ -449,16 +450,16 @@ namespace AbreDico
       if (WordsTree.WordExists(this.textBox1.Text, LoadWordsDictionnary.NoeudRacine))
       { // le mot proposé par joueur existe
         bool motDejaUtilise = false;
-        for (int i = 0; i < FindedWordList.Count; i++)
+        for (int i = 0; i < findedWordList.Count; i++)
         {
-          if (FindedWordList[i] == this.textBox1.Text)
+          if (findedWordList[i] == this.textBox1.Text)
           {
             motDejaUtilise = true;
             this.ImageTriste.Visible = true;
             this.labNotification.ForeColor = Color.FromName("Red");
             this.labNotification.Text = "Mot déja choisi";
             this.DrawMatrix();
-            i = FindedWordList.Count;
+            i = findedWordList.Count;
           }
         }
 
@@ -470,7 +471,7 @@ namespace AbreDico
           DataGame.NumberOFGoodWord++;
           this.progressBar1.Value = DataGame.NumberOFGoodWord;
           this.labScoreTotal.Text = DataGame.ScoreTotal.ToString();
-          FindedWordList.Add(this.textBox1.Text);
+          findedWordList.Add(this.textBox1.Text);
         }
         else
         {
@@ -506,7 +507,7 @@ namespace AbreDico
     // Réalise un nouveau tirage de lettres
     private void NewGame()
         {
-            FindedWordList.Clear();
+            findedWordList.Clear();
             DataGame.ResetWordScore();
             DataGame.RazScoreTotal();
             this.labScoreMotJoueur.Text = "Score du mot";
@@ -561,11 +562,11 @@ namespace AbreDico
             }
             else
             {
-                MessageBox.Show(
-                    "Erreur à l'ouverture du dictionnaire des mots Français\r\n" +
-                    " Verifiez si le fichier MOTS TRADUITS.txt est présent sous le même répertoire que celui\r\n" +
-                    " de l'application.", "Erreur fatale.", MessageBoxButtons.OK, MessageBoxIcon.Stop);
-                Application.Exit();
+        _ = MessageBox.Show(
+            "Erreur à l'ouverture du dictionnaire des mots Français\r\n" +
+            " Verifiez si le fichier MOTS TRADUITS.txt est présent sous le même répertoire que celui\r\n" +
+            " de l'application.", "Erreur fatale.", buttons: MessageBoxButtons.OK, MessageBoxIcon.Stop);
+        Application.Exit();
             }
 
             this.PossibleWordsInTextbox2();
@@ -580,6 +581,7 @@ namespace AbreDico
         // on ajoute la liste des mots possiles
         this.textBox2.Text += WordsInGrid.WordList[i] + "\r\n";
       }
+
       this.progressBar1.Maximum = WordsInGrid.WordList.Count;
     }
 
@@ -730,12 +732,13 @@ namespace AbreDico
       if (this.textBox2.Visible)
       {
         this.textBox2.Visible = false;
-        this.bt_test.Text = "Cacher les mots";
+        this.bt_test.Text = "Voir les mots";
       }
       else
       {
         this.textBox2.Visible = true;
-        this.bt_test.Text = "Voir les mots";
+
+        this.bt_test.Text = "Cacher les mots";
       }
         }
 

@@ -11,8 +11,6 @@
      * - une liste de noeuds désignant les noeuds enfants
      * */
 
-
-
         public static Noeud NoeudRacineConstructionArbre(string[] lignesDico)
         {
             // création de la racine

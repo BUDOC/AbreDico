@@ -3,9 +3,11 @@ using System.IO;
 
 namespace AbreDico
 {
-
   class WordsInGrid
   {
+    // Liste des mots contenus dans la grille
+    public static List<string> WordList = new List<string>();
+
     private static double cptCombinaisons = 1;
 
     private static char[] PossibleWord { get; set; } = new char[16];
@@ -14,10 +16,18 @@ namespace AbreDico
 
     public static string Test { get; set; }
 
-    public static string ListOfPossibleWord = string.Empty;
+    private static string listOfPossibleWord = string.Empty
 
-    // Liste des mots contenus dans la grille
-    public static List<string> WordList = new List<string>();
+    public static void ExploreCellWay()
+    {
+      for (int i = 0; i < 4; i++)
+      {
+        for (int j = 0; j < 4; j++)
+        {
+          BeginTree(i, j);
+        }
+      }
+    }
 
     private static void InitialiseArrayOfUsedfCells()
     {
@@ -68,7 +78,8 @@ namespace AbreDico
             {
               isInList = true;
               i = WordList.Count;
-             // System.Windows.Forms.MessageBox.Show("Le mot " + myWord + " Existe déjà");
+
+              // System.Windows.Forms.MessageBox.Show("Le mot " + myWord + " Existe déjà");
             }
           }
 
@@ -78,7 +89,8 @@ namespace AbreDico
           }
         }
 
-        ListOfPossibleWord += myWord + "\r\n";
+        listOfPossibleWord += myWord + "\r\n";
+        
         // System.Windows.Forms.MessageBox.Show("Le mot " + myWord + " Existe");
       }
     }
@@ -223,29 +235,6 @@ namespace AbreDico
       return ok;
     }
 
-    public static void ExploreCellWay()
-    {
-      for (int i = 0; i < 4; i++)
-      {
-        for (int j = 0; j < 4; j++)
-        {
-          BeginTree(i, j);
-        }
-      }
-    }
-
     // fin Class WordsGrid
   }
-
-  public class OneCell
-  {
-    public int X { get; set; }
-
-    public int Y { get; set; }
-
-    public int Deep { get; set; }
-
-    internal List<OneCell> ListOfPossiblesCellNeighbors { get; set; } = new List<OneCell>();
-  }
 }
-

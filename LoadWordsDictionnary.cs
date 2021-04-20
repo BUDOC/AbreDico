@@ -1,11 +1,11 @@
 ﻿using System.IO;
 
-
 namespace AbreDico
 {
     class LoadWordsDictionnary
     {
         private static bool startAuthorization = true;
+
         public static Noeud NoeudRacine { get; private set; }
 
         // Return true if succes on dictinary loading
@@ -35,6 +35,5 @@ namespace AbreDico
                 startAuthorization = false;
             }
         }
-
     }
 }

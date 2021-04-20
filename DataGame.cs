@@ -8,6 +8,7 @@
         // GERE LES SCORES
         public static int ScoreMotJoueur;
         public static int NumberOFGoodWord;
+        public static int ScoreTotal;
 
         public static void ResetWordScore()
         {
@@ -18,8 +19,6 @@
         {
             ScoreMotJoueur += scoreLettre; // remplacer par nb point du mot
         }
-
-        public static int ScoreTotal;
 
         public static void RazScoreTotal()
         {

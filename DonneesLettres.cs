@@ -72,11 +72,11 @@ namespace AbreDico
 
             return i;
         }
-        // renvoi le nombre d'occurences de la lettre dans matrice ([0..15] of char
+
         public static int HowManyInMatrix(char c)
-        {
-            int cpt = 0;
-            for (int i = 0; i < ArrayOfLetters.Length - 1; i++)
+        {// renvoi le nombre d'occurences de la lettre dans matrice ([0..15] of char
+           int cpt = 0;
+           for (int i = 0; i < ArrayOfLetters.Length - 1; i++)
             {
                 if (ArrayOfLetters[i] == c)
                 {
@@ -84,7 +84,7 @@ namespace AbreDico
                 }
             }
 
-            return cpt;
+           return cpt;
         }
 
         public static void RotateMatrix()
@@ -100,39 +100,39 @@ namespace AbreDico
                 }
             }
 
-            for (int j = 0; j < 4; j++) // From line 0 to target column 3
-            {
-                workingArray[j, 3] = TableauDeLettres[0, j];
+            for (int j = 0; j < 4; j++)
+            {// From line 0 to target column 3
+              workingArray[j, 3] = TableauDeLettres[0, j];
             }
 
-            for (int j = 0; j < 4; j++) // From column 3 to target line 3
-            {
-                workingArray[3, 3 - j] = TableauDeLettres[j, 3];
+            for (int j = 0; j < 4; j++)
+            {// From column 3 to target line 3
+              workingArray[3, 3 - j] = TableauDeLettres[j, 3];
             }
 
-            for (int j = 0; j < 4; j++) // From line 3 to target column 0
-            {
-                workingArray[j, 0] = TableauDeLettres[3, j];
+            for (int j = 0; j < 4; j++)
+             {// From line 3 to target column 0
+              workingArray[j, 0] = TableauDeLettres[3, j];
             }
 
-            for (int j = 0; j < 4; j++) // From column 0 to target line 0
-            {
-                workingArray[0, 3 - j] = TableauDeLettres[j, 0];
+            for (int j = 0; j < 4; j++)
+            {// From column 0 to target line 0
+              workingArray[0, 3 - j] = TableauDeLettres[j, 0];
             }
 
-            for (int j = 1; j < 3; j++) // From column 1 to target line 1
-            {
-                workingArray[1, 3 - j] = TableauDeLettres[j, 1];
+            for (int j = 1; j < 3; j++)
+            {// From column 1 to target line 1
+              workingArray[1, 3 - j] = TableauDeLettres[j, 1];
             }
 
-            for (int j = 1; j < 3; j++) // From line 1 to target column2 1
-            {
-                workingArray[j, 2] = TableauDeLettres[1, j];
+            for (int j = 1; j < 3; j++)
+            {// From line 1 to target column2 1
+              workingArray[j, 2] = TableauDeLettres[1, j];
             }
 
-            for (int j = 1; j < 3; j++) // From column 2 to target line 2
-            {
-                workingArray[2, 3 - j] = TableauDeLettres[j, 2];
+            for (int j = 1; j < 3; j++)
+            {// From column 2 to target line 2
+              workingArray[2, 3 - j] = TableauDeLettres[j, 2];
             }
 
             for (int i = 0; i < 4; i++)
@@ -212,9 +212,10 @@ namespace AbreDico
             TabloDifficulte[10] = 5; // difficulté très prononcée
             TabloDifficulte[9] = 8;  // J
             TabloDifficulte[16] = 8; // Q
-            for (int i = 22; i < 26; i++) // W X Y Z
+            for (int i = 22; i < 26; i++)
             {
-                TabloDifficulte[i] = 8;
+              // W X Y Z
+              TabloDifficulte[i] = 8;
             }
         }
 
