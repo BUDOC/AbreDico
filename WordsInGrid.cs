@@ -16,6 +16,7 @@ namespace AbreDico
 
     public static string ListOfPossibleWord = string.Empty;
 
+    // Liste des mots contenus dans la grille
     public static List<string> WordList = new List<string>();
 
     private static void InitialiseArrayOfUsedfCells()

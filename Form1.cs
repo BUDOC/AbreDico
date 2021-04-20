@@ -432,56 +432,59 @@ namespace AbreDico
         private void BoutonVerifMot(object sender, EventArgs e)
         {
             this.VerifMot();
-            this.labNmotsTrouves.Text = "Nombre de mots trouvés = " + DataGame.NumberOFGoodWord.ToString();           
+            this.labNmotsTrouves.Text = "Nombre de mots trouvés = " + DataGame.NumberOFGoodWord.ToString()
+        + " sur "+ WordsInGrid.WordList.Count;
             this.textBox1.Clear();
             DataGame.ResetWordScore();
             this.labScoreMotJoueur.Text = string.Empty;
             this.DrawMatrix();
         }
 
-        // Vérifie si le mot à controler n'est pas un mot déjà utilisé
-        private void VerifMot()
-        {   // ICI supprumer l'utilisation de Listbox1 et remplacer pas findedWordList !!!!!!!!!!!!
-            this.pictureBox1.Visible = false;
+     
 
-            if (WordsTree.WordExists(this.textBox1.Text, LoadWordsDictionnary.NoeudRacine))
-            { // le mot propose par joueur existe
-                bool motDejaUtilise = false;
-                for (int cptM = 0; cptM < this.listBox1.Items.Count; cptM++)
-                {
-                    // verifie si le mot a déjà été proposé
-                    if (this.listBox1.Items[cptM].ToString() == this.textBox1.Text)
-                    {
-                        motDejaUtilise = true;
-                        this.ImageTriste.Visible = true;
-                        this.labNotification.Text = "Mot déja choisi";
-                        this.DrawMatrix();
-                    }
-                }
-
-                if (motDejaUtilise == false)
-                {
-                    this.ImageGai.Visible = true;
-                    this.ImageTriste.Visible = false;
-                    DataGame.ActualiseScoreTotal(DataGame.ScoreMotJoueur);
-                    DataGame.NumberOFGoodWord++;
-                    this.labScoreTotal.Text = DataGame.ScoreTotal.ToString();
-                    this.listBox1.Items.Add(this.textBox1.Text);
-                    this.textBox1.Clear();
-                }
-                else
-                {
-                    this.ImageGai.Visible = false;
-                    this.ImageTriste.Visible = true;
-                }
-            }
-            else
-            {
-                this.ImageTriste.Visible = true;
-            }
+    // Vérifie si le mot à controler n'est pas un mot déjà utilisé
+    private void VerifMot()
+    {
+      this.pictureBox1.Visible = false;
+      if (WordsTree.WordExists(this.textBox1.Text, LoadWordsDictionnary.NoeudRacine))
+      { // le mot proposé par joueur existe
+        bool motDejaUtilise = false;
+        for (int i = 0; i < FindedWordList.Count; i++)
+        {
+          if (FindedWordList[i] == this.textBox1.Text)
+          {
+            motDejaUtilise = true;
+            this.ImageTriste.Visible = true;
+            this.labNotification.ForeColor = Color.FromName("Red");
+            this.labNotification.Text = "Mot déja choisi";
+            this.DrawMatrix();
+            i = FindedWordList.Count;
+          }
         }
 
-        private void TextBox1_Enter(object sender, EventArgs e)
+        if (motDejaUtilise == false)
+        {
+          this.ImageGai.Visible = true;
+          this.ImageTriste.Visible = false;
+          DataGame.ActualiseScoreTotal(DataGame.ScoreMotJoueur);
+          DataGame.NumberOFGoodWord++;
+          this.progressBar1.Value = DataGame.NumberOFGoodWord;
+          this.labScoreTotal.Text = DataGame.ScoreTotal.ToString();
+          FindedWordList.Add(this.textBox1.Text);
+        }
+        else
+        {
+          this.ImageGai.Visible = false;
+          this.ImageTriste.Visible = true;
+        }
+      }
+      else
+      {
+        this.ImageTriste.Visible = true;
+      }
+    }
+
+    private void TextBox1_Enter(object sender, EventArgs e)
         {// n'est plus utilisé dans la configuration terminée du jeu
             this.pictureBox1.Visible = true;
             this.ImageGai.Visible = false;
@@ -500,9 +503,9 @@ namespace AbreDico
             this.pictureBox1.Visible = true;
         }
 
+    // Réalise un nouveau tirage de lettres
     private void NewGame()
-        { // Réalise un nouveau tirage de lettres
-            this.listBox1.Items.Clear();
+        {
             FindedWordList.Clear();
             DataGame.ResetWordScore();
             DataGame.RazScoreTotal();
@@ -511,10 +514,10 @@ namespace AbreDico
             this.CreateMatrix();
             this.DrawMatrix();
             WordsInGrid.ExploreCellWay();
-      this.PossibleWordsInTextbox2();
+            this.PossibleWordsInTextbox2();
     }
 
-        private void Form1_Load(object sender, EventArgs e)
+    private void Form1_Load(object sender, EventArgs e)
         {
             string t;
             int cpt = 0;
@@ -565,10 +568,10 @@ namespace AbreDico
                 Application.Exit();
             }
 
-      this.PossibleWordsInTextbox2();
-        }
+            this.PossibleWordsInTextbox2();
+    }
 
-        private void PossibleWordsInTextbox2()
+    private void PossibleWordsInTextbox2()
     {
       this.textBox2.Clear();
       this.textBox2.Text = "La nombre de mots trouvables est de " + WordsInGrid.WordList.Count + "\r\n";
@@ -577,29 +580,30 @@ namespace AbreDico
         // on ajoute la liste des mots possiles
         this.textBox2.Text += WordsInGrid.WordList[i] + "\r\n";
       }
+      this.progressBar1.Maximum = WordsInGrid.WordList.Count;
     }
 
-        private class LAbelXY : Label
+    private class LAbelXY : Label
         {
             public int X { get; set; }
 
             public int Y { get; set; }
         }
 
-        private void LetterIsChoosen(object sender, EventArgs e)
+    private void LetterIsChoosen(object sender, EventArgs e)
         {
             this.ImageGai.Visible = false;
             this.ImageTriste.Visible = false;
             LAbelXY choisi = (LAbelXY)sender;
             {
                 // this.Text = Choisi.X.ToString() + ", " + Choisi.Y.ToString();
-                choisi.Visible = false; choisi.Visible = false;
+                choisi.Visible = false;
+                choisi.Visible = false;
                 this.GereClicSurLettre(choisi.Name.ToString(), choisi.Y, choisi.X);
             }
         }
 
-
-        private void DrawMatrix2()
+    private void DrawMatrix2()
         {
             int compteur = 0;
             try
@@ -622,7 +626,7 @@ namespace AbreDico
             DonneesLettres.PrecedentSquare.Y = -1;
         }
 
-        private void DrawMatrix()
+    private void DrawMatrix()
         {
             int compteur = 0;
             try
@@ -639,14 +643,14 @@ namespace AbreDico
                 MessageBox.Show("Erreur dans la boucle foreach de dessinneMatrice");
             }
 
-            DonneesLettres.PrecedentSquare.X = -1; 
-            // initialise case précédente
+            DonneesLettres.PrecedentSquare.X = -1;
 
+            // initialise case précédente
             DonneesLettres.PrecedentSquare.Y = -1;
             DonneesLettres.ResetLettersUtilisationArray();
         }
 
-        private bool IsNeighbourrFromPrecedent()
+    private bool IsNeighbourrFromPrecedent()
         {
             // retourn vrai si la case est une case voisine
             int rx, ry;
@@ -678,7 +682,7 @@ namespace AbreDico
             }
         }
 
-        private void GereClicSurLettre(string labelName, int ligne, int colonne)
+    private void GereClicSurLettre(string labelName, int ligne, int colonne)
         {
             DonneesLettres.ChoosenSquare.X = colonne;
             DonneesLettres.ChoosenSquare.Y = ligne;
@@ -702,32 +706,40 @@ namespace AbreDico
             }
         }
 
-        private void UpdateWordScore(char c)
+    private void UpdateWordScore(char c)
         {
             for (int i = 0; i < DonneesLettres.Alphabet.Length - 1; i++)
             {
                 if (DonneesLettres.Alphabet[i] == c)
-
-        // caractère identifié
-        {
-                    DataGame.UpdatePlayerScore(DonneesLettres.PointArrayForAletter[i]);
-                    this.labScoreMotJoueur.Text = DataGame.ScoreMotJoueur.ToString();
+                {
+                // caractère identifié
+                 DataGame.UpdatePlayerScore(DonneesLettres.PointArrayForAletter[i]);
+                 this.labScoreMotJoueur.Text = DataGame.ScoreMotJoueur.ToString();
                 }
             }
         }
 
-        private void Bt_Rotation_Click(object sender, EventArgs e)
+    private void Bt_Rotation_Click(object sender, EventArgs e)
         {
             DonneesLettres.RotateMatrix();
             this.DrawMatrix();
         }
 
-        private void Bt_test_Click(object sender, EventArgs e)
+    private void Bt_test_Click(object sender, EventArgs e)
         {
-           
+      if (this.textBox2.Visible)
+      {
+        this.textBox2.Visible = false;
+        this.bt_test.Text = "Cacher les mots";
+      }
+      else
+      {
+        this.textBox2.Visible = true;
+        this.bt_test.Text = "Voir les mots";
+      }
         }
 
-        private void btTest2_Click(object sender, EventArgs e)
+    private void BtTest2_Click(object sender, EventArgs e)
         {
             this.MatriceCreate();
             this.DrawMatrix2();
@@ -736,7 +748,5 @@ namespace AbreDico
         // fin classe Form1
     }
 
-
-
-    // FIn  namspace
+    // Fin  namspace
 }
