@@ -71,6 +71,7 @@
   <ItemGroup>
     <Compile Include="LoadWordsDictionnary.cs" />
     <Compile Include="OneCell.cs" />
+    <Compile Include="TriAlphabetique.cs" />
     <Compile Include="WordsInGrid.cs" />
     <Compile Include="WordsTree.cs" />
     <Compile Include="DataGame.cs" />

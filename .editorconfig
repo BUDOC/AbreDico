@@ -10,7 +10,7 @@ dotnet_diagnostic.SA1633.severity = none
 dotnet_diagnostic.SA1200.severity = none
 dotnet_diagnostic.SA0001.severity = none
 dotnet_diagnostic.SA1601.severity = none
-dotnet_diagnostic.SA1600.severity = none
+#dotnet_diagnostic.SA1600.severity = none
 
 
 # SA1201: Elements should appear in the correct order

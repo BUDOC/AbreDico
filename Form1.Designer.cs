@@ -50,6 +50,7 @@ namespace AbreDico
       this.labNmotsTrouves = new System.Windows.Forms.Label();
       this.LabPourcentageDeTrouves = new System.Windows.Forms.Label();
       this.progressBar1 = new System.Windows.Forms.ProgressBar();
+      this.lab_scoreMaxi = new System.Windows.Forms.Label();
       this.panelMIAP.SuspendLayout();
       ((System.ComponentModel.ISupportInitialize)(this.ImageGai)).BeginInit();
       ((System.ComponentModel.ISupportInitialize)(this.ImageTriste)).BeginInit();
@@ -182,7 +183,8 @@ namespace AbreDico
       // 
       // panel2
       // 
-      this.panel2.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
+      this.panel2.BackColor = System.Drawing.SystemColors.Menu;
+      this.panel2.Controls.Add(this.lab_scoreMaxi);
       this.panel2.Controls.Add(this.labScoreTotal);
       this.panel2.Controls.Add(this.labScoreMotJoueur);
       this.panel2.Location = new System.Drawing.Point(18, 331);
@@ -195,7 +197,7 @@ namespace AbreDico
       this.labScoreTotal.AutoSize = true;
       this.labScoreTotal.Font = new System.Drawing.Font("Wide Latin", 16.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
       this.labScoreTotal.ForeColor = System.Drawing.Color.Lime;
-      this.labScoreTotal.Location = new System.Drawing.Point(35, 79);
+      this.labScoreTotal.Location = new System.Drawing.Point(3, 43);
       this.labScoreTotal.Name = "labScoreTotal";
       this.labScoreTotal.Size = new System.Drawing.Size(51, 34);
       this.labScoreTotal.TabIndex = 1;
@@ -205,8 +207,8 @@ namespace AbreDico
       // 
       this.labScoreMotJoueur.AutoSize = true;
       this.labScoreMotJoueur.Font = new System.Drawing.Font("Wide Latin", 16.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.labScoreMotJoueur.ForeColor = System.Drawing.Color.Yellow;
-      this.labScoreMotJoueur.Location = new System.Drawing.Point(29, 22);
+      this.labScoreMotJoueur.ForeColor = System.Drawing.Color.DarkGoldenrod;
+      this.labScoreMotJoueur.Location = new System.Drawing.Point(3, 9);
       this.labScoreMotJoueur.Name = "labScoreMotJoueur";
       this.labScoreMotJoueur.Size = new System.Drawing.Size(51, 34);
       this.labScoreMotJoueur.TabIndex = 0;
@@ -265,6 +267,15 @@ namespace AbreDico
       this.progressBar1.Name = "progressBar1";
       this.progressBar1.Size = new System.Drawing.Size(425, 23);
       this.progressBar1.TabIndex = 30;
+      // 
+      // lab_scoreMaxi
+      // 
+      this.lab_scoreMaxi.AutoSize = true;
+      this.lab_scoreMaxi.Location = new System.Drawing.Point(9, 108);
+      this.lab_scoreMaxi.Name = "lab_scoreMaxi";
+      this.lab_scoreMaxi.Size = new System.Drawing.Size(148, 20);
+      this.lab_scoreMaxi.TabIndex = 2;
+      this.lab_scoreMaxi.Text = "SCORE MAXIMAL";
       // 
       // Form1
       // 
@@ -326,6 +337,7 @@ namespace AbreDico
         private System.Windows.Forms.Label labNmotsTrouves;
         private System.Windows.Forms.Label LabPourcentageDeTrouves;
     private System.Windows.Forms.ProgressBar progressBar1;
+    private System.Windows.Forms.Label lab_scoreMaxi;
   }
 }
 

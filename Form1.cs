@@ -7,22 +7,23 @@ using System.Windows.Forms;
 
 namespace AbreDico
 {
-    public partial class Form1 : Form
-    {
-    private static List<string> findedWordList = new List<string>();
+  public partial class Form1 : Form
+  {
+    private List<string> findedWordList = new List<string>();
+    private List<string> possibleWords = new List<string>();
 
     // crée une variable d'instance à laquelle on affectera le noeud racine (passage du pointeur)
     // pour en disposer dans Form1
     // **** Couleurs de l'environnement
     private readonly Color defaultColor = Color.FromName("Navy");
 
-        // retourne une consonne en fonction du niveau de diffculté
+    // retourne une consonne en fonction du niveau de diffculté
     static Random rand = new Random();
 
     public Form1()
-        {
-            this.InitializeComponent();
-        }
+    {
+      this.InitializeComponent();
+    }
 
     // Bouton qui déclenche l'action de controler si le mot est acceptable
     private static int RangConsonnant(int maxDifficulty)
@@ -433,15 +434,15 @@ namespace AbreDico
     }
 
     private void BoutonVerifMot(object sender, EventArgs e)
-        {
-            this.VerifMot();
-            this.labNmotsTrouves.Text = "Nombre de mots trouvés = " + DataGame.NumberOFGoodWord.ToString()
-        + " sur " + WordsInGrid.WordList.Count;
-            this.textBox1.Clear();
-            DataGame.ResetWordScore();
-            this.labScoreMotJoueur.Text = string.Empty;
-            this.DrawMatrix();
-        }
+    {
+      this.VerifMot();
+      this.labNmotsTrouves.Text = "Nombre de mots trouvés = " + DataGame.NumberOFGoodWord.ToString()
+  + " sur " + this.possibleWords.Count;
+      this.textBox1.Clear();
+      DataGame.ResetWordScore();
+      this.labScoreMotJoueur.Text = string.Empty;
+      this.DrawMatrix();
+    }
 
     // Vérifie si le mot à controler n'est pas un mot déjà utilisé
     private void VerifMot()
@@ -450,16 +451,16 @@ namespace AbreDico
       if (WordsTree.WordExists(this.textBox1.Text, LoadWordsDictionnary.NoeudRacine))
       { // le mot proposé par joueur existe
         bool motDejaUtilise = false;
-        for (int i = 0; i < findedWordList.Count; i++)
+        for (int i = 0; i < this.findedWordList.Count; i++)
         {
-          if (findedWordList[i] == this.textBox1.Text)
+          if (this.findedWordList[i] == this.textBox1.Text)
           {
             motDejaUtilise = true;
             this.ImageTriste.Visible = true;
             this.labNotification.ForeColor = Color.FromName("Red");
             this.labNotification.Text = "Mot déja choisi";
             this.DrawMatrix();
-            i = findedWordList.Count;
+            i = this.findedWordList.Count;
           }
         }
 
@@ -471,7 +472,7 @@ namespace AbreDico
           DataGame.NumberOFGoodWord++;
           this.progressBar1.Value = DataGame.NumberOFGoodWord;
           this.labScoreTotal.Text = DataGame.ScoreTotal.ToString();
-          findedWordList.Add(this.textBox1.Text);
+          this.findedWordList.Add(this.textBox1.Text);
         }
         else
         {
@@ -483,252 +484,303 @@ namespace AbreDico
       {
         this.ImageTriste.Visible = true;
       }
+
+      // met le mot trouvé entre parenthèse dans la liste des mots
+      for (int i = 0; i < this.possibleWords.Count; i++)
+      {
+        if (this.possibleWords[i] == this.textBox1.Text)
+        {
+          this.possibleWords[i] = "(" + this.textBox1.Text + ")";
+          i = this.possibleWords.Count;
+        }
+      }
+
+      this.AfficheMotsPossibles();
+
     }
 
     private void TextBox1_Enter(object sender, EventArgs e)
-        {// n'est plus utilisé dans la configuration terminée du jeu
-            this.pictureBox1.Visible = true;
-            this.ImageGai.Visible = false;
-            this.ImageTriste.Visible = false;
-        }
+    {// n'est plus utilisé dans la configuration terminée du jeu
+      this.pictureBox1.Visible = true;
+      this.ImageGai.Visible = false;
+      this.ImageTriste.Visible = false;
+    }
 
     private void Button1_Click(object sender, EventArgs e)
-        {
-            // Réalise un nouveau tirage de lettres et configure l'IHM
-            this.textBox2.Clear();
-            DataGame.ResetWordScore();
-            DataGame.NumberOFGoodWord = 0;
-            this.NewGame();
-            this.DrawMatrix();
-            this.textBox1.Clear();
-            this.pictureBox1.Visible = true;
-        }
+    {
+      // Réalise un nouveau tirage de lettres et configure l'IHM
+      this.textBox2.Clear();
+      this.textBox1.Clear();
+      DataGame.ResetWordScore();
+      DataGame.NumberOFGoodWord = 0;
+      this.NewGame();
+      this.DrawMatrix();
+      this.pictureBox1.Visible = true;
+    }
 
     // Réalise un nouveau tirage de lettres
     private void NewGame()
-        {
-            findedWordList.Clear();
-            DataGame.ResetWordScore();
-            DataGame.RazScoreTotal();
-            this.labScoreMotJoueur.Text = "Score du mot";
-            this.labScoreTotal.Text = "Score de la partie.";
-            this.CreateMatrix();
-            this.DrawMatrix();
-            WordsInGrid.ExploreCellWay();
-            this.PossibleWordsInTextbox2();
+    {
+      this.findedWordList.Clear();
+      this.textBox2.Clear();
+      DataGame.ResetWordScore();
+      DataGame.RazScoreTotal();
+      this.labScoreMotJoueur.Text = "Score du mot";
+      this.labScoreTotal.Text = "Score de la partie.";
+      this.CreateMatrix();
+      this.DrawMatrix();
+      WordsInGrid solver = new WordsInGrid();
+      this.possibleWords = solver.ExploreCellWay();
+      this.lab_scoreMaxi.Text = "SCORE MAXIMAL : " + this.ScoreMaxi();
+      this.possibleWords.Sort();
+      this.PossibleWordsInTextbox2();
+
     }
 
     private void Form1_Load(object sender, EventArgs e)
+    {
+      string t;
+      int cpt = 0;
+      for (int j = 0; j < 4; j++)
+      {
+        // Création des LABEL  de la grille
+        for (int i = 0; i < 4; i++)
         {
-            string t;
-            int cpt = 0;
-            for (int j = 0; j < 4; j++)
-             {
-              // Création des LABEL  de la grille
-                for (int i = 0; i < 4; i++)
-                {
-                    cpt++;
-                    int pas = 60;
-                    LAbelXY l = new LAbelXY();
-                    {
-                        l.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, FontStyle.Bold, GraphicsUnit.Point, (byte)0);
-                        l.Parent = this;
-                    }
+          cpt++;
+          int pas = 60;
+          LAbelXY l = new LAbelXY();
+          {
+            l.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, FontStyle.Bold, GraphicsUnit.Point, (byte)0);
+            l.Parent = this;
+          }
 
-                    l.Click += new EventHandler(this.LetterIsChoosen);
-                    t = cpt.ToString();
-                    l.Text = t;
-                    l.Name = t;
-                    l.Width = pas - 20;
-                    l.Height = pas - 20;
-                    l.Top = 20 + (j * pas);
-                    l.Left = 20 + (i * pas);
-                    l.ForeColor = this.defaultColor;
-                    l.X = i;
-                    l.Y = j;
-                    l.Show();
-                }
-            }
+          l.Click += new EventHandler(this.LetterIsChoosen);
+          t = cpt.ToString();
+          l.Text = t;
+          l.Name = t;
+          l.Width = pas - 20;
+          l.Height = pas - 20;
+          l.Top = 20 + (j * pas);
+          l.Left = 20 + (i * pas);
+          l.ForeColor = this.defaultColor;
+          l.X = i;
+          l.Y = j;
+          l.Show();
+        }
+      }
 
-            DataGame.ResetWordScore();
-            DataGame.RazScoreTotal();
+      DataGame.ResetWordScore();
+      DataGame.RazScoreTotal();
 
-            // Pour la contruction d'un arbre des lettres à partir de la liste des mots français
-            LoadWordsDictionnary.InitialiseEnvironnement();
-            if (LoadWordsDictionnary.GetAuthorizationStatus())
-            {
-                DonneesLettres.MatrixIniialization();
-                this.NewGame();
-            }
-            else
-            {
+      // Pour la contruction d'un arbre des lettres à partir de la liste des mots français
+      LoadWordsDictionnary.InitialiseEnvironnement();
+      if (LoadWordsDictionnary.GetAuthorizationStatus())
+      {
+        DonneesLettres.MatrixIniialization();
+        this.NewGame();
+      }
+      else
+      {
         _ = MessageBox.Show(
             "Erreur à l'ouverture du dictionnaire des mots Français\r\n" +
             " Verifiez si le fichier MOTS TRADUITS.txt est présent sous le même répertoire que celui\r\n" +
             " de l'application.", "Erreur fatale.", buttons: MessageBoxButtons.OK, MessageBoxIcon.Stop);
         Application.Exit();
-            }
+      }
 
-            this.PossibleWordsInTextbox2();
+      this.PossibleWordsInTextbox2();
     }
 
     private void PossibleWordsInTextbox2()
     {
       this.textBox2.Clear();
-      this.textBox2.Text = "La nombre de mots trouvables est de " + WordsInGrid.WordList.Count + "\r\n";
-      for (int i = 0; i < WordsInGrid.WordList.Count; i++)
+      this.textBox2.Text = "La nombre de mots trouvables est de " + this.possibleWords.Count + "\r\n";
+      for (int i = 0; i < this.possibleWords.Count; i++)
       {
         // on ajoute la liste des mots possiles
-        this.textBox2.Text += WordsInGrid.WordList[i] + "\r\n";
+        this.textBox2.Text += this.possibleWords[i] + "\r\n";
       }
 
-      this.progressBar1.Maximum = WordsInGrid.WordList.Count;
+      this.progressBar1.Maximum = this.possibleWords.Count;
     }
 
     private class LAbelXY : Label
-        {
-            public int X { get; set; }
+    {
+      public int X { get; set; }
 
-            public int Y { get; set; }
-        }
+      public int Y { get; set; }
+    }
 
     private void LetterIsChoosen(object sender, EventArgs e)
-        {
-            this.ImageGai.Visible = false;
-            this.ImageTriste.Visible = false;
-            LAbelXY choisi = (LAbelXY)sender;
-            {
-                // this.Text = Choisi.X.ToString() + ", " + Choisi.Y.ToString();
-                choisi.Visible = false;
-                choisi.Visible = false;
-                this.GereClicSurLettre(choisi.Name.ToString(), choisi.Y, choisi.X);
-            }
-        }
+    {
+      this.ImageGai.Visible = false;
+      this.ImageTriste.Visible = false;
+      LAbelXY choisi = (LAbelXY)sender;
+      {
+        // this.Text = Choisi.X.ToString() + ", " + Choisi.Y.ToString();
+        choisi.Visible = false;
+        choisi.Visible = false;
+        this.GereClicSurLettre(choisi.Name.ToString(), choisi.Y, choisi.X);
+      }
+    }
 
     private void DrawMatrix2()
+    {
+      int compteur = 0;
+      try
+      {
+        foreach (LAbelXY labelDeLettre in this.Controls.OfType<LAbelXY>())
         {
-            int compteur = 0;
-            try
-            {
-                foreach (LAbelXY labelDeLettre in this.Controls.OfType<LAbelXY>())
-                {
-                    labelDeLettre.Text = DonneesLettres.TableauDeLettres[labelDeLettre.Y, labelDeLettre.X].ToString();
-                    labelDeLettre.Visible = true;
-                    compteur++;
-                }
-            }
-            catch
-            {
-                MessageBox.Show("Erreur dans la boucle foreach de dessinneMatrice");
-            }
-
-            DonneesLettres.PrecedentSquare.X = -1;
-
-            // initialise case précédente
-            DonneesLettres.PrecedentSquare.Y = -1;
+          labelDeLettre.Text = DonneesLettres.TableauDeLettres[labelDeLettre.Y, labelDeLettre.X].ToString();
+          labelDeLettre.Visible = true;
+          compteur++;
         }
+      }
+      catch
+      {
+        MessageBox.Show("Erreur dans la boucle foreach de dessinneMatrice");
+      }
+
+      DonneesLettres.PrecedentSquare.X = -1;
+
+      // initialise case précédente
+      DonneesLettres.PrecedentSquare.Y = -1;
+    }
 
     private void DrawMatrix()
+    {
+      int compteur = 0;
+      try
+      {
+        foreach (LAbelXY labelDeLettre in this.Controls.OfType<LAbelXY>())
         {
-            int compteur = 0;
-            try
-            {
-                foreach (LAbelXY labelDeLettre in this.Controls.OfType<LAbelXY>())
-                {
-                    labelDeLettre.Text = DonneesLettres.TableauDeLettres[labelDeLettre.Y, labelDeLettre.X].ToString();
-                    labelDeLettre.Visible = true;
-                    compteur++;
-                }
-            }
-            catch
-            {
-                MessageBox.Show("Erreur dans la boucle foreach de dessinneMatrice");
-            }
-
-            DonneesLettres.PrecedentSquare.X = -1;
-
-            // initialise case précédente
-            DonneesLettres.PrecedentSquare.Y = -1;
-            DonneesLettres.ResetLettersUtilisationArray();
+          labelDeLettre.Text = DonneesLettres.TableauDeLettres[labelDeLettre.Y, labelDeLettre.X].ToString();
+          labelDeLettre.Visible = true;
+          compteur++;
         }
+      }
+      catch
+      {
+        MessageBox.Show("Erreur dans la boucle foreach de dessinneMatrice");
+      }
+
+      DonneesLettres.PrecedentSquare.X = -1;
+
+      // initialise case précédente
+      DonneesLettres.PrecedentSquare.Y = -1;
+      DonneesLettres.ResetLettersUtilisationArray();
+    }
 
     private bool IsNeighbourrFromPrecedent()
-        {
-            // retourn vrai si la case est une case voisine
-            int rx, ry;
-            this.labNotification.Text = string.Empty;
+    {
+      // retourn vrai si la case est une case voisine
+      int rx, ry;
+      this.labNotification.Text = string.Empty;
 
-            // pas la première case
-            if (DonneesLettres.PrecedentSquare.X != -1)
-            {
-                // traitement
-                rx = Math.Abs(DonneesLettres.ChoosenSquare.X - DonneesLettres.PrecedentSquare.X);
-                ry = Math.Abs(DonneesLettres.ChoosenSquare.Y - DonneesLettres.PrecedentSquare.Y);
-                if (rx >= -1 && rx <= 1 && ry >= -1 && ry <= 1)
-                {
-                    DonneesLettres.StoreUsingPlace();
-                    this.labNotification.Text = " ";
-                    return true;
-                }
-                else
-                {
-                    this.labNotification.Text = "Choix innacceptable : pas voisine";
-                    return false;
-                }
-            }
-            else
-            {
-                DonneesLettres.StoreUsingPlace();
-                this.labNotification.Text = " ";
-                return true;
-            }
+      // pas la première case
+      if (DonneesLettres.PrecedentSquare.X != -1)
+      {
+        // traitement
+        rx = Math.Abs(DonneesLettres.ChoosenSquare.X - DonneesLettres.PrecedentSquare.X);
+        ry = Math.Abs(DonneesLettres.ChoosenSquare.Y - DonneesLettres.PrecedentSquare.Y);
+        if (rx >= -1 && rx <= 1 && ry >= -1 && ry <= 1)
+        {
+          DonneesLettres.StoreUsingPlace();
+          this.labNotification.Text = " ";
+          return true;
         }
+        else
+        {
+          this.labNotification.Text = "Choix innacceptable : pas voisine";
+          return false;
+        }
+      }
+      else
+      {
+        DonneesLettres.StoreUsingPlace();
+        this.labNotification.Text = " ";
+        return true;
+      }
+    }
 
     private void GereClicSurLettre(string labelName, int ligne, int colonne)
+    {
+      DonneesLettres.ChoosenSquare.X = colonne;
+      DonneesLettres.ChoosenSquare.Y = ligne;
+
+      // ParcoursDeMatrice.TrouveVoisinePossible(colonne, ligne);
+      if (this.IsNeighbourrFromPrecedent())
+      {
+        // pour tous les labels de la form
+        foreach (Label letterLabel in this.Controls.OfType<Label>())
         {
-            DonneesLettres.ChoosenSquare.X = colonne;
-            DonneesLettres.ChoosenSquare.Y = ligne;
+          // si le label est celui cliqué
+          if (letterLabel.Name == labelName)
+          {
+            this.textBox1.Text += letterLabel.Text;
+            this.UpdateWordScore(char.Parse(letterLabel.Text));
+            DonneesLettres.ArrayOfLetterUse[colonne, ligne] = true;
+          }
 
-            // ParcoursDeMatrice.TrouveVoisinePossible(colonne, ligne);
-            if (this.IsNeighbourrFromPrecedent())
-            {
-                // pour tous les labels de la form
-                foreach (Label letterLabel in this.Controls.OfType<Label>())
-                {
-                    // si le label est celui cliqué
-                    if (letterLabel.Name == labelName)
-                    {
-                        this.textBox1.Text += letterLabel.Text;
-                        this.UpdateWordScore(char.Parse(letterLabel.Text));
-                        DonneesLettres.ArrayOfLetterUse[colonne, ligne] = true;
-                    }
-
-                    DonneesLettres.SetPlaceOfUsingLetter(ligne, colonne);
-                }
-            }
+          DonneesLettres.SetPlaceOfUsingLetter(ligne, colonne);
         }
+      }
+    }
 
     private void UpdateWordScore(char c)
+    {
+      for (int i = 0; i < DonneesLettres.Alphabet.Length - 1; i++)
+      {
+        if (DonneesLettres.Alphabet[i] == c)
         {
-            for (int i = 0; i < DonneesLettres.Alphabet.Length - 1; i++)
-            {
-                if (DonneesLettres.Alphabet[i] == c)
-                {
-                // caractère identifié
-                 DataGame.UpdatePlayerScore(DonneesLettres.PointArrayForAletter[i]);
-                 this.labScoreMotJoueur.Text = DataGame.ScoreMotJoueur.ToString();
-                }
-            }
+          // caractère identifié
+          DataGame.UpdatePlayerScore(DonneesLettres.PointArrayForAletter[i]);
+          this.labScoreMotJoueur.Text = DataGame.ScoreMotJoueur.ToString();
         }
+      }
+    }
+
+    private long ScoreMaxi()
+    {
+      long total = 0;
+
+      // pour chaque mot de la liste
+      for (int i = 0; i < this.possibleWords.Count; i++)
+      {
+        // pour chaque lettre du mot
+        for (int j = 0; j < this.possibleWords[i].Count(); j++)
+        {
+          // pour chaque lettre de l'alpahabet
+          for (int k = 0; k < DonneesLettres.Alphabet.Count(); k++)
+          {
+            if (this.possibleWords[i][j] == DonneesLettres.Alphabet[k])
+            {
+              total += DonneesLettres.PointArrayForAletter[k];
+            }
+          }
+        }
+      }
+
+      return total;
+    }
 
     private void Bt_Rotation_Click(object sender, EventArgs e)
-        {
-            DonneesLettres.RotateMatrix();
-            this.DrawMatrix();
-        }
+    {
+      DonneesLettres.RotateMatrix();
+      this.DrawMatrix();
+    }
+
+    private void AfficheMotsPossibles()
+    {
+      this.textBox2.Clear();
+      for (int i = 0; i < this.possibleWords.Count; i++)
+      {
+        this.textBox2.Text += this.possibleWords[i] + "\r\n";
+      }
+    }
 
     private void Bt_test_Click(object sender, EventArgs e)
-        {
+    {
       if (this.textBox2.Visible)
       {
         this.textBox2.Visible = false;
@@ -737,19 +789,19 @@ namespace AbreDico
       else
       {
         this.textBox2.Visible = true;
-
+        this.AfficheMotsPossibles();
         this.bt_test.Text = "Cacher les mots";
       }
-        }
-
-    private void BtTest2_Click(object sender, EventArgs e)
-        {
-            this.MatriceCreate();
-            this.DrawMatrix2();
-        }
-
-        // fin classe Form1
     }
 
-    // Fin  namspace
+    private void BtTest2_Click(object sender, EventArgs e)
+    {
+      this.MatriceCreate();
+      this.DrawMatrix2();
+    }
+
+    // fin classe Form1
+  }
+
+  // Fin  namspace
 }
