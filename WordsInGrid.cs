@@ -3,21 +3,26 @@ using System.IO;
 
 namespace AbreDico
 {
+  /// <summary>
+  /// Classes qui contient les méthodes pour trouver les mots possible dans la matrice.
+  /// </summary>
   class WordsInGrid
   {
     // Liste des mots contenus dans la grille
-    private List<string> WordList = new List<string>();
+    private readonly List<string> wordList = new List<string>();
 
     private double cptCombinaisons = 1;
 
     private char[] PossibleWord { get; set; } = new char[16];
 
-    private readonly bool[,] ArrayOfUsedCells = new bool[4, 4];
-
-    public string Test { get; set; }
+    private readonly bool[,] arrayOfUsedCells = new bool[4, 4];
 
     private string listOfPossibleWord = string.Empty;
 
+    /// <summary>
+    /// Explore toutes les combinaisons possibles qui forment un mot dans la mtrice.
+    /// </summary>
+    /// <returns> liste des mots possibles à former dans la matrice.</returns>
     public List<string> ExploreCellWay()
     {
       for (int i = 0; i < 4; i++)
@@ -28,7 +33,7 @@ namespace AbreDico
         }
       }
 
-      return this.WordList;
+      return this.wordList;
     }
 
     private void InitialiseArrayOfUsedfCells()
@@ -37,7 +42,7 @@ namespace AbreDico
       {
         for (int j = 0; j < 4; j++)
         {
-          this.ArrayOfUsedCells[i, j] = false;
+          this.arrayOfUsedCells[i, j] = false;
         }
       }
     }
@@ -65,21 +70,21 @@ namespace AbreDico
 
       if (WordsTree.WordExists(myWord, LoadWordsDictionnary.NoeudRacine))
       {
-        if (this.WordList.Count == 0)
+        if (this.wordList.Count == 0)
         {
           // si la liste est vide on ajoute le mot
-          this.WordList.Add(myWord);
+          this.wordList.Add(myWord);
         }
         else
         {
           // La liste n'est pas vide => on vérifie si le mot n'est pas déjà dans la liste
           bool isInList = false;
-          for (int i = 0; i < this.WordList.Count; i++)
+          for (int i = 0; i < this.wordList.Count; i++)
           {
-            if (this.WordList[i] == myWord)
+            if (this.wordList[i] == myWord)
             {
               isInList = true;
-              i = this.WordList.Count;
+              i = this.wordList.Count;
 
               // System.Windows.Forms.MessageBox.Show("Le mot " + myWord + " Existe déjà");
             }
@@ -87,7 +92,7 @@ namespace AbreDico
 
           if (isInList == false)
           {
-            this.WordList.Add(myWord);
+            this.wordList.Add(myWord);
           }
         }
 
@@ -108,7 +113,7 @@ namespace AbreDico
         Y = y,
         Deep = 0,
       };
-      this.ArrayOfUsedCells[root.X, root.Y] = true;
+      this.arrayOfUsedCells[root.X, root.Y] = true;
       this.PossibleWord[root.Deep] = this.LetterOfCell(root);
       this.TestMot(root.Deep);
       this.AddAcceptablesNeighbors(root);
@@ -119,7 +124,7 @@ namespace AbreDico
       }
 
       // replace  True  by false in used cells array.
-      this.ArrayOfUsedCells[root.X, root.Y] = false;
+      this.arrayOfUsedCells[root.X, root.Y] = false;
     }
 
     // AllWays est appelée par BeginTree pour continuer la recherche des mots possibles
@@ -127,7 +132,7 @@ namespace AbreDico
     private void AllWays(OneCell lowCell)
     {
       this.cptCombinaisons++;
-      this.ArrayOfUsedCells[lowCell.X, lowCell.Y] = true;
+      this.arrayOfUsedCells[lowCell.X, lowCell.Y] = true;
       this.PossibleWord[lowCell.Deep] = this.LetterOfCell(lowCell);
       this.TestMot(lowCell.Deep);
       this.AddAcceptablesNeighbors(lowCell);
@@ -137,15 +142,15 @@ namespace AbreDico
         lowCell.ListOfPossiblesCellNeighbors.RemoveAt(0);
       }
 
-      this.ArrayOfUsedCells[lowCell.X, lowCell.Y] = false;
+      this.arrayOfUsedCells[lowCell.X, lowCell.Y] = false;
       this.PossibleWord[lowCell.Deep] = '+';
     }
 
     /// <summary>
-    /// cette procedure trouve les cases voisines de celle passée en paramètre
+    /// cette procedure trouve les cases voisines de celle passée en paramètre.
     /// Créer des instances de Case pour chacune
     /// et les ajoute dans la liste des cases voisines de la case passée en paramètre
-    /// et le niveau de parcours du chemin est incrémenté pour ces cellules voisines
+    /// et le niveau de parcours du chemin est incrémenté pour ces cellules voisines.
     /// </summary>
     private void AddAcceptablesNeighbors(OneCell workingCell)
     {
@@ -168,7 +173,7 @@ namespace AbreDico
             if (coordonneeX >= 0 && coordonneeX < 4 && coordonneeY >= 0 && coordonneeY < 4)
             {
               // on traite car les coordonnées sont acceptables
-              if (this.ArrayOfUsedCells[coordonneeX, coordonneeY])
+              if (this.arrayOfUsedCells[coordonneeX, coordonneeY])
               {
                 // La  case est déjà utilisée : on ne fait rien
               }

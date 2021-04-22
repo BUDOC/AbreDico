@@ -36,12 +36,12 @@ namespace AbreDico
       this.ImageTriste = new System.Windows.Forms.PictureBox();
       this.textBox1 = new System.Windows.Forms.TextBox();
       this.BtCreateTree = new System.Windows.Forms.Button();
-      this.pictureBox1 = new System.Windows.Forms.PictureBox();
       this.button1 = new System.Windows.Forms.Button();
       this.textBox2 = new System.Windows.Forms.TextBox();
       this.panel1 = new System.Windows.Forms.Panel();
       this.labNotification = new System.Windows.Forms.Label();
       this.panel2 = new System.Windows.Forms.Panel();
+      this.lab_scoreMaxi = new System.Windows.Forms.Label();
       this.labScoreTotal = new System.Windows.Forms.Label();
       this.labScoreMotJoueur = new System.Windows.Forms.Label();
       this.bt_Rotation = new System.Windows.Forms.Button();
@@ -50,11 +50,9 @@ namespace AbreDico
       this.labNmotsTrouves = new System.Windows.Forms.Label();
       this.LabPourcentageDeTrouves = new System.Windows.Forms.Label();
       this.progressBar1 = new System.Windows.Forms.ProgressBar();
-      this.lab_scoreMaxi = new System.Windows.Forms.Label();
       this.panelMIAP.SuspendLayout();
       ((System.ComponentModel.ISupportInitialize)(this.ImageGai)).BeginInit();
       ((System.ComponentModel.ISupportInitialize)(this.ImageTriste)).BeginInit();
-      ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
       this.panel1.SuspendLayout();
       this.panel2.SuspendLayout();
       this.SuspendLayout();
@@ -131,18 +129,6 @@ namespace AbreDico
       this.BtCreateTree.UseVisualStyleBackColor = true;
       this.BtCreateTree.Click += new System.EventHandler(this.BoutonVerifMot);
       // 
-      // pictureBox1
-      // 
-      this.pictureBox1.Image = global::AbreDico.Properties.Resources.tenor;
-      this.pictureBox1.Location = new System.Drawing.Point(436, 340);
-      this.pictureBox1.Margin = new System.Windows.Forms.Padding(4);
-      this.pictureBox1.MaximumSize = new System.Drawing.Size(150, 150);
-      this.pictureBox1.Name = "pictureBox1";
-      this.pictureBox1.Size = new System.Drawing.Size(150, 135);
-      this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-      this.pictureBox1.TabIndex = 2;
-      this.pictureBox1.TabStop = false;
-      // 
       // button1
       // 
       this.button1.Location = new System.Drawing.Point(22, 295);
@@ -192,11 +178,20 @@ namespace AbreDico
       this.panel2.Size = new System.Drawing.Size(392, 144);
       this.panel2.TabIndex = 22;
       // 
+      // lab_scoreMaxi
+      // 
+      this.lab_scoreMaxi.AutoSize = true;
+      this.lab_scoreMaxi.Location = new System.Drawing.Point(9, 108);
+      this.lab_scoreMaxi.Name = "lab_scoreMaxi";
+      this.lab_scoreMaxi.Size = new System.Drawing.Size(148, 20);
+      this.lab_scoreMaxi.TabIndex = 2;
+      this.lab_scoreMaxi.Text = "SCORE MAXIMAL";
+      // 
       // labScoreTotal
       // 
       this.labScoreTotal.AutoSize = true;
       this.labScoreTotal.Font = new System.Drawing.Font("Wide Latin", 16.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.labScoreTotal.ForeColor = System.Drawing.Color.Lime;
+      this.labScoreTotal.ForeColor = System.Drawing.Color.Red;
       this.labScoreTotal.Location = new System.Drawing.Point(3, 43);
       this.labScoreTotal.Name = "labScoreTotal";
       this.labScoreTotal.Size = new System.Drawing.Size(51, 34);
@@ -207,7 +202,7 @@ namespace AbreDico
       // 
       this.labScoreMotJoueur.AutoSize = true;
       this.labScoreMotJoueur.Font = new System.Drawing.Font("Wide Latin", 16.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.labScoreMotJoueur.ForeColor = System.Drawing.Color.DarkGoldenrod;
+      this.labScoreMotJoueur.ForeColor = System.Drawing.SystemColors.MenuHighlight;
       this.labScoreMotJoueur.Location = new System.Drawing.Point(3, 9);
       this.labScoreMotJoueur.Name = "labScoreMotJoueur";
       this.labScoreMotJoueur.Size = new System.Drawing.Size(51, 34);
@@ -268,15 +263,6 @@ namespace AbreDico
       this.progressBar1.Size = new System.Drawing.Size(425, 23);
       this.progressBar1.TabIndex = 30;
       // 
-      // lab_scoreMaxi
-      // 
-      this.lab_scoreMaxi.AutoSize = true;
-      this.lab_scoreMaxi.Location = new System.Drawing.Point(9, 108);
-      this.lab_scoreMaxi.Name = "lab_scoreMaxi";
-      this.lab_scoreMaxi.Size = new System.Drawing.Size(148, 20);
-      this.lab_scoreMaxi.TabIndex = 2;
-      this.lab_scoreMaxi.Text = "SCORE MAXIMAL";
-      // 
       // Form1
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 20F);
@@ -292,7 +278,6 @@ namespace AbreDico
       this.Controls.Add(this.panel2);
       this.Controls.Add(this.textBox2);
       this.Controls.Add(this.button1);
-      this.Controls.Add(this.pictureBox1);
       this.Controls.Add(this.panelMIAP);
       this.Cursor = System.Windows.Forms.Cursors.Arrow;
       this.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -305,7 +290,6 @@ namespace AbreDico
       this.panelMIAP.PerformLayout();
       ((System.ComponentModel.ISupportInitialize)(this.ImageGai)).EndInit();
       ((System.ComponentModel.ISupportInitialize)(this.ImageTriste)).EndInit();
-      ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
       this.panel1.ResumeLayout(false);
       this.panel1.PerformLayout();
       this.panel2.ResumeLayout(false);
@@ -318,7 +302,6 @@ namespace AbreDico
         #endregion
         private System.Windows.Forms.Panel panelMIAP;
         private System.Windows.Forms.Button BtCreateTree;
-        private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.PictureBox ImageTriste;
         private System.Windows.Forms.PictureBox ImageGai;

@@ -9,17 +9,18 @@ namespace AbreDico
 {
   public partial class Form1 : Form
   {
-    private List<string> findedWordList = new List<string>();
+    static readonly Random Rand = new Random();
+    private readonly Color defaultColor = Color.FromName("Navy");
+    private readonly List<string> findedWordList = new List<string>();
     private List<string> possibleWords = new List<string>();
 
-    // crée une variable d'instance à laquelle on affectera le noeud racine (passage du pointeur)
-    // pour en disposer dans Form1
-    // **** Couleurs de l'environnement
-    private readonly Color defaultColor = Color.FromName("Navy");
-
-    // retourne une consonne en fonction du niveau de diffculté
-    static Random rand = new Random();
-
+    /// <summary>
+    /// Initializes a new instance of the <see cref="Form1"/> class.
+    /// crée une variable d'instance à laquelle on affectera le noeud racine (passage du pointeur).
+    /// pour en disposer dans Form.1
+    /// **** Couleurs de l'environnement.
+    /// retourne une consonne en fonction du niveau de diffculté.
+    /// </summary>
     public Form1()
     {
       this.InitializeComponent();
@@ -31,7 +32,7 @@ namespace AbreDico
       int range;
       do
       {
-        range = rand.Next(0, 26);
+        range = Rand.Next(0, 26);
       }
       while
       (DonneesLettres.TabloDifficulte[range] >= maxDifficulty &&
@@ -447,61 +448,60 @@ namespace AbreDico
     // Vérifie si le mot à controler n'est pas un mot déjà utilisé
     private void VerifMot()
     {
-      this.pictureBox1.Visible = false;
-      if (WordsTree.WordExists(this.textBox1.Text, LoadWordsDictionnary.NoeudRacine))
+      Form1 form1 = this;
+      if (WordsTree.WordExists(form1.textBox1.Text, LoadWordsDictionnary.NoeudRacine))
       { // le mot proposé par joueur existe
         bool motDejaUtilise = false;
-        for (int i = 0; i < this.findedWordList.Count; i++)
+        for (int i = 0; i < form1.findedWordList.Count; i++)
         {
-          if (this.findedWordList[i] == this.textBox1.Text)
+          if (form1.findedWordList[i] == form1.textBox1.Text)
           {
             motDejaUtilise = true;
-            this.ImageTriste.Visible = true;
-            this.labNotification.ForeColor = Color.FromName("Red");
-            this.labNotification.Text = "Mot déja choisi";
-            this.DrawMatrix();
-            i = this.findedWordList.Count;
+            form1.ImageTriste.Visible = true;
+            form1.labNotification.ForeColor = Color.FromName("Red");
+            form1.labNotification.Text = "Mot déja choisi";
+            form1.DrawMatrix();
+            i = form1.findedWordList.Count;
           }
         }
 
         if (motDejaUtilise == false)
         {
-          this.ImageGai.Visible = true;
-          this.ImageTriste.Visible = false;
+          form1.ImageGai.Visible = true;
+          form1.ImageTriste.Visible = false;
           DataGame.ActualiseScoreTotal(DataGame.ScoreMotJoueur);
           DataGame.NumberOFGoodWord++;
-          this.progressBar1.Value = DataGame.NumberOFGoodWord;
-          this.labScoreTotal.Text = DataGame.ScoreTotal.ToString();
-          this.findedWordList.Add(this.textBox1.Text);
+          form1.progressBar1.Value = DataGame.NumberOFGoodWord;
+          form1.labScoreTotal.Text = DataGame.ScoreTotal.ToString();
+          form1.findedWordList.Add(form1.textBox1.Text);
         }
         else
         {
-          this.ImageGai.Visible = false;
-          this.ImageTriste.Visible = true;
+          form1.ImageGai.Visible = false;
+          form1.ImageTriste.Visible = true;
         }
       }
       else
       {
-        this.ImageTriste.Visible = true;
+        form1.ImageTriste.Visible = true;
       }
 
       // met le mot trouvé entre parenthèse dans la liste des mots
-      for (int i = 0; i < this.possibleWords.Count; i++)
+      for (int i = 0; i < form1.possibleWords.Count; i++)
       {
-        if (this.possibleWords[i] == this.textBox1.Text)
+        if (form1.possibleWords[i] == form1.textBox1.Text)
         {
-          this.possibleWords[i] = "(" + this.textBox1.Text + ")";
-          i = this.possibleWords.Count;
+          form1.possibleWords[i] = "(" + form1.textBox1.Text + ")";
+          i = form1.possibleWords.Count;
         }
       }
 
-      this.AfficheMotsPossibles();
-
+      form1.AfficheMotsPossibles();
     }
 
     private void TextBox1_Enter(object sender, EventArgs e)
-    {// n'est plus utilisé dans la configuration terminée du jeu
-      this.pictureBox1.Visible = true;
+    {
+      // n'est plus utilisé dans la configuration terminée du jeu.
       this.ImageGai.Visible = false;
       this.ImageTriste.Visible = false;
     }
@@ -515,7 +515,6 @@ namespace AbreDico
       DataGame.NumberOFGoodWord = 0;
       this.NewGame();
       this.DrawMatrix();
-      this.pictureBox1.Visible = true;
     }
 
     // Réalise un nouveau tirage de lettres
@@ -534,7 +533,6 @@ namespace AbreDico
       this.lab_scoreMaxi.Text = "SCORE MAXIMAL : " + this.ScoreMaxi();
       this.possibleWords.Sort();
       this.PossibleWordsInTextbox2();
-
     }
 
     private void Form1_Load(object sender, EventArgs e)
