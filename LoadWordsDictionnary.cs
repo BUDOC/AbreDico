@@ -2,13 +2,22 @@
 
 namespace AbreDico
 {
+  /// <summary>
+  /// Classe qui permet la modélisation du dictionnaire des mots français sous forme d'arbre.
+  /// </summary>
   internal class LoadWordsDictionnary
   {
     private static bool startAuthorization = true;
 
+    /// <summary>
+    /// Premier noeud de l'arbre représentant le dictionnaire.
+    /// </summary>
     public static Noeud NoeudRacine { get; private set; }
 
-    // Return true if succes on dictinary loading
+    /// <summary>
+    /// Return true if succes on dictinary loading.
+    /// </summary>
+    /// <returns></returns>
     public static bool GetAuthorizationStatus()
     {
       return startAuthorization;

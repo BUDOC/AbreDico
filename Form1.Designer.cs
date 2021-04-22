@@ -51,6 +51,8 @@ namespace AbreDico
       this.LabPourcentageDeTrouves = new System.Windows.Forms.Label();
       this.progressBar1 = new System.Windows.Forms.ProgressBar();
       this.labEncouragement = new System.Windows.Forms.Label();
+      this.label1 = new System.Windows.Forms.Label();
+      this.labEncouragement2 = new System.Windows.Forms.Label();
       this.panelMIAP.SuspendLayout();
       ((System.ComponentModel.ISupportInitialize)(this.ImageGai)).BeginInit();
       ((System.ComponentModel.ISupportInitialize)(this.ImageTriste)).BeginInit();
@@ -80,7 +82,7 @@ namespace AbreDico
       this.labelMot.Location = new System.Drawing.Point(104, 61);
       this.labelMot.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
       this.labelMot.Name = "labelMot";
-      this.labelMot.Size = new System.Drawing.Size(99, 20);
+      this.labelMot.Size = new System.Drawing.Size(123, 25);
       this.labelMot.TabIndex = 5;
       this.labelMot.Text = "Mot à vérifier";
       // 
@@ -115,7 +117,7 @@ namespace AbreDico
       this.textBox1.Location = new System.Drawing.Point(22, 90);
       this.textBox1.Margin = new System.Windows.Forms.Padding(4);
       this.textBox1.Name = "textBox1";
-      this.textBox1.Size = new System.Drawing.Size(291, 26);
+      this.textBox1.Size = new System.Drawing.Size(291, 30);
       this.textBox1.TabIndex = 3;
       this.textBox1.Enter += new System.EventHandler(this.TextBox1_Enter);
       // 
@@ -165,7 +167,7 @@ namespace AbreDico
       this.labNotification.AutoSize = true;
       this.labNotification.Location = new System.Drawing.Point(15, 20);
       this.labNotification.Name = "labNotification";
-      this.labNotification.Size = new System.Drawing.Size(0, 17);
+      this.labNotification.Size = new System.Drawing.Size(0, 20);
       this.labNotification.TabIndex = 0;
       // 
       // panel2
@@ -184,7 +186,7 @@ namespace AbreDico
       this.lab_scoreMaxi.AutoSize = true;
       this.lab_scoreMaxi.Location = new System.Drawing.Point(9, 108);
       this.lab_scoreMaxi.Name = "lab_scoreMaxi";
-      this.lab_scoreMaxi.Size = new System.Drawing.Size(120, 17);
+      this.lab_scoreMaxi.Size = new System.Drawing.Size(148, 20);
       this.lab_scoreMaxi.TabIndex = 2;
       this.lab_scoreMaxi.Text = "SCORE MAXIMAL";
       // 
@@ -195,7 +197,7 @@ namespace AbreDico
       this.labScoreTotal.ForeColor = System.Drawing.Color.Red;
       this.labScoreTotal.Location = new System.Drawing.Point(3, 43);
       this.labScoreTotal.Name = "labScoreTotal";
-      this.labScoreTotal.Size = new System.Drawing.Size(40, 27);
+      this.labScoreTotal.Size = new System.Drawing.Size(51, 34);
       this.labScoreTotal.TabIndex = 1;
       this.labScoreTotal.Text = "0";
       // 
@@ -206,7 +208,7 @@ namespace AbreDico
       this.labScoreMotJoueur.ForeColor = System.Drawing.SystemColors.MenuHighlight;
       this.labScoreMotJoueur.Location = new System.Drawing.Point(3, 9);
       this.labScoreMotJoueur.Name = "labScoreMotJoueur";
-      this.labScoreMotJoueur.Size = new System.Drawing.Size(40, 27);
+      this.labScoreMotJoueur.Size = new System.Drawing.Size(51, 34);
       this.labScoreMotJoueur.TabIndex = 0;
       this.labScoreMotJoueur.Text = "0";
       // 
@@ -236,7 +238,7 @@ namespace AbreDico
       this.labNbMotPossible.AutoSize = true;
       this.labNbMotPossible.Location = new System.Drawing.Point(14, 481);
       this.labNbMotPossible.Name = "labNbMotPossible";
-      this.labNbMotPossible.Size = new System.Drawing.Size(0, 17);
+      this.labNbMotPossible.Size = new System.Drawing.Size(0, 20);
       this.labNbMotPossible.TabIndex = 26;
       // 
       // labNmotsTrouves
@@ -244,7 +246,7 @@ namespace AbreDico
       this.labNmotsTrouves.AutoSize = true;
       this.labNmotsTrouves.Location = new System.Drawing.Point(18, 519);
       this.labNmotsTrouves.Name = "labNmotsTrouves";
-      this.labNmotsTrouves.Size = new System.Drawing.Size(12, 17);
+      this.labNmotsTrouves.Size = new System.Drawing.Size(13, 20);
       this.labNmotsTrouves.TabIndex = 27;
       this.labNmotsTrouves.Text = ".";
       // 
@@ -253,13 +255,13 @@ namespace AbreDico
       this.LabPourcentageDeTrouves.AutoSize = true;
       this.LabPourcentageDeTrouves.Location = new System.Drawing.Point(588, 505);
       this.LabPourcentageDeTrouves.Name = "LabPourcentageDeTrouves";
-      this.LabPourcentageDeTrouves.Size = new System.Drawing.Size(12, 17);
+      this.LabPourcentageDeTrouves.Size = new System.Drawing.Size(13, 20);
       this.LabPourcentageDeTrouves.TabIndex = 28;
       this.LabPourcentageDeTrouves.Text = ".";
       // 
       // progressBar1
       // 
-      this.progressBar1.Location = new System.Drawing.Point(664, 477);
+      this.progressBar1.Location = new System.Drawing.Point(664, 502);
       this.progressBar1.Name = "progressBar1";
       this.progressBar1.Size = new System.Drawing.Size(425, 23);
       this.progressBar1.TabIndex = 30;
@@ -271,15 +273,37 @@ namespace AbreDico
       this.labEncouragement.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
       this.labEncouragement.Location = new System.Drawing.Point(417, 331);
       this.labEncouragement.Name = "labEncouragement";
-      this.labEncouragement.Size = new System.Drawing.Size(47, 33);
+      this.labEncouragement.Size = new System.Drawing.Size(73, 43);
       this.labEncouragement.TabIndex = 31;
-      this.labEncouragement.Text = "HI";
+      this.labEncouragement.Text = "Hi!";
+      // 
+      // label1
+      // 
+      this.label1.AutoSize = true;
+      this.label1.Location = new System.Drawing.Point(663, 473);
+      this.label1.Name = "label1";
+      this.label1.Size = new System.Drawing.Size(246, 20);
+      this.label1.TabIndex = 32;
+      this.label1.Text = "Progression en points marqués.";
+      // 
+      // labEncouragement2
+      // 
+      this.labEncouragement2.AutoSize = true;
+      this.labEncouragement2.Font = new System.Drawing.Font("Showcard Gothic", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+      this.labEncouragement2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+      this.labEncouragement2.Location = new System.Drawing.Point(14, 496);
+      this.labEncouragement2.Name = "labEncouragement2";
+      this.labEncouragement2.Size = new System.Drawing.Size(538, 43);
+      this.labEncouragement2.TabIndex = 33;
+      this.labEncouragement2.Text = "Encouragement  score total";
       // 
       // Form1
       // 
-      this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+      this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 20F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
       this.ClientSize = new System.Drawing.Size(1114, 564);
+      this.Controls.Add(this.labEncouragement2);
+      this.Controls.Add(this.label1);
       this.Controls.Add(this.labEncouragement);
       this.Controls.Add(this.progressBar1);
       this.Controls.Add(this.LabPourcentageDeTrouves);
@@ -335,6 +359,8 @@ namespace AbreDico
     private System.Windows.Forms.ProgressBar progressBar1;
     private System.Windows.Forms.Label lab_scoreMaxi;
     private System.Windows.Forms.Label labEncouragement;
+    private System.Windows.Forms.Label label1;
+    private System.Windows.Forms.Label labEncouragement2;
   }
 }
 

@@ -449,14 +449,14 @@ namespace AbreDico
     /// Affiche un texte d'encouragement si un score de mot est atteint.
     /// </summary>
     private void Encourage()
-    { 
+    {
       int score = DataGame.ScoreMotJoueur;
       if (score >= 6 && score < 8)
       {
         this.labEncouragement.Text = "Beau!";
       }
 
-      if ( score >= 8 && score < 10)
+      if (score >= 8 && score < 10)
       {
         this.labEncouragement.Text = "Superbe!";
       }
@@ -469,6 +469,11 @@ namespace AbreDico
       if (score >= 12 && score <= 50)
       {
         this.labEncouragement.Text = "Exeptionnel!";
+      }
+
+      if (DataGame.ScoreTotal >= this.ScoreMaxi() / 2)
+      {
+        this.labEncouragement2.Text = "Super moitié du score atteinte.";
       }
     }
 
@@ -499,7 +504,7 @@ namespace AbreDico
           DataGame.ActualiseScoreTotal(DataGame.ScoreMotJoueur);
           this.Encourage();
           DataGame.NumberOFGoodWord++;
-          form1.progressBar1.Value = DataGame.NumberOFGoodWord;
+          form1.progressBar1.Value = DataGame.ScoreTotal;
           form1.labScoreTotal.Text = DataGame.ScoreTotal.ToString();
           form1.findedWordList.Add(form1.textBox1.Text);
         }
@@ -568,6 +573,8 @@ namespace AbreDico
       string t;
       int cpt = 0;
       this.labEncouragement.Text = string.Empty;
+      this.labEncouragement2.Text = string.Empty;
+
       for (int j = 0; j < 4; j++)
       {
         // Création des LABEL  de la grille
@@ -628,7 +635,7 @@ namespace AbreDico
         this.textBox2.Text += this.possibleWords[i] + "\r\n";
       }
 
-      this.progressBar1.Maximum = this.possibleWords.Count;
+      this.progressBar1.Maximum = int.Parse(ScoreMaxi().ToString());
     }
 
     private class LAbelXY : Label
@@ -641,13 +648,12 @@ namespace AbreDico
     /// <summary>
     /// Definit le raitement quand une lettre est choisie.
     /// </summary>
-    /// <param name="sender"> ?.</param>
-    /// <param name="e">?.</param>
     private void LetterIsChoosen(object sender, EventArgs e)
     {
       this.ImageGai.Visible = false;
       this.ImageTriste.Visible = false;
       this.labEncouragement.Text = string.Empty;
+      this.labEncouragement2.Text = string.Empty;
 
       LAbelXY choisi = sender as LAbelXY;
       {
@@ -656,29 +662,6 @@ namespace AbreDico
         choisi.Visible = false;
         this.GereClicSurLettre(choisi.Name.ToString(), choisi.Y, choisi.X);
       }
-    }
-
-    private void DrawMatrix2()
-    {
-      int compteur = 0;
-      try
-      {
-        foreach (LAbelXY labelDeLettre in this.Controls.OfType<LAbelXY>())
-        {
-          labelDeLettre.Text = DonneesLettres.TableauDeLettres[labelDeLettre.Y, labelDeLettre.X].ToString();
-          labelDeLettre.Visible = true;
-          compteur++;
-        }
-      }
-      catch
-      {
-        MessageBox.Show("Erreur dans la boucle foreach de dessinneMatrice");
-      }
-
-      DonneesLettres.PrecedentSquare.X = -1;
-
-      // initialise case précédente
-      DonneesLettres.PrecedentSquare.Y = -1;
     }
 
     private void DrawMatrix()
@@ -826,12 +809,6 @@ namespace AbreDico
         this.AfficheMotsPossibles();
         this.bt_test.Text = "Cacher les mots";
       }
-    }
-
-    private void BtTest2_Click(object sender, EventArgs e)
-    {
-      this.MatriceCreate();
-      this.DrawMatrix2();
     }
 
     // fin classe Form1
