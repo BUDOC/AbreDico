@@ -445,6 +445,33 @@ namespace AbreDico
       this.DrawMatrix();
     }
 
+    /// <summary>
+    /// Affiche un texte d'encouragement si un score de mot est atteint.
+    /// </summary>
+    private void Encourage()
+    { 
+      int score = DataGame.ScoreMotJoueur;
+      if (score >= 6 && score < 8)
+      {
+        this.labEncouragement.Text = "Beau!";
+      }
+
+      if ( score >= 8 && score < 10)
+      {
+        this.labEncouragement.Text = "Superbe!";
+      }
+
+      if (score >= 10 && score < 12)
+      {
+        this.labEncouragement.Text = "GENIAL!";
+      }
+
+      if (score >= 12 && score <= 50)
+      {
+        this.labEncouragement.Text = "Exeptionnel!";
+      }
+    }
+
     // Vérifie si le mot à controler n'est pas un mot déjà utilisé
     private void VerifMot()
     {
@@ -470,6 +497,7 @@ namespace AbreDico
           form1.ImageGai.Visible = true;
           form1.ImageTriste.Visible = false;
           DataGame.ActualiseScoreTotal(DataGame.ScoreMotJoueur);
+          this.Encourage();
           DataGame.NumberOFGoodWord++;
           form1.progressBar1.Value = DataGame.NumberOFGoodWord;
           form1.labScoreTotal.Text = DataGame.ScoreTotal.ToString();
@@ -539,6 +567,7 @@ namespace AbreDico
     {
       string t;
       int cpt = 0;
+      this.labEncouragement.Text = string.Empty;
       for (int j = 0; j < 4; j++)
       {
         // Création des LABEL  de la grille
@@ -609,11 +638,18 @@ namespace AbreDico
       public int Y { get; set; }
     }
 
+    /// <summary>
+    /// Definit le raitement quand une lettre est choisie.
+    /// </summary>
+    /// <param name="sender"> ?.</param>
+    /// <param name="e">?.</param>
     private void LetterIsChoosen(object sender, EventArgs e)
     {
       this.ImageGai.Visible = false;
       this.ImageTriste.Visible = false;
-      LAbelXY choisi = (LAbelXY)sender;
+      this.labEncouragement.Text = string.Empty;
+
+      LAbelXY choisi = sender as LAbelXY;
       {
         // this.Text = Choisi.X.ToString() + ", " + Choisi.Y.ToString();
         choisi.Visible = false;
