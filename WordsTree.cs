@@ -7,7 +7,7 @@
   /// Le noeud est une classe qui comprend
   /// - Un caractère : la donnée
   /// - un booléen indiquant si cette lettre constitue la fin d'un mot
-  /// - une liste de noeuds désignant les noeuds enfants     
+  /// - une liste de noeuds désignant les noeuds enfants.
   /// </summary>
   public class WordsTree
   {
@@ -123,7 +123,7 @@
     /// </summary>
     /// <param name="word"> Mot recherché.</param>
     /// <param name="dictionnaireDesMots"> Dictionnaire des mots français modélisé sous forme d'arbre.</param>
-    /// <returns></returns>
+    /// <returns> Vrai si le mot existe.</returns>
     public static bool WordExists(string word, Noeud dictionnaireDesMots)
     {
       int lg = word.Length;

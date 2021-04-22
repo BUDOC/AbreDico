@@ -41,207 +41,10 @@ namespace AbreDico
       return range;
     }
 
-    private void MatriceCreate()
-    {
-      // this part was programmed with feet but it works :-)
-      // Variables
-      var rand = new Random();
-      int number0fVowel = rand.Next(8, 11);
-      List<char> vowelList = new List<char>();
-      char[,] lettersPositionningArray = new char[4, 4];
-
-      // variable de limitation des voyelles répétée
-      int maxO = 2;
-      int maxU = 3;
-      int maxI = 3;
-      int maxA = 3;
-      int maxE = 4;
-      int cptO = 0;
-      int cptU = 0;
-      int cptI = 0;
-      int cptA = 0;
-      int cptE = 0;
-
-      // initialise le tableau de lettre
-      for (int line = 0; line < 4; line++)
-      {
-        for (int column = 0; column < 4; column++)
-        {
-          lettersPositionningArray[line, column] = '?';
-        }
-      }
-
-      // Ajoute des voyelles tirées au hasard dans la liste des voyelles
-      vowelList.Clear();
-      for (int i = 0; i <= number0fVowel; i++)
-      {
-        vowelList.Add(DonneesLettres.UsualVowels[rand.Next(0, 4)]);
-      }
-
-      void PlaceVoyelleDansQuart(int x1, int y1, int x2, int y2)
-      {
-        // a ajouter controle de nombre de voyelles répétées
-        char vowel;
-        for (int i = 0; i < 2; i++)
-        {
-          int li = rand.Next(x1, y1);
-          Thread.Sleep(12);
-          int co = rand.Next(x2, y2);
-          Thread.Sleep(12);
-          if (lettersPositionningArray[li, co] == '?')
-          {
-            vowel = vowelList[rand.Next(0, vowelList.Count)];
-            Thread.Sleep(12);
-            switch (vowel)
-            {
-              case 'O':
-                if (cptO <= maxO)
-                {
-                  lettersPositionningArray[li, co] = vowel;
-                  cptO++;
-                }
-                else
-                {
-                  i--;
-                }
-
-                break;
-              case 'U':
-                if (cptU <= maxU)
-                {
-                  lettersPositionningArray[li, co] = vowel;
-                  cptU++;
-                }
-                else
-                {
-                  i--;
-                }
-
-                break;
-              case 'I':
-                if (cptI <= maxI)
-                {
-                  lettersPositionningArray[li, co] = vowel;
-                  cptI++;
-                }
-                else
-                {
-                  i--;
-                }
-
-                break;
-              case 'A':
-                if (cptA <= maxA)
-                {
-                  lettersPositionningArray[li, co] = vowel;
-                  cptA++;
-                }
-                else
-                {
-                  i--;
-                }
-
-                break;
-              case 'E':
-                if (cptE <= maxE)
-                {
-                  lettersPositionningArray[li, co] = vowel;
-                  cptE++;
-                }
-                else
-                {
-                  i--;
-                }
-
-                break;
-            }
-          }
-          else
-          {
-            i--;
-          }
-        }
-      }
-
-      // Place 2 voyelles aléatoirement dans chaque quart et le reste aléatoirement (donc 8 voyelles)
-      // Quart NO
-      PlaceVoyelleDansQuart(0, 2, 0, 2);
-
-      // Quart NE
-      PlaceVoyelleDansQuart(0, 2, 1, 4);
-
-      // Quart SO
-      PlaceVoyelleDansQuart(1, 4, 0, 2);
-
-      // QuartSE
-      PlaceVoyelleDansQuart(1, 4, 1, 4);
-
-      // Ajoute si nécessaires pour atteindre le nombre de voyelles fixé aléatoirement
-      if (number0fVowel < 8)
-      {
-        for (int i = 0; i < number0fVowel - 8; i++)
-        {
-          int li = rand.Next(0, 4);
-          Thread.Sleep(14);
-          int co = rand.Next(0, 4);
-          Thread.Sleep(12);
-          while (lettersPositionningArray[li, co] == '?')
-          {
-            li = rand.Next(0, 4);
-            Thread.Sleep(13);
-            co = rand.Next(0, 4);
-            Thread.Sleep(14);
-          }
-
-          lettersPositionningArray[li, co] = vowelList[rand.Next(0, vowelList.Count)];
-        }
-      }
-
-      // Remplit aléatoirement le reste du tableau avec des consonnes
-      // en gérant la difficuté
-      int difficultyLevel = 8;
-      int rangTrouve;
-      for (int li = 0; li < 4; li++)
-      {
-        for (int co = 0; co < 4; co++)
-        {
-          rangTrouve = rand.Next(0, 26);
-          Thread.Sleep(12);
-
-          // pour toutes les cases du tableau
-          // si la case n'est pas utilisée
-          if (lettersPositionningArray[li, co] == '?')
-          {
-            // tire une consonne
-            char test = DonneesLettres.Alphabet[RangConsonnant(difficultyLevel)];
-            Thread.Sleep(11);
-            lettersPositionningArray[li, co] = test;
-            if (DonneesLettres.TabloDifficulte[rangTrouve] >= 3)
-            {
-              difficultyLevel -= 4;
-              if (difficultyLevel <= 0)
-              {
-                difficultyLevel = 1;
-              }
-            }
-          }
-        }
-
-        // transfere les lettres dans la matrice
-      }
-
-      for (int lig = 0; lig < 4; lig++)
-      {
-        for (int co = 0; co < 4; co++)
-        {
-          DonneesLettres.TableauDeLettres[lig, co] = lettersPositionningArray[lig, co];
-        }
-      }
-
-      this.CreateMatrix();
-    }
-
-    private void CreateMatrix() // Génère aléatoirement des lettres qui sont mises dans le tableau"matrice"
+    /// <summary>
+    /// Génère aléatoirement des lettres qui sont mises dans le tableau"matrice".
+    /// </summary>
+    private void CreateMatrix()
     {
       int cptVoyelle = 0;
       int voyelleDeSuite = 0;
@@ -550,7 +353,9 @@ namespace AbreDico
       this.DrawMatrix();
     }
 
-    // Réalise un nouveau tirage de lettres
+    /// <summary>
+    /// Réalise un nouveau tirage de lettres.
+    /// </summary>
     private void NewGame()
     {
       this.findedWordList.Clear();
@@ -625,6 +430,9 @@ namespace AbreDico
       this.PossibleWordsInTextbox2();
     }
 
+    /// <summary>
+    /// Affiche tous les mots possibles dans le textbox2.
+    /// </summary>
     private void PossibleWordsInTextbox2()
     {
       this.textBox2.Clear();
@@ -638,6 +446,9 @@ namespace AbreDico
       this.progressBar1.Maximum = int.Parse(ScoreMaxi().ToString());
     }
 
+    /// <summary>
+    /// Classe dérivée de Label dont on peut définir les coordonnées du coin sup gauche.
+    /// </summary>
     private class LAbelXY : Label
     {
       public int X { get; set; }
@@ -657,13 +468,15 @@ namespace AbreDico
 
       LAbelXY choisi = sender as LAbelXY;
       {
-        // this.Text = Choisi.X.ToString() + ", " + Choisi.Y.ToString();
         choisi.Visible = false;
         choisi.Visible = false;
         this.GereClicSurLettre(choisi.Name.ToString(), choisi.Y, choisi.X);
       }
     }
 
+    /// <summary>
+    /// Dessine la matrice.
+    /// </summary>
     private void DrawMatrix()
     {
       int compteur = 0;
@@ -688,9 +501,12 @@ namespace AbreDico
       DonneesLettres.ResetLettersUtilisationArray();
     }
 
+    /// <summary>
+    /// retourne vrai si la case est une case voisine.
+    /// </summary>
+    /// <returns> Vrai ou faux.</returns>
     private bool IsNeighbourrFromPrecedent()
     {
-      // retourn vrai si la case est une case voisine
       int rx, ry;
       this.labNotification.Text = string.Empty;
 
@@ -720,12 +536,17 @@ namespace AbreDico
       }
     }
 
+    /// <summary>
+    /// Exécute les choses à faire lors d'un clic sur une lettre de la matrice.
+    /// </summary>
+    /// <param name="labelName"> Lettre cliquée.</param>
+    /// <param name="ligne"> coordonnée en X.</param>
+    /// <param name="colonne"> Coordonnée en Y.</param>
     private void GereClicSurLettre(string labelName, int ligne, int colonne)
     {
       DonneesLettres.ChoosenSquare.X = colonne;
       DonneesLettres.ChoosenSquare.Y = ligne;
 
-      // ParcoursDeMatrice.TrouveVoisinePossible(colonne, ligne);
       if (this.IsNeighbourrFromPrecedent())
       {
         // pour tous les labels de la form

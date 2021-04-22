@@ -17,7 +17,7 @@ namespace AbreDico
     /// <summary>
     /// Return true if succes on dictinary loading.
     /// </summary>
-    /// <returns></returns>
+    /// <returns> Statut de l'authorisation.</returns>
     public static bool GetAuthorizationStatus()
     {
       return startAuthorization;
