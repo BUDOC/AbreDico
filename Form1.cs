@@ -240,7 +240,7 @@ namespace AbreDico
     private void BoutonVerifMot(object sender, EventArgs e)
     {
       this.VerifMot();
-      this.labNmotsTrouves.Text = "Nombre de mots trouvés = " + DataGame.NumberOFGoodWord.ToString()
+      this.labNmotsTrouves.Text = "Nombre de mots trouvés = " + DataGame.GetNumberOfGoodWord().ToString()
   + " sur " + this.possibleWords.Count;
       this.textBox1.Clear();
       DataGame.ResetWordScore();
@@ -253,7 +253,7 @@ namespace AbreDico
     /// </summary>
     private void Encourage()
     {
-      int score = DataGame.ScoreMotJoueur;
+      int score = DataGame.GetScoreMotJoueur();
       if (score >= 6 && score < 8)
       {
         this.labEncouragement.Text = "Beau!";
@@ -304,9 +304,9 @@ namespace AbreDico
         {
           form1.ImageGai.Visible = true;
           form1.ImageTriste.Visible = false;
-          DataGame.ActualiseScoreTotal(DataGame.ScoreMotJoueur);
+          DataGame.ActualiseScoreTotal(DataGame.GetScoreMotJoueur());
           this.Encourage();
-          DataGame.NumberOFGoodWord++;
+          DataGame.IncrementeNumberOfGoddWord();
           form1.progressBar1.Value = DataGame.ScoreTotal;
           form1.labScoreTotal.Text = DataGame.ScoreTotal.ToString();
           form1.findedWordList.Add(form1.textBox1.Text);
@@ -348,7 +348,7 @@ namespace AbreDico
       this.textBox2.Clear();
       this.textBox1.Clear();
       DataGame.ResetWordScore();
-      DataGame.NumberOFGoodWord = 0;
+      DataGame.ResetNumberOfGoodWord();
       this.NewGame();
       this.DrawMatrix();
     }
@@ -573,7 +573,7 @@ namespace AbreDico
         {
           // caractère identifié
           DataGame.UpdatePlayerScore(DonneesLettres.PointArrayForAletter[i]);
-          this.labScoreMotJoueur.Text = DataGame.ScoreMotJoueur.ToString();
+          this.labScoreMotJoueur.Text = DataGame.GetScoreMotJoueur().ToString();
         }
       }
     }

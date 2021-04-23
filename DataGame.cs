@@ -9,9 +9,44 @@
   public class DataGame
   {
     // GERE LES SCORES
-    public static int ScoreMotJoueur;
-    public static int NumberOFGoodWord;
+    private static int ScoreMotJoueur;
+    private static int NumberOFGoodWord;
     public static int ScoreTotal;
+
+    /// <summary>
+    ///  Retoutene le score du mot du joueur.
+    /// </summary>
+    /// <returns> score du mot.</returns>
+    public static int GetScoreMotJoueur()
+    {
+      return ScoreMotJoueur;
+    }
+
+    /// <summary>
+    /// Return good wors number.
+    /// </summary>
+    /// <returns> Nombre de mots valides.</returns>
+    public static int GetNumberOfGoodWord()
+    {
+      return NumberOFGoodWord;
+    }
+
+    /// <summary>
+    ///  Reset du nombre de mots valdses.
+    /// </summary>
+    public static void ResetNumberOfGoodWord()
+    {
+      NumberOFGoodWord = 0;
+    }
+
+    /// <summary>
+    ///  Incrémente le nombre de mots valides.
+    /// </summary>
+    public static void IncrementeNumberOfGoddWord()
+    {
+      NumberOFGoodWord++;
+    }
+
 
     /// <summary>
     /// Remet le score du joueur à zéro.
