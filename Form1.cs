@@ -346,11 +346,16 @@ namespace AbreDico
     {
       // Réalise un nouveau tirage de lettres et configure l'IHM
       this.textBox2.Clear();
+      this.textBox2.Visible = false;
+      this.bt_test.Text = "Voir les mots";
+      this.labNmotsTrouves.Text = String.Empty;
       this.textBox1.Clear();
       DataGame.ResetWordScore();
       DataGame.ResetNumberOfGoodWord();
       this.NewGame();
       this.DrawMatrix();
+      this.labEncouragement.Text = string.Empty;
+      this.labEncouragement2.Text = string.Empty;
     }
 
     /// <summary>
@@ -368,7 +373,7 @@ namespace AbreDico
       this.DrawMatrix();
       WordsInGrid solver = new WordsInGrid();
       this.possibleWords = solver.ExploreCellWay();
-      this.lab_scoreMaxi.Text = "SCORE MAXIMAL : " + this.ScoreMaxi();
+      this.lab_scoreMaxi.Text = "SCORE MAXIMAL : " + this.ScoreMaxi() + "points.";
       this.possibleWords.Sort();
       this.PossibleWordsInTextbox2();
     }
