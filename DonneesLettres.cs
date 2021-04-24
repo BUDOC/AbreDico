@@ -3,7 +3,7 @@
 namespace AbreDico
 {
   /// <summary>
-  /// Contient les méthodes de gestion des lettre.
+  /// Contient les méthodes de gestion des lettres.
   /// </summary>
   internal class DonneesLettres
   {

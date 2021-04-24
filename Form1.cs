@@ -274,7 +274,7 @@ namespace AbreDico
         this.labEncouragement.Text = "Exeptionnel!";
       }
 
-      if (DataGame.ScoreTotal >= this.ScoreMaxi() / 2)
+      if (DataGame.GetScoreTotal() >= this.ScoreMaxi() / 2)
       {
         this.labEncouragement2.Text = "Super moitié du score atteinte.";
       }
@@ -307,8 +307,8 @@ namespace AbreDico
           DataGame.ActualiseScoreTotal(DataGame.GetScoreMotJoueur());
           this.Encourage();
           DataGame.IncrementeNumberOfGoddWord();
-          form1.progressBar1.Value = DataGame.ScoreTotal;
-          form1.labScoreTotal.Text = DataGame.ScoreTotal.ToString();
+          form1.progressBar1.Value = DataGame.GetScoreTotal();
+          form1.labScoreTotal.Text = DataGame.GetScoreTotal().ToString();
           form1.findedWordList.Add(form1.textBox1.Text);
         }
         else

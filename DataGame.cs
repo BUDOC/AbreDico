@@ -8,9 +8,18 @@
   public class DataGame
   {
     // GERE LES SCORES
-    private static int ScoreMotJoueur;
-    private static int NumberOFGoodWord;
-    public static int ScoreTotal;
+    private static int scoreMotJoueur;
+    private static int numberOFGoodWord;
+    private static int scoreTotal;
+
+    /// <summary>
+    /// Retourne le score total.
+    /// </summary>
+    /// <returns> Score total.</returns>
+    public static int GetScoreTotal()
+    {
+      return scoreTotal;
+    }
 
     /// <summary>
     ///  Retoutene le score du mot du joueur.
@@ -18,7 +27,7 @@
     /// <returns> score du mot.</returns>
     public static int GetScoreMotJoueur()
     {
-      return ScoreMotJoueur;
+      return scoreMotJoueur;
     }
 
     /// <summary>
@@ -27,7 +36,7 @@
     /// <returns> Nombre de mots valides.</returns>
     public static int GetNumberOfGoodWord()
     {
-      return NumberOFGoodWord;
+      return numberOFGoodWord;
     }
 
     /// <summary>
@@ -35,7 +44,7 @@
     /// </summary>
     public static void ResetNumberOfGoodWord()
     {
-      NumberOFGoodWord = 0;
+      numberOFGoodWord = 0;
     }
 
     /// <summary>
@@ -43,16 +52,15 @@
     /// </summary>
     public static void IncrementeNumberOfGoddWord()
     {
-      NumberOFGoodWord++;
+      numberOFGoodWord++;
     }
-
 
     /// <summary>
     /// Remet le score du joueur à zéro.
     /// </summary>
     public static void ResetWordScore()
     {
-      ScoreMotJoueur = 0;
+      scoreMotJoueur = 0;
     }
 
     /// <summary>
@@ -61,7 +69,7 @@
     /// <param name="scoreLettre"> nombre de points attribués à la lettre.</param>
     public static void UpdatePlayerScore(int scoreLettre)
     {
-      ScoreMotJoueur += scoreLettre;
+      scoreMotJoueur += scoreLettre;
     }
 
     /// <summary>
@@ -69,7 +77,7 @@
     /// </summary>
     public static void RazScoreTotal()
     {
-      ScoreTotal = 0;
+      scoreTotal = 0;
     }
 
     /// <summary>
@@ -78,7 +86,7 @@
     /// <param name="scoreMot"> nombre de points du mot.</param>
     public static void ActualiseScoreTotal(int scoreMot)
     {
-      ScoreTotal += scoreMot;
+      scoreTotal += scoreMot;
     }
   }
 }
