@@ -10,7 +10,7 @@ namespace AbreDico
     private static bool startAuthorization = true;
 
     /// <summary>
-    /// Premier noeud de l'arbre représentant le dictionnaire.
+    /// Gets premier noeud de l'arbre représentant le dictionnaire.
     /// </summary>
     public static Noeud NoeudRacine { get; private set; }
 

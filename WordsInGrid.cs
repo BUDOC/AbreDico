@@ -181,7 +181,7 @@ namespace AbreDico
               {
                 // La case est libre donc utilisable donc
                 // on crée une Case de coordonnées courantes
-                // qu'on ajoute à la liste des cases voisines de la case courante si le chemin n'est pas sans issu.
+                // qu'on ajoute à la liste des cases voisines de la case courante si le chemin n'est pas sans issue.
                 if (this.IsNotSteril(this.Chaine(nextLevel)))
                 {
                   OneCell neighborsCell = new OneCell
@@ -216,6 +216,11 @@ namespace AbreDico
       return newWord;
     }
 
+        /// <summary>
+        /// Retourne vrai si la branche contient la chaine transmise en paramètre.
+        /// </summary>
+        /// <param name="suite"> chaine à trouver.</param>
+        /// <returns> Booléen.</returns>
     private bool IsNotSteril(string suite)
     {
       bool ok = false;

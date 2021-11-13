@@ -6,12 +6,12 @@
   public class Point2D
   {
     /// <summary>
-    /// Coordonnées X de l'emplacement.
+    /// Gets or sets coordonnées X de l'emplacement.
     /// </summary>
     public int X { get; set; }
 
     /// <summary>
-    /// Coordonnées Y de l'emplacement.
+    /// Gets or sets coordonnées Y de l'emplacement.
     /// </summary>
     public int Y { get; set; }
   }
